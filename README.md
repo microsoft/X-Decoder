@@ -1,6 +1,6 @@
 # X-Decoder: Generalized Decoding for Pixel, Image, and Language
 
-\[[arXiv (comming soon)]()\]    \[[Hugging Face Demo](https://huggingface.co/spaces/xdecoder/Demo)\]    \[[Video](https://youtu.be/wYp6vmyolqE)\]
+\[[arXiv (comming soon)]()\]    \[[Hugging Face Demo](https://huggingface.co/spaces/xdecoder/Demo)\]    \[[Project Page](https://x-decoder-vl.github.io/)\]    \[[Video](https://youtu.be/wYp6vmyolqE)\]
 
 :sunflower: Try out our Hugging Face Demo!
 
