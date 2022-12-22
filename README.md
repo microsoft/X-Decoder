@@ -66,9 +66,10 @@ python demo/demo_captioning.py evaluate --conf_files configs/xdecoder/svlp_focal
 |-----------|---------|------|------|------|----------|------|------|------|--------|-----------|------|------|------|------|
 | model     | ckpt    | PQ   | AP   | mIoU | mIoU     | mIoU | PQ   | mIoU | mIoU   | PQ        | mAP  | mIoU | PQ   | mIoU |
 | X-Decoder | [BestSeg Tiny](https://projects4jw.blob.core.windows.net/x-decoder/release/xdecoder_focalt_best_openseg.pt) | 19.1 | 10.1 | 25.1 | 6.2      | 35.7 | 30.3 | 38.4 | 22.4   | 37.7      | 18.5 | 50.2 | 16.9 | 47.6 |
+<!---
 | X-Decoder | [Last Tiny](https://projects4jw.blob.core.windows.net/x-decoder/release/xdecoder_focalt_last.pt) |  |  |  |       |  |  |  |    |       |  |  |  |  |
 | X-Decoder | [NoVG Tiny](https://projects4jw.blob.core.windows.net/x-decoder/release/xdecoder_focalt_last_novg.pt) |  |  |  |       |  |  |  |    |       |  |  |  | |
-
+-->
 
 ## Acknowledgement
 We appreciated the contructive dicussion with Haotian Zhang, and inspiration from GLIP! Also we thank the solid codebase of [Mask2Former](https://github.com/facebookresearch/Mask2Former), and Hugging Face to sponsor our Demo.
