@@ -8,25 +8,26 @@ by [Xueyan Zou*](https://maureenzou.github.io/), [Zi-Yi Dou*](https://zdou0830.g
 
 https://user-images.githubusercontent.com/11957155/209045241-916ccf73-d29d-4637-8502-027d3420875c.mp4
 
+## :notes: Introduction
+
+X-Decoder is a generalized decoding model that can generate **pixel-level segmentation** and **token-level texts** seamlessly!
+
+**It achieves:**
+
+* State-of-the-art results on open-vocabulary segmentation and referring segmentation on eight datasets; 
+* Better or competitive finetuned performance to generalist and specialist models on segmentation and VL tasks; 
+* Friendly for efficient finetuning and flexible for novel task composition.
+
+**It supports:** 
+
+* **One suite of parameters** pretrained for Semantic/Instance/Panoptic Segmentation, Referring Segmentation, Image Captioning, and Image-Text Retrieval;
+* **One model architecture** finetuned for Semantic/Instance/Panoptic Segmentation, Referring Segmentation, Image Captioning, Image-Text Retrieval and Visual Question Answering (VQA);
+* **Zero-shot task composition** for Region Retrieval, Referring Captioning, Image Editing.
+
 ## :fire: Updates
 * **[2022.12.21]** We release inference code of X-Decoder.
 * **[2022.12.21]** We release Focal-T pretrained checkpoint.
 * **[2022.12.21]** We release open-vocabulary segmentation benchmark.
-
-## :notes: Introduction
-
-X-Decoder is a generalized decoding model that can generate **pixel-level segmentation** and **token-level texts** seamlessly. 
-
-**It achieves:**
-
-* SoTA results on open-vocabulary segmentation and referring segmentation on eight datasets; 
-* Better or competitive finetuned performance to generalist and specialist models on Seg and VL tasks; 
-* Flexibility for efficient finetuning and novel task composition.
-
-**It supports:** 
-
-* Pretrained: Semantic/Instance/Panoptic Segmentation; Referring Segmentation; Image Captioning; Image/Text Retrieval
-* Finetuned/Compostion: VQA; Region Retrieval; Referring Captioning; Image Editing
 
 
 ## :snowflake: TODO
