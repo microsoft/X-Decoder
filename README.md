@@ -74,7 +74,7 @@ python demo/demo_captioning.py evaluate --conf_files configs/xdecoder/svlp_focal
 
 ## Additional Results
 
-* Finetuned ADE 150 (24 epochs)
+* Finetuned ADE 150 (32 epochs)
 
 | Model                           | Task    | PQ   | mAP  | mIoU |
 |---------------------------------|---------|------|------|------|
