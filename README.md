@@ -70,7 +70,7 @@ python demo/demo_captioning.py evaluate --conf_files configs/xdecoder/xdecoder_f
 
 
 ## Acknowledgement
-We appreciated the solid codebase of [Mask2Former](https://github.com/facebookresearch/Mask2Former).
+We appreciated the solid codebase of [Mask2Former](https://github.com/facebookresearch/Mask2Former), and Hugging Face to sponsor our Demo.
 
 ## Citation
 ```
