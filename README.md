@@ -72,7 +72,7 @@ python demo/demo_captioning.py evaluate --conf_files configs/xdecoder/svlp_focal
 -->
 
 ## Acknowledgement
-We appreciated the contructive dicussion with Haotian Zhang, and inspiration from GLIP! Also we thank the solid codebase of [Mask2Former](https://github.com/facebookresearch/Mask2Former), and Hugging Face to sponsor our Demo.
+We appreciate the contructive dicussion with Haotian Zhang, and inspiration from GLIP! Also we thank the solid codebase of [Mask2Former](https://github.com/facebookresearch/Mask2Former), and Hugging Face to sponsor GPU for our Demo!
 
 ## Citation
 ```
