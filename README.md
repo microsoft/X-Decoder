@@ -73,6 +73,9 @@ python demo/demo_captioning.py evaluate --conf_files configs/xdecoder/svlp_focal
 | X-Decoder | [NoVG Tiny](https://projects4jw.blob.core.windows.net/x-decoder/release/xdecoder_focalt_last_novg.pt) |  |  |  |       |  |  |  |    |       |  |  |  | |
 -->
 
+* X-Decoder [NoVG Tiny](https://projects4jw.blob.core.windows.net/x-decoder/release/xdecoder_focalt_last_novg.pt)
+* X-Decoder [Last Tiny](https://projects4jw.blob.core.windows.net/x-decoder/release/xdecoder_focalt_last.pt)
+
 ## Additional Results
 
 * Finetuned ADE 150 (32 epochs)
