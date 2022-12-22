@@ -22,7 +22,7 @@ X-Decoder is a generalized decoding model that can generate **pixel-level segmen
 **It supports:** 
 
 * **One suite of parameters** pretrained for Semantic/Instance/Panoptic Segmentation, Referring Segmentation, Image Captioning, and Image-Text Retrieval;
-* **One model architecture** finetuned for Semantic/Instance/Panoptic Segmentation, Referring Segmentation, Image Captioning, Image-Text Retrieval and Visual Question Answering (VQA);
+* **One model architecture** finetuned for Semantic/Instance/Panoptic Segmentation, Referring Segmentation, Image Captioning, Image-Text Retrieval and Visual Question Answering (with an extra cls head);
 * **Zero-shot task composition** for Region Retrieval, Referring Captioning, Image Editing.
 
 ## :fire: Updates
