@@ -72,6 +72,14 @@ python demo/demo_captioning.py evaluate --conf_files configs/xdecoder/svlp_focal
 | X-Decoder | [NoVG Tiny](https://projects4jw.blob.core.windows.net/x-decoder/release/xdecoder_focalt_last_novg.pt) |  |  |  |       |  |  |  |    |       |  |  |  | |
 -->
 
+## Additional Results
+
+* Finetuned ADE 150 (24 epochs)
+
+| Model                           | Task    | PQ   | mAP  | mIoU |
+|---------------------------------|---------|------|------|------|
+| X-Decoder (davit-d5,Deformable) | PanoSeg | 52.4 | 38.7 | 61.6 |
+
 ## Acknowledgement
 We appreciate the contructive dicussion with Haotian Zhang, and inspiration from GLIP! Also we thank the solid codebase of [Mask2Former](https://github.com/facebookresearch/Mask2Former), and Hugging Face to sponsor GPU for our Demo!
 
