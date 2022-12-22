@@ -1,6 +1,6 @@
 # X-Decoder: Generalized Decoding for Pixel, Image, and Language
 
-\[[arXiv](https://youtu.be/wYp6vmyolqE)\]    \[[Hugging Face Demo](https://huggingface.co/spaces/xdecoder/Demo)\]    \[[Project Page](https://x-decoder-vl.github.io/)\]    \[[Video](https://youtu.be/nZZTkYM0kd0)\]
+\[[arXiv](https://youtu.be/wYp6vmyolqE)\]    \[[Hugging Face Demo](https://huggingface.co/spaces/xdecoder/Demo)\]  \[[Demo Route2](https://35c1565f665c9075.gradio.app)\] \[[Demo Route3](https://8f3b4114c6c2344b.gradio.app)\] \[[Project Page](https://x-decoder-vl.github.io/)\]    \[[Video](https://youtu.be/nZZTkYM0kd0)\]
 
 
 :sunflower: Try out our Hugging Face Demo!
