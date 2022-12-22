@@ -2,10 +2,9 @@
 
 \[[arXiv](https://arxiv.org/pdf/2212.11270.pdf)\]    \[[Hugging Face Demo](https://huggingface.co/spaces/xdecoder/Demo)\]  \[[Demo Route2](https://cda0daa1c8443a50.gradio.app)\] \[[Demo Route3](https://f67c65f4f065f836.gradio.app/)\] \[[Project Page](https://x-decoder-vl.github.io/)\]    \[[Video](https://youtu.be/nZZTkYM0kd0)\]
 
+by [Xueyan Zou*](https://maureenzou.github.io/), [Zi-Yi Dou*](https://zdou0830.github.io/), [Jianwei Yang*](https://jwyang.github.io/),  [Zhe Gan](https://zhegan27.github.io/), [Linjie Li](https://scholar.google.com/citations?user=WR875gYAAAAJ&hl=en), [Chunyuan Li](https://chunyuan.li/), [Xiyang Dai](https://sites.google.com/site/xiyangdai/), [Harkirat Behl](https://harkiratbehl.github.io/), [Jianfeng Wang](https://scholar.google.com/citations?user=vJWEw_8AAAAJ&hl=en), [Lu Yuan](https://scholar.google.com/citations?user=k9TsUVsAAAAJ&hl=en), [Nanyun Peng](https://vnpeng.net/), [Lijuan Wang](https://scholar.google.com/citations?user=cDcWXuIAAAAJ&hl=zh-CN), [Yong Jae Lee^](https://pages.cs.wisc.edu/~yongjaelee/), [Jianfeng Gao^](https://www.microsoft.com/en-us/research/people/jfgao/?from=http%3A%2F%2Fresearch.microsoft.com%2Fen-us%2Fum%2Fpeople%2Fjfgao%2F).
 
 :sunflower: Try out our Hugging Face Demo!
-
-by [Xueyan Zou*](https://maureenzou.github.io/), [Zi-Yi Dou*](https://zdou0830.github.io/), [Jianwei Yang*](https://jwyang.github.io/),  [Zhe Gan](https://zhegan27.github.io/), [Linjie Li](https://scholar.google.com/citations?user=WR875gYAAAAJ&hl=en), [Chunyuan Li](https://chunyuan.li/), [Xiyang Dai](https://sites.google.com/site/xiyangdai/), [Harkirat Behl](https://harkiratbehl.github.io/), [Jianfeng Wang](https://scholar.google.com/citations?user=vJWEw_8AAAAJ&hl=en), [Lu Yuan](https://scholar.google.com/citations?user=k9TsUVsAAAAJ&hl=en), [Nanyun Peng](https://vnpeng.net/), [Lijuan Wang](https://scholar.google.com/citations?user=cDcWXuIAAAAJ&hl=zh-CN), [Yong Jae Lee^](https://pages.cs.wisc.edu/~yongjaelee/), [Jianfeng Gao^](https://www.microsoft.com/en-us/research/people/jfgao/?from=http%3A%2F%2Fresearch.microsoft.com%2Fen-us%2Fum%2Fpeople%2Fjfgao%2F).
 
 https://user-images.githubusercontent.com/11957155/209045241-916ccf73-d29d-4637-8502-027d3420875c.mp4
 
@@ -15,12 +14,13 @@ https://user-images.githubusercontent.com/11957155/209045241-916ccf73-d29d-4637-
 * **[2022.12.21]** We release open-vocabulary segmentation benchmark.
 
 ## :notes: Introduction
-X-Decoder is a generalized decoding model that can predict **pixel-level segmentation** and **language tokens** seamlessly. 
+
+X-Decoder is a generalized decoding model that can generate **pixel-level segmentation** and **token-level texts** seamlessly. 
 
 **It achieves:**
 
 * SoTA results on open-vocabulary segmentation and referring segmentation on eight datasets; 
-* Better or competitive finetuned performance to generalist and specialist models on SEG and VL tasks; 
+* Better or competitive finetuned performance to generalist and specialist models on Seg and VL tasks; 
 * Flexibility for efficient finetuning and novel task composition.
 
 **It supports:** 
