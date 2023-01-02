@@ -35,7 +35,7 @@ Please download the original refcoco datasets at https://github.com/lichengunc/r
         └── refs(umd).p
 ```
 
-Also download the coco dataset:
+Also download the coco dataset at https://cocodataset.org/#home:
 ### Expected dataset structure for coco:
 ```
 .
