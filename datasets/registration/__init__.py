@@ -8,7 +8,6 @@ from . import (
     register_coco_panoptic_annos_caption,
     register_coco_panoptic_annos_caption_grounding,
     register_ade20k_instance,
-    register_imagenet_cls,
     register_vlp_datasets,
     register_sunrgbd_semseg,
     register_scannet_semseg,

@@ -16,22 +16,22 @@ from detectron2.utils.file_io import PathManager
 
 
 _PREDEFINED_SPLITS_COCO_PANOPTIC_CAPTION = {
-    "refcocog_train_umd": (
-        "coco/train2017", # image_root
-        "coco/annotations/refcocog_umd_train.json", # annot_root
-    ),
-    "refcocog_val_google": (
-        "coco/train2017", # image_root
-        "coco/annotations/refcocog_google.json", # annot_root
-    ),
-    "refcocop_val_unc": (
-        "coco/train2017", # image_root
-        "coco/annotations/refcocop_unc.json", # annot_root
-    ),
-    "refcoco_val_unc": (
-        "coco/train2017", # image_root
-        "coco/annotations/refcoco_unc.json", # annot_root
-    ),
+    # "refcocog_train_umd": (
+    #     "coco/train2017", # image_root
+    #     "coco/annotations/refcocog_umd_train.json", # annot_root
+    # ),
+    # "refcocog_val_google": (
+    #     "coco/train2017", # image_root
+    #     "coco/annotations/refcocog_google.json", # annot_root
+    # ),
+    # "refcocop_val_unc": (
+    #     "coco/train2017", # image_root
+    #     "coco/annotations/refcocop_unc.json", # annot_root
+    # ),
+    # "refcoco_val_unc": (
+    #     "coco/train2017", # image_root
+    #     "coco/annotations/refcoco_unc.json", # annot_root
+    # ),
     "refcocog_val_umd": (
         "coco/train2017", # image_root
         "coco/annotations/refcocog_umd_val.json", # annot_root
