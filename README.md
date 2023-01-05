@@ -10,7 +10,7 @@ by [Xueyan Zou*](https://maureenzou.github.io/), [Zi-Yi Dou*](https://zdou0830.g
 
 :sunflower: Try out our Hugging Face Demo!
 
-![Presentation2](https://user-images.githubusercontent.com/11957155/210801477-8c508ec2-faa5-4670-8695-d7e466d5cd81.gif)
+![github_figure](https://user-images.githubusercontent.com/11957155/210801832-c9143c42-ef65-4501-95a5-0d54749dcc52.gif)
 
 ## :notes: Introduction
 
