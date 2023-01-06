@@ -13,10 +13,6 @@ import torch
 from PIL import Image
 
 from torchvision import transforms
-from detectron2.data import detection_utils as utils
-from detectron2.structures import BitMasks, Boxes, Instances
-from panopticapi.utils import rgb2id
-from ..datasets.register_scannet_panoptic import SCANNET_20_CATEGORIES
 from xdecoder.utils import configurable
 
 __all__ = ["ScanNetPanoDatasetMapper"]
