@@ -1,8 +1,8 @@
 # X-Decoder: Generalized Decoding for Pixel, Image, and Language
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/generalized-decoding-for-pixel-image-and/referring-expression-segmentation-on-refcocog)](https://paperswithcode.com/sota/referring-expression-segmentation-on-refcocog?p=generalized-decoding-for-pixel-image-and)
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/generalized-decoding-for-pixel-image-and/semantic-segmentation-on-coco-1)](https://paperswithcode.com/sota/semantic-segmentation-on-coco-1?p=generalized-decoding-for-pixel-image-and)
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/generalized-decoding-for-pixel-image-and/panoptic-segmentation-on-ade20k-val)](https://paperswithcode.com/sota/panoptic-segmentation-on-ade20k-val?p=generalized-decoding-for-pixel-image-and) 
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/generalized-decoding-for-pixel-image-and/instance-segmentation-on-ade20k-val)](https://paperswithcode.com/sota/instance-segmentation-on-ade20k-val?p=generalized-decoding-for-pixel-image-and)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/generalized-decoding-for-pixel-image-and/semantic-segmentation-on-coco-1)](https://paperswithcode.com/sota/semantic-segmentation-on-coco-1?p=generalized-decoding-for-pixel-image-and)
 
 \[[Project Page](https://x-decoder-vl.github.io/)\]   \[[Paper](https://arxiv.org/pdf/2212.11270.pdf)\]    \[[Hugging Face Demo](https://huggingface.co/spaces/xdecoder/Demo)\]  \[[Video](https://youtu.be/nZZTkYM0kd0)\]
 
