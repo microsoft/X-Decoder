@@ -8,11 +8,15 @@
 
 by [Xueyan Zou*](https://maureenzou.github.io/), [Zi-Yi Dou*](https://zdou0830.github.io/), [Jianwei Yang*](https://jwyang.github.io/),  [Zhe Gan](https://zhegan27.github.io/), [Linjie Li](https://scholar.google.com/citations?user=WR875gYAAAAJ&hl=en), [Chunyuan Li](https://chunyuan.li/), [Xiyang Dai](https://sites.google.com/site/xiyangdai/), [Harkirat Behl](https://harkiratbehl.github.io/), [Jianfeng Wang](https://scholar.google.com/citations?user=vJWEw_8AAAAJ&hl=en), [Lu Yuan](https://scholar.google.com/citations?user=k9TsUVsAAAAJ&hl=en), [Nanyun Peng](https://vnpeng.net/), [Lijuan Wang](https://scholar.google.com/citations?user=cDcWXuIAAAAJ&hl=zh-CN), [Yong Jae Lee^](https://pages.cs.wisc.edu/~yongjaelee/), [Jianfeng Gao^](https://www.microsoft.com/en-us/research/people/jfgao/?from=http%3A%2F%2Fresearch.microsoft.com%2Fen-us%2Fum%2Fpeople%2Fjfgao%2F).
 
-:sunflower: Try out our Hugging Face Demo!
-
-![github_figure](https://user-images.githubusercontent.com/11957155/210801832-c9143c42-ef65-4501-95a5-0d54749dcc52.gif)
+## :fire: News
+* **[2022.02.07]** We combine <ins>X-Decoder</ins> (strong image understanding), <ins>GPT-3</ins> (strong language understanding) and <ins>Stable Diffusion</ins> (strong image generation) to make an [instructional image editing demo](https://huggingface.co/spaces/xdecoder/Instruct-X-Decoder), check it out!
+* **[2022.12.21]** We release inference code of X-Decoder.
+* **[2022.12.21]** We release Focal-T pretrained checkpoint.
+* **[2022.12.21]** We release open-vocabulary segmentation benchmark.
 
 ## :notes: Introduction
+
+![github_figure](https://user-images.githubusercontent.com/11957155/210801832-c9143c42-ef65-4501-95a5-0d54749dcc52.gif)
 
 X-Decoder is a generalized decoding model that can generate **pixel-level segmentation** and **token-level texts** seamlessly!
 
@@ -27,12 +31,6 @@ X-Decoder is a generalized decoding model that can generate **pixel-level segmen
 * **One suite of parameters** pretrained for Semantic/Instance/Panoptic Segmentation, Referring Segmentation, Image Captioning, and Image-Text Retrieval;
 * **One model architecture** finetuned for Semantic/Instance/Panoptic Segmentation, Referring Segmentation, Image Captioning, Image-Text Retrieval and Visual Question Answering (with an extra cls head);
 * **Zero-shot task composition** for Region Retrieval, Referring Captioning, Image Editing.
-
-## :fire: Updates
-* **[2022.12.21]** We release inference code of X-Decoder.
-* **[2022.12.21]** We release Focal-T pretrained checkpoint.
-* **[2022.12.21]** We release open-vocabulary segmentation benchmark.
-
 
 ## :snowflake: TODO
 - [ ] Release Training and Prompt Tuning code
