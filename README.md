@@ -86,7 +86,7 @@ python demo/demo_captioning.py evaluate --conf_files configs/xdecoder/svlp_focal
 | X-Decoder (davit-d5,Deformable) | PanoSeg |  [log](https://projects4jw.blob.core.windows.net/x-decoder/release/ade20k_finetune_davitd5_deform_32epoch_log.txt)   | 52.4 | 38.7 | 59.1 |
 
 ## Acknowledgement
-We appreciate the contructive dicussion with Haotian Zhang, and inspiration from GLIP! Also we thank the solid codebase of [Mask2Former](https://github.com/facebookresearch/Mask2Former), and Hugging Face to sponsor GPU for our Demo!
+We appreciate the contructive dicussion with [Haotian Zhang](https://haotian-zhang.github.io/), and inspiration from [GLIP](https://github.com/microsoft/GLIP)! Also we thank the solid codebase of [Mask2Former](https://github.com/facebookresearch/Mask2Former), and HuggingFace :hugs: to sponsor GPU for our Demo! 
 
 ## Citation
 ```
