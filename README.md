@@ -1,4 +1,5 @@
 # X-Decoder Demo for Segmentation In the Wild
+Organizers: 
 
 ## :fire: News
 * **[2023.02.28]** We release Segmentation In the Wild dataset and evaluation code.
