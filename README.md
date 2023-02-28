@@ -1,4 +1,4 @@
-# X-Decoder Demo for Segmentation In the Wild
+# X-Decoder Suite for Segmentation In the Wild
 Organizers: 
 
 ## :fire: News
