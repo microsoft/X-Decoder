@@ -70,6 +70,22 @@ Note: Due to zero-padding, filling a single gpu with multiple images may decreas
 ## Dataset Statistics
 <img width="1240" alt="Screenshot 2023-02-28 at 8 46 56 AM" src="https://user-images.githubusercontent.com/11957155/221888498-f0e332ae-516f-405b-b3ee-faea5db5dc57.png">
 
+## Submission Format
+Please refer to detailed format [HERE](https://github.com/microsoft/X-Decoder/blob/seginw/eval_with_json/submission.zip) : )
+
+```
+.
+├── ade.json/
+│   └── {"ADE150-mIoU": "x", "ADE150-PQ": "x", "ADE150-mAP": "x", "ADE847-mIoU": "x"} 
+├── seginw_Airplane-Parts_val.json/
+│   └── coco format
+├── seginw_Bottles_val.json
+├── seginw_Brain-Tumor_val.json
+├── seginw_Chicken_val.json
+└── ...
+```
+
+
 ## Citation
 ```
 @article{zou2022xdecoder,
