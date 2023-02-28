@@ -4,23 +4,12 @@
 * **[2023.02.28]** We release Segmentation In the Wild dataset and evaluation code.
 
 ## :notes: Introduction
-![github_figure](https://user-images.githubusercontent.com/11957155/210801832-c9143c42-ef65-4501-95a5-0d54749dcc52.gif)
+![seginw_allfig](https://user-images.githubusercontent.com/11957155/221871274-a46da377-5c25-4642-80ef-edf150d31418.png)
 
-**It achieves:**
-* State-of-the-art results on open-vocabulary segmentation and referring segmentation on eight datasets; 
-* Better or competitive finetuned performance to generalist and specialist models on segmentation and VL tasks; 
-* Friendly for efficient finetuning and flexible for novel task composition.
+**The branch includes:** 
 
-**It supports:** 
-
-* **One suite of parameters** pretrained for Semantic/Instance/Panoptic Segmentation, Referring Segmentation, Image Captioning, and Image-Text Retrieval;
-* **One model architecture** finetuned for Semantic/Instance/Panoptic Segmentation, Referring Segmentation, Image Captioning, Image-Text Retrieval and Visual Question Answering (with an extra cls head);
-* **Zero-shot task composition** for Region Retrieval, Referring Captioning, Image Editing.
-
-## :snowflake: TODO
-- [ ] Release Training and Prompt Tuning code
-- [ ] Release Finetuned model
-- [ ] Release Base and Large model
+* **Dataset** The download link for SegInW dataset;
+* **Evaluation** On the fly evaluation code supported X-Decoder evluation.
 
 ## Getting Started
 
@@ -32,21 +21,31 @@ pip install git+https://github.com/cocodataset/panopticapi.git
 python -m pip install -r requirements.txt
 ```
 
-To prepare the dataset: [DATASET.md](./DATASET.md)
+### Download
+Please download the dataset [HERE](https://projects4jw.blob.core.windows.net/x-decoder/release/seginw.zip)!
 
-## Open Vocabulary Segmentation
+```
+.
+└── seginw/
+    ├── Airplane-Parts/
+    │   ├── train/
+    │   │   ├── *.jpg
+    │   │   └── _annotations_min1cat.coco.json
+    │   ├── train_10shot/
+    │   │   └── ...
+    │   └── valid/
+    │       └── ...
+    ├── Bottles/
+    │   └── ...
+    └── ...
+```
+
+## Evaluation
 ```sh
 mpirun -n 8 python eval.py evaluate --conf_files configs/xdecoder/svlp_focalt_lang.yaml  --overrides WEIGHT /pth/to/ckpt
 ```
 Note: Due to zero-padding, filling a single gpu with multiple images may decrease the performance.
 
-## Inference Demo
-```sh
-# For Segmentation Tasks
-python demo/demo_semseg.py evaluate --conf_files configs/xdecoder/svlp_focalt_lang.yaml  --overrides WEIGHT /pth/to/xdecoder_focalt_best_openseg.pt
-# For VL Tasks
-python demo/demo_captioning.py evaluate --conf_files configs/xdecoder/svlp_focalt_lang.yaml  --overrides WEIGHT /pth/to/xdecoder_focalt_last_novg.pt
-```
 
 
 ## Model Zoo
@@ -62,18 +61,9 @@ python demo/demo_captioning.py evaluate --conf_files configs/xdecoder/svlp_focal
 * X-Decoder [NoVG Tiny](https://projects4jw.blob.core.windows.net/x-decoder/release/xdecoder_focalt_last_novg.pt)
 * X-Decoder [Last Tiny](https://projects4jw.blob.core.windows.net/x-decoder/release/xdecoder_focalt_last.pt)
 
-## Additional Results
 
-* Finetuned ADE 150 (32 epochs)
-
-| Model                           | Task    | Log | PQ   | mAP  | mIoU |
-|---------------------------------|---------|-----|------|------|------|
-| X-Decoder (davit-d5,Deformable) | PanoSeg |  [log](https://projects4jw.blob.core.windows.net/x-decoder/release/ade20k_finetune_davitd5_deform_32epoch_log.txt)   | 52.4 | 38.7 | 59.1 |
-
-## Acknowledgement
-* We appreciate the contructive dicussion with [Haotian Zhang](https://haotian-zhang.github.io/), and inspiration from [GLIP](https://github.com/microsoft/GLIP)! 
-* We thank the solid codebase of [Mask2Former](https://github.com/facebookresearch/Mask2Former)
-* It is really generous that HuggingFace :hugs: sponsors GPU for our Demo!
+## Dataset Statistics
+<img width="1240" alt="Screenshot 2023-02-28 at 8 46 56 AM" src="https://user-images.githubusercontent.com/11957155/221888498-f0e332ae-516f-405b-b3ee-faea5db5dc57.png">
 
 ## Citation
 ```
