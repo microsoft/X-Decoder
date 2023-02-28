@@ -42,10 +42,14 @@ Please download the dataset [HERE](https://projects4jw.blob.core.windows.net/x-d
 ```
 
 ## Evaluation
+
+* Evaluate under Framework X-Decoder
 ```sh
 mpirun -n 8 python eval.py evaluate --conf_files configs/xdecoder/svlp_focalt_lang.yaml  --overrides WEIGHT /pth/to/ckpt
 ```
 Note: Due to zero-padding, filling a single gpu with multiple images may decrease the performance.
+
+* Evaluate Using Json File
 
 
 
