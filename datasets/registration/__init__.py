@@ -14,4 +14,5 @@ from . import (
     register_bdd100k_semseg,
     register_scannet_panoptic,
     register_bdd100k_panoseg,
+    register_seginw_instance,
 )

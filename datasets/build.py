@@ -42,6 +42,7 @@ from .dataset_mappers import (
     BDDSemDatasetMapper,
     ScanNetPanoDatasetMapper,
     RefCOCODatasetMapper,
+    SeginWDatasetMapper,
 )
 from .evaluation import (InstanceSegEvaluator, 
                          ClassificationEvaluator, 
@@ -351,6 +352,9 @@ def get_config_from_name(cfg, dataset_name):
     elif 'bdd' in dataset_name:
         cfg.update(cfg['BDD'])
         return cfg
+    elif 'seginw' in dataset_name:
+        cfg.update(cfg['SEGINW'])
+        return cfg
     else:
         assert False, "dataset not support."
 
@@ -374,6 +378,8 @@ def build_eval_dataloader(cfg, ):
             mapper = SunRGBDSegDatasetMapper(cfg, False)
         elif 'refcoco' in dataset_name:
             mapper = RefCOCODatasetMapper(cfg, False)
+        elif 'seginw' in dataset_name:
+            mapper = SeginWDatasetMapper(cfg, False)
         else:
             mapper = None
         dataloaders += [build_detection_test_loader(cfg, dataset_name, mapper=mapper)]

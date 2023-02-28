@@ -11,3 +11,4 @@ from .scannet_dataset_mapper import ScanNetSegDatasetMapper
 from .bdd_semseg_dataset_mapper import BDDSemDatasetMapper
 from .scannet_pano_dataset_mapper import ScanNetPanoDatasetMapper
 from .refcoco_dataset_mapper import RefCOCODatasetMapper
+from .seginw_dataset_mapper import SeginWDatasetMapper

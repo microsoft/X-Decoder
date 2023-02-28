@@ -21,6 +21,7 @@ import torchvision
 from torch import Tensor
 
 from utils.constants import *
+from utils.seginw_categories import SEGINW_CATEGORIES
 
 
 def _max_by_axis(the_list):
@@ -195,5 +196,7 @@ def get_class_names(name):
         return BDD_PANO + ["background"]
     elif 'vlp' in name:
         return ["background"]
+    elif 'seginw' in name:
+        return SEGINW_CATEGORIES[name.replace('_train','').replace('_val','')] + ["background"]
     else:
         assert False, "text dataset name {} is not defined".format(name)

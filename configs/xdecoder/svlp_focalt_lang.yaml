@@ -172,9 +172,12 @@ INPUT:
 
 DATASETS:
   # open vocabulary segmentation evaluation.
-  TEST: ["ade20k_panoptic_val", "ade20k_full_sem_seg_val", "sunrgbd_37_val_seg", "scannet_21_val_seg", "scannet_21_panoptic_val", "scannet_41_val_seg", "cityscapes_fine_panoptic_val", "cityscapes_fine_instance_seg_val", "cityscapes_fine_sem_seg_val", "bdd10k_val_sem_seg", "bdd10k_40_panoptic_val"]
+  # TEST: ["ade20k_panoptic_val", "ade20k_full_sem_seg_val", "sunrgbd_37_val_seg", "scannet_21_val_seg", "scannet_21_panoptic_val", "scannet_41_val_seg", "cityscapes_fine_panoptic_val", "cityscapes_fine_instance_seg_val", "cityscapes_fine_sem_seg_val", "bdd10k_val_sem_seg", "bdd10k_40_panoptic_val"]
   # Supervised metrics evaluation.
   # TEST: ["vlp_captioning_val", "refcocog_val_umd", "vlp_val"]
+  # Segmentation In the Wild
+  TEST: ['seginw_Elephants_val', 'seginw_Hand-Metal_val', 'seginw_Watermelon_val', 'seginw_House-Parts_val', 'seginw_HouseHold-Items_val', 'seginw_Strawberry_val', 'seginw_Fruits_val', 'seginw_Nutterfly-Squireel_val', 'seginw_Hand_val', 'seginw_Garbage_val', 'seginw_Chicken_val', 'seginw_Rail_val', 'seginw_Airplane-Parts_val', 'seginw_Brain-Tumor_val', 'seginw_Poles_val', 'seginw_Electric-Shaver_val', 'seginw_Bottles_val', 'seginw_Toolkits_val', 'seginw_Trash_val', 'seginw_Salmon-Fillet_val', 'seginw_Puppies_val', 'seginw_Tablets_val', 'seginw_Phones_val', 'seginw_Cows_val', 'seginw_Ginger-Garlic_val']
+
   CLASS_CONCAT: false
   SIZE_DIVISIBILITY: 32
   PROPOSAL_FILES_TRAIN: []
@@ -300,3 +303,19 @@ CITY:
   DATALOADER:
     FILTER_EMPTY_ANNOTATIONS: True
     NUM_WORKERS: 4
+
+SEGINW:
+  INPUT:
+    PIXEL_MEAN: [123.675, 116.280, 103.530]
+    PIXEL_STD: [58.395, 57.120, 57.375]
+    MIN_SIZE_TEST: 512
+    MAX_SIZE_TEST: 1024
+    FORMAT: "RGB"
+  DATALOADER:
+    FILTER_EMPTY_ANNOTATIONS: False
+    NUM_WORKERS: 0
+    LOAD_PROPOSALS: False
+    SAMPLER_TRAIN: "TrainingSampler"
+    ASPECT_RATIO_GROUPING: False
+  TEST:
+    BATCH_SIZE_TOTAL: 8
