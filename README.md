@@ -9,7 +9,7 @@ Organizers:
 
 **The branch includes:** 
 
-* **Dataset** The download link for SegInW dataset;
+* **Dataset** The download link for SGinW dataset;
 * **Evaluation** On the fly evaluation code supported X-Decoder evaluation.
 
 ## Getting Started
