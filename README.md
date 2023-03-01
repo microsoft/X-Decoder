@@ -2,6 +2,7 @@
 Organizers: 
 
 ## :fire: News
+* **[2023.03.01]** The [Segmentation in the Wild Challenge](https://eval.ai/web/challenges/challenge-page/1931/overview) had been launched and ready for submitting results!
 * **[2023.02.28]** We release Segmentation In the Wild dataset and evaluation code.
 
 ## :notes: Introduction
