@@ -9,7 +9,8 @@ by [Xueyan Zou*](https://maureenzou.github.io/), [Zi-Yi Dou*](https://zdou0830.g
 
 ## :fire: News
 
-* **[2023.02.28]** We released the [SGinW benchmark](https://github.com/microsoft/X-Decoder/tree/seginw) for our challenge, welcome to submit your works and compete on the leaderboard!
+* **[2023.03.01]** The [Segmentation in the Wild Challenge](https://eval.ai/web/challenges/challenge-page/1931/overview) had been launched and ready for submitting results!
+* **[2023.02.28]** We released the [SGinW benchmark](https://github.com/microsoft/X-Decoder/tree/seginw) for our challenge. Welcome to build your own models on the benchmark!
 * **[2023.02.27]** Our X-Decoder has been accepted by CVPR 2023!
 * **[2023.02.07]** We combine <ins>X-Decoder</ins> (strong image understanding), <ins>GPT-3</ins> (strong language understanding) and <ins>Stable Diffusion</ins> (strong image generation) to make an [instructional image editing demo](https://huggingface.co/spaces/xdecoder/Instruct-X-Decoder), check it out!
 * **[2022.12.21]** We release inference code of X-Decoder.
