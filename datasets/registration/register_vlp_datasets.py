@@ -6,6 +6,7 @@
 # Modified by Xueyan Zou (xueyan@cs.wisc.edu)
 # --------------------------------------------------------
 import os
+import logging
 
 from detectron2.data import DatasetCatalog, MetadataCatalog
 import pyarrow as pa
@@ -96,18 +97,21 @@ def register_pretrain(
     # the name is "coco_2017_train/val_caption_only"
     semantic_name = name
     arrow_root = os.path.join(arrow_root, 'pretrain_arrows_code224')
-    pretrain_arrows = load_pretrain_arrows(arrow_root, arrow_paths)
-    DatasetCatalog.register(
-        semantic_name,
-        lambda: load_pretrain_data(arrow_root, metadata, name, pretrain_arrows),
-    )
-    MetadataCatalog.get(semantic_name).set(
-        arrow_root=arrow_root,
-        evaluator_type=evaluator_mapper[name],
-        arrows=pretrain_arrows,
-        **metadata,
-    )
-
+    if os.path.exists(arrow_root):
+        pretrain_arrows = load_pretrain_arrows(arrow_root, arrow_paths)
+        DatasetCatalog.register(
+            semantic_name,
+            lambda: load_pretrain_data(arrow_root, metadata, name, pretrain_arrows),
+        )
+        MetadataCatalog.get(semantic_name).set(
+            arrow_root=arrow_root,
+            evaluator_type=evaluator_mapper[name],
+            arrows=pretrain_arrows,
+            **metadata,
+        )
+    else:
+        logger = logging.getLogger(__name__)
+        logger.warning("WARNING: Cannot find VLPreDataset. Make sure datasets are accessible if you want to use them for training or evaluation.")        
 
 def register_all_pretrain(root):
     for (
