@@ -8,7 +8,7 @@
 
 ### Why are we unique?
 
-This specific project was started with our previous two demos, [all-in-one](https://huggingface.co/spaces/xdecoder/Demo) and [instruct x-decoder](https://huggingface.co/spaces/xdecoder/Instruct-X-Decoder). Then we are inspired by [visual-chatgpt](https://github.com/microsoft/visual-chatgpt) developed by our MSRA collegues to use the langchain to empower a conversational X-Decoder and encompassing all the capacities of our single X-Decoder model.
+This specific project was started with our previous two demos, [all-in-one](https://huggingface.co/spaces/xdecoder/Demo) and [instruct x-decoder](https://huggingface.co/spaces/xdecoder/Instruct-X-Decoder). Then we were inspired by [visual-chatgpt](https://github.com/microsoft/visual-chatgpt) developed by our MSRA collegues to use the [langchain](https://github.com/hwchase17/langchain) to empower a conversational X-Decoder and encompassing all the capacities of our single X-Decoder model.
 
 Our **X-Chat** has several unique and new features:
 
@@ -64,3 +64,7 @@ python xchat.py
   year        = {2022},
 }
 ```
+
+## Contact Information
+
+For issues to use our X-Chat, please submit a GitHub issue or contact Jianwei Yang (jianwyan@microsoft.com).
