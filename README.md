@@ -2,7 +2,7 @@
 
 ## :fire: News
 
-* **[2023.03.14]** We build X-Chat, a multi-modal interactive X-Decoder!
+* **[2023.03.14]** We build X-Chat, a multi-modal conversational X-Decoder through langchain!
 
 ## :notes: Introduction
 

@@ -28,3 +28,7 @@ scann
 kornia==0.6.4
 torchmetrics==0.6.0
 mpi4py
+altair
+diffusers
+langchain
+pytorch_lightning
