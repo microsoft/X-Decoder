@@ -44,6 +44,9 @@ wget https://projects4jw.blob.core.windows.net/x-decoder/release/xdecoder_focalt
 
 # create a folder for image uploading and image retrieval
 mkdir image & mkdir image_pool
+
+# export openai key
+export OPENAI_API_KEY=$YOUR_KEY
 ```
 
 ## Run Demo
