@@ -16,12 +16,11 @@ Our **X-Chat** has several unique and new features:
 
 * **It delivers the state-of-the-art referring segmentation performance. It is much better than CLIPSeg or any existing open-vocabulary segmentation system!**
 
-* **It support image retrieval from the pool. You can either generate an image with a text prompt or find a real image from the pool!**
+* **It supports text-to-image retrieval. You can choose find a real image from your own pool or ask for generating a new image!**
 
 In the next, we will:
 
 * **Have visual question answering added to our pretrained X-Decoder model. Our model shows good VQA performance, but was not added to pretraining, though no barrier at all.**
-
 
 
 ## Getting Started
