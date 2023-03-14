@@ -32,3 +32,4 @@ altair
 diffusers
 langchain
 pytorch_lightning
+openai
