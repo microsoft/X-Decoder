@@ -1,3 +1,11 @@
+# --------------------------------------------------------
+# X-Chat -- Multi-Modal Interactive X-Decoder
+# Paper: Generalized Decoding for Pixels, Images, and Language (CVPR 2023)
+# Copyright (c) 2023 Microsoft
+# Licensed under The MIT License [see LICENSE for details]
+# Written by Jianwei Yang (jianwyan@microsoft.com) based on visual-chatgpt (https://github.com/microsoft/visual-chatgpt)
+# --------------------------------------------------------
+
 import sys
 import os
 import re
@@ -273,7 +281,7 @@ class ImageRetrieval:
     def inference(self, text_query):
         if self.v_emb is None:
             print("Please upload images to image_pool folder")
-            return ""
+            return "there is no images in the pool, need to generate an image instead"
 
         texts = text_query
         texts_ = [[x.strip() if x.strip().endswith('.') else (x.strip() + '.')] for x in texts.split(',')][0]
