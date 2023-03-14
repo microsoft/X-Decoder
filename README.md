@@ -12,16 +12,17 @@ This specific project was started with our previous two demos, [all-in-one](http
 
 Our **X-Chat** has several unique and new features:
 
-* **It uses a SINGLE X-Decoder model to support a wide range of vision and vision-language tasks. As such, you do not need separate models for each individual tasks!**
+* **It uses a SINGLE X-Decoder model to support a wide range of vision and vision-language tasks. As such, you do not need separate models for individual tasks!**
 
-* **It delivers the state-of-the-art referring segmentation performance. It is much better than CLIPSeg or any existing open-vocabulary segmentation system!**
+* **It delivers the state-of-the-art segmentation performance. It is much better than CLIPSeg or other existing open-vocabulary segmentation systems!**
 
-* **It supports text-to-image retrieval. You can choose find a real image from your own pool or ask for generating a new image!**
+* **It also supports text-to-image retrieval. You can choose find a real image from your own pool or ask for generating a new image!**
 
 In the next, we will:
 
 * **Have visual question answering added to our pretrained X-Decoder model. Our model shows good VQA performance, but was not added to pretraining, though no barrier at all.**
 
+* **You may notice we developed a more grounded instructPix2Pix with the support of our X-Decoder. Next we integrate it to our X-Chat!**
 
 ## Getting Started
 
