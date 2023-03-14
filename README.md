@@ -1,8 +1,8 @@
-# X-Chat: X-Decoder for a Chat
+# X-Chat: Connecting generalist vision model with GPT
 
 ## :fire: News
 
-* **[2023.03.14]** We build X-Chat, a multi-modal conversational X-Decoder through langchain!
+* **[2023.03.14]** We build X-Chat, a demo of multi-modal conversational X-Decoder using GPT-3 and langchain!
 
 ## :notes: Introduction
 
