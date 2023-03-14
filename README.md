@@ -47,12 +47,13 @@ mkdir image & mkdir image_pool
 
 ## Run Demo
 ```sh
-# Simply run this single line!!!
+# Simply run this single line and enjoy it!!!
 python xchat.py
 ```
 
 ## Acknowledgement
-* We are highly inspired by [visual-chatgpt](https://github.com/microsoft/visual-chatgpt) in the usage of langchain, thanks for the great work!
+
+We are highly inspired by [visual-chatgpt](https://github.com/microsoft/visual-chatgpt) in the usage of langchain, and build on top of many great open-sourced projects: [HuggingFace Transformers](https://github.com/huggingface), [LangChain](https://github.com/hwchase17/langchain), [Stable Diffusion](https://github.com/CompVis/stable-diffusion), [InstructPix2Pix](https://github.com/timothybrooks/instruct-pix2pix).
 
 ## Citation
 ```

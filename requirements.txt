@@ -30,6 +30,6 @@ torchmetrics==0.6.0
 mpi4py
 altair
 diffusers
-langchain
 pytorch_lightning
 openai
+langchain==0.0.101
