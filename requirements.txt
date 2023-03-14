@@ -33,3 +33,4 @@ diffusers
 langchain
 pytorch_lightning
 openai
+accelerate
