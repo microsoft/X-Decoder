@@ -1,4 +1,4 @@
-# X-Chat: Multi-modal Interactive X-Decoder
+# X-Chat: Multi-Modal Interactive X-Decoder
 
 ## :fire: News
 
