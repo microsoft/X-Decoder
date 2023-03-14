@@ -6,6 +6,24 @@
 
 ## :notes: Introduction
 
+### Why are we unique?
+
+This specific project was started with our previous two demos, [all-in-one](https://huggingface.co/spaces/xdecoder/Demo) and [instruct x-decoder](https://huggingface.co/spaces/xdecoder/Instruct-X-Decoder). Then we are inspired by [visual-chatgpt](https://github.com/microsoft/visual-chatgpt) developed by our MSRA collegues to use the langchain to empower a conversational X-Decoder and encompassing all the capacities of our single X-Decoder model.
+
+Our **X-Chat** has several unique and new features:
+
+* **It uses a SINGLE X-Decoder model to support a wide range of vision and vision-language tasks. As such, you do not need separate models for each individual tasks!**
+
+* **It delivers the state-of-the-art referring segmentation performance. It is much better than CLIPSeg or any existing open-vocabulary segmentation system!**
+
+* **It support image retrieval from the pool. You can either generate an image with a text prompt or find a real image from the pool!**
+
+In the next, we will:
+
+* **Have visual question answering added to our pretrained X-Decoder model. Our model shows good VQA performance, but was not added to pretraining, though no barrier at all.**
+
+
+
 ## Getting Started
 
 ### Installation
