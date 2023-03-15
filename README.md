@@ -1,5 +1,5 @@
 # X-GPT: Connecting generalist X-Decoder with GPT-3
-![demo6](https://user-images.githubusercontent.com/11957155/225445794-62f69aec-c986-40de-98d5-41237d4def3e.gif)
+![demo6_AdobeExpress](https://user-images.githubusercontent.com/11957155/225451614-62c6f129-5c4a-4706-971c-0c90024a2bfa.gif)
 
 ## :fire: News
 
