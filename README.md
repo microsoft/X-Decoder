@@ -6,6 +6,8 @@
 
 ## :notes: Introduction
 
+<img src="./images/X-GPT-fast-gif.gif" width="750">
+
 ### Why are we unique?
 
 This specific project was started with our previous two demos, [all-in-one](https://huggingface.co/spaces/xdecoder/Demo) and [instruct x-decoder](https://huggingface.co/spaces/xdecoder/Instruct-X-Decoder). Then we were inspired by [visual-chatgpt](https://github.com/microsoft/visual-chatgpt) developed by our MSRA collegues to use the [langchain](https://github.com/hwchase17/langchain) to empower a conversational X-Decoder and encompassing all the capacities of our single X-Decoder model.

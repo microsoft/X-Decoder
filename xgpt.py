@@ -44,7 +44,7 @@ from detectron2.data import MetadataCatalog
 metedata = MetadataCatalog.get('coco_2017_train_panoptic')
 MetadataCatalog.get("vqa_metadata").set(id2answer=torch.load("id2answer.da"))
 
-X_GPT_PREFIX = """X-GPT is developed by Microsoft, UW-Madison and UCLA and designed to be able to assist with a wide range of vision and vision-langauge tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. X-GPT is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
+X_GPT_PREFIX = """X-GPT is developed by Microsoft, UW-Madison and UCLA and designed to accomplish a wide range of vision and vision-langauge tasks. It is empowered by three models, X-Decoder for generic visual understanding from image-level to pixel-level, GPT-3 for generic language-based reasoning and planning, stable diffusion for image generation and editing. Based on this, X-GPT can discuss with people on a lot topics regarding images and texts.
 
 X-GPT is able to process and understand large amounts of text and images. It relies on X-Decoder for different types of visual understanding tasks and stable diffusion for image generation. Each image will have a file name formed as "image/xxx.png", and X-GPT can invoke different tools to indirectly understand pictures. When talking about images, X-GPT is very strict to the file name and will never fabricate nonexistent files. When using tools to generate new image files, X-GPT is also known that the image may not be the same as the user's demand, and will use other visual question answering tools or description tools to observe the real image. X-GPT is able to use tools in a sequence, and is loyal to the tool observation outputs rather than faking the image content and image file name. It will remember to provide the file name from the last tool observation, if a new image is generated.
 
@@ -244,7 +244,10 @@ class ImageRetrieval:
     def _get_image_list(self):
         imgs_root = self.image_folder_path
         self.img_pths = sorted(
-            glob.glob(os.path.join(imgs_root, '*.jpg')) + glob.glob(os.path.join(imgs_root, '*.png')) + glob.glob(os.path.join(imgs_root, '*.webp'))
+            glob.glob(os.path.join(imgs_root, '*.jpg')) \
+            + glob.glob(os.path.join(imgs_root, '*.png')) \
+            + glob.glob(os.path.join(imgs_root, '*.webp')) \
+            + glob.glob(os.path.join(imgs_root, '*.jfif'))
         )
         if len(self.img_pths) == 0:
             return
@@ -383,7 +386,7 @@ class ConversationBot:
                  description="useful when you want to know what is about a specific object or region in the photo. like: describe the bird in the image or describe the mountain in the image. receives image_path as input. "
                              "The input to this tool should be a comma seperated string of two, representing the image_path and the object need to be described. "),  # can be replaced by x-decoder                             
             Tool(name="Get Referring Image Segementation", func=self.refseg.inference,
-                 description="useful when you want to segment a specific object or region in the photo. like: segment the bird in the image or the mountain in the image. receives image_path as input. "
+                 description="useful when you want to locate or segment a specific object or region in the photo. like: segment the bird in the image or locate the mountain in the image. receives image_path as input. "
                              "The input to this tool should be a comma seperated string of two, representing the image_path and the object need to be segmented. "),  # can be replaced by x-decoder                                                          
             Tool(name="Retrieve Image From A Pool Given User Input Text", func=self.iret.inference,
                  description="useful when you want to find or retrieve an image from the image pool given an user input text. like: find me an image of an object or something, or give me an image that includes some objects. "
