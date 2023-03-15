@@ -1,4 +1,5 @@
 # X-GPT: Connecting generalist X-Decoder with GPT-3
+
 ![demo](https://user-images.githubusercontent.com/11957155/225451614-62c6f129-5c4a-4706-971c-0c90024a2bfa.gif)
 
 ## :fire: News
@@ -7,12 +8,13 @@
 
 ## :notes: Introduction
 
+![intro](https://user-images.githubusercontent.com/11957155/225456972-5a859a87-d03d-44e9-80c8-1aa9a67afa79.png)
+
 ### What are the uniques?
 
 This specific project was started with our previous two demos, [all-in-one](https://huggingface.co/spaces/xdecoder/Demo) and [instruct x-decoder](https://huggingface.co/spaces/xdecoder/Instruct-X-Decoder). Then we were inspired by [visual-chatgpt](https://github.com/microsoft/visual-chatgpt) developed by our MSRA collegues to use the [langchain](https://github.com/hwchase17/langchain) to empower a conversational X-Decoder and encompassing all the capacities of our single X-Decoder model.
 
 Our **X-GPT** has several unique and new features:
-![intro](https://user-images.githubusercontent.com/11957155/225456972-5a859a87-d03d-44e9-80c8-1aa9a67afa79.png)
 
 * **It uses a SINGLE X-Decoder model to support a wide range of vision and vision-language tasks. As such, you do not need separate models for individual tasks!**
 
