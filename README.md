@@ -42,7 +42,7 @@ sh install_cococapeval.sh
 wget https://projects4jw.blob.core.windows.net/x-decoder/release/xdecoder_focalt_last_novg.pt
 wget https://projects4jw.blob.core.windows.net/x-decoder/release/xdecoder_focalt_vqa.pt
 
-# create a folder for image uploading and image retrieval
+# create a folder for image uploading and image retrieval, note image_folder is for image retrieval, image is for cache
 mkdir image & mkdir image_pool
 
 # export openai key, please follow https://langchain.readthedocs.io/en/latest/modules/llms/integrations/azure_openai_example.html
