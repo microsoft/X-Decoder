@@ -28,7 +28,7 @@ from diffusers import StableDiffusionInpaintPipeline
 from PIL import Image
 import numpy as np
 from omegaconf import OmegaConf
-from transformers import pipeline, BlipProcessor, BlipForConditionalGeneration, BlipForQuestionAnswering
+from transformers import pipeline
 import cv2
 import einops
 from scipy import ndimage
@@ -42,14 +42,15 @@ from utils.distributed import init_distributed
 from utils.visualizer import Visualizer
 from detectron2.data import MetadataCatalog
 metedata = MetadataCatalog.get('coco_2017_train_panoptic')
+MetadataCatalog.get("vqa_metadata").set(id2answer=torch.load("id2answer.da"))
 
-X_CHAT_PREFIX = """X-Chat is designed to be able to assist with a wide range of text and visual related tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. X-Chat is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
+X_CHAT_PREFIX = """X-Chat is designed to be able to assist with a wide range of vision and vision-langauge tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. X-Chat is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
 
-X-Chat is able to process and understand large amounts of text and images. As a language model, X-Chat can not directly read images, but it has a list of tools to finish different visual tasks. Each image will have a file name formed as "image/xxx.png", and X-Chat can invoke different tools to indirectly understand pictures. When talking about images, X-Chat is very strict to the file name and will never fabricate nonexistent files. When using tools to generate new image files, X-Chat is also known that the image may not be the same as the user's demand, and will use other visual question answering tools or description tools to observe the real image. X-Chat is able to use tools in a sequence, and is loyal to the tool observation outputs rather than faking the image content and image file name. It will remember to provide the file name from the last tool observation, if a new image is generated.
+X-Chat is able to process and understand large amounts of text and images. It relies on X-Decoder for different types of visual understanding tasks. Each image will have a file name formed as "image/xxx.png", and X-Chat can invoke different tools to indirectly understand pictures. When talking about images, X-Chat is very strict to the file name and will never fabricate nonexistent files. When using tools to generate new image files, X-Chat is also known that the image may not be the same as the user's demand, and will use other visual question answering tools or description tools to observe the real image. X-Chat is able to use tools in a sequence, and is loyal to the tool observation outputs rather than faking the image content and image file name. It will remember to provide the file name from the last tool observation, if a new image is generated.
 
 Human may provide new figures to X-Chat with a description. The description helps X-Chat to understand this image, but X-Chat should use tools to finish following tasks, rather than directly imagine from the description.
 
-Overall, X-Chat is a powerful visual dialogue assistant tool that can help with a wide range of tasks and provide valuable insights and information on a wide range of topics. 
+Overall, X-Chat is a powerful conversational that can help with a wide range of tasks and provide valuable insights and information on a wide range of topics. 
 
 
 TOOLS:
@@ -83,7 +84,7 @@ Previous conversation history:
 {chat_history}
 
 New input: {input}
-Since X-Chat is a text language model, X-Chat must use tools to observe images rather than imagination.
+X-Chat must use tools to observe images rather than imagination.
 The thoughts and observations are only visible for X-Chat, X-Chat should remember to repeat important information in the final response for Human. 
 Thought: Do I need to use a tool? {agent_scratchpad}"""
 
@@ -132,27 +133,8 @@ class XDecoder:
         self.model = BaseModel(opt, build_model(opt)).from_pretrained("xdecoder_focalt_last_novg.pt").eval().to(device)
         self.model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(["background", "background"], is_eval=True)
 
-    def inference(self, image_path, text):
-        threshold = 0.5
-        min_area = 0.02
-        padding = 20
-        original_image = Image.open(image_path)
-        image = original_image.resize((512, 512))
-        inputs = self.processor(text=text, images=image, padding="max_length", return_tensors="pt",).to(self.device)
-        with torch.no_grad():
-            outputs = self.model(**inputs)
-        mask = torch.sigmoid(outputs[0]).squeeze().cpu().numpy() > threshold
-        area_ratio = len(np.argwhere(mask)) / (mask.shape[0] * mask.shape[1])
-        if area_ratio < min_area:
-            return None
-        true_indices = np.argwhere(mask)
-        mask_array = np.zeros_like(mask, dtype=bool)
-        for idx in true_indices:
-            padded_slice = tuple(slice(max(0, i - padding), i + padding + 1) for i in idx)
-            mask_array[padded_slice] = True
-        visual_mask = (mask_array * 255).astype(np.uint8)
-        image_mask = Image.fromarray(visual_mask)
-        return image_mask.resize(image.size)
+        self.model_ft = BaseModel(opt, build_model(opt)).from_pretrained("xdecoder_focalt_vqa.pt").eval().to(device)
+        self.model_ft.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(["background", "background"], is_eval=True)
 
 xdmodel = XDecoder(device="cuda")
 
@@ -359,24 +341,26 @@ class ReferringImageSegmentation:
         real_image.save(updated_image_path)
         return updated_image_path
 
-class BLIPVQA:
-    """ 
-    NOTE: We will REPLACE this vqa model with our X-Decoder soon!!!
-    """
+class ImageQuestionAnswering:
     def __init__(self, device):
-        print("Initializing BLIP VQA to %s" % device)
+        print("Initializing ImageQuestionAnswering to %s" % device)
         self.device = device
-        self.processor = BlipProcessor.from_pretrained("Salesforce/blip-vqa-base")
-        self.model = BlipForQuestionAnswering.from_pretrained("Salesforce/blip-vqa-base").to(self.device)
+        self.processor = transforms.Compose([transforms.Resize((640,640), interpolation=Image.BICUBIC)])
 
-    def get_answer_from_question_and_image(self, inputs):
-        image_path, question = inputs.split(",")
-        raw_image = Image.open(image_path).convert('RGB')
-        print(F'BLIPVQA :question :{question}')
-        inputs = self.processor(raw_image, question, return_tensors="pt").to(self.device)
-        out = self.model.generate(**inputs)
-        answer = self.processor.decode(out[0], skip_special_tokens=True)
+    def inference(self, input):
+        image_path, question = input.split(",")
+        image = self.processor(Image.open(image_path).convert("RGB"))
+        image = np.asarray(image)
+        images = torch.from_numpy(image.copy()).permute(2,0,1).to(self.device)
+        tokens = xdmodel.model_ft.model.sem_seg_head.predictor.lang_encoder.tokenizer([question], padding='max_length', truncation=True, max_length=77, return_tensors='pt')
+        batch_inputs = [{'image': images, 'tokens': tokens, 'questions': [question], 'height': images.shape[1], 'width': images.shape[2]}]
+        outputs = xdmodel.model_ft.model.evaluate_vqa(batch_inputs, None)
+        answer = outputs[-1]['preds']
         return answer
+
+# vqa = ImageQuestionAnswering(device="cuda:0")
+# answer = vqa.inference("image_pool/002.jpg, Is there a flower in the image?")
+# print(answer)
 
 class ConversationBot:
     def __init__(self):
@@ -384,11 +368,11 @@ class ConversationBot:
         self.llm = OpenAI(engine="text003", temperature=0)
         self.edit = ImageEditing(device="cuda:0")
         self.i2t = ImageCaptioning(device="cuda:0")
+        self.iqa = ImageQuestionAnswering(device="cuda:0")
         self.iret = ImageRetrieval(device="cuda:0")
         self.refi2t = ReferringImageCaptioning(device="cuda:0")
         self.refseg = ReferringImageSegmentation(device="cuda:0")
         self.t2i = T2I(device="cuda:0")
-        self.BLIPVQA = BLIPVQA(device="cuda:0")
         self.pix2pix = Pix2Pix(device="cuda:0")
         self.memory = ConversationBufferMemory(memory_key="chat_history", output_key='output')
         self.tools = [
@@ -413,10 +397,10 @@ class ConversationBot:
             Tool(name="Replace Something From The Photo", func=self.edit.replace_part_of_image,
                  description="useful when you want to replace an object from the object description or location with another object from its description. "
                              "The input to this tool should be a comma seperated string of three, representing the image_path, the object to be replaced, the object to be replaced with "), # can be replaced by instruct-x-decoder
-            Tool(name="Change Something In The Photo", func=self.pix2pix.inference,
-                 description="useful when you want to change the style of the image or object in the image to be like the text. like: make it look like a painting. or make it like a robot. or change the curtain to red. "
+            Tool(name="Change or Add Something In The Photo", func=self.pix2pix.inference,
+                 description="useful when you want to change the style of the image or object in the image or add new stuffs to the image adhering the text. like: make it look like a painting. or make it like a robot. or change the curtain to red. "
                              "The input to this tool should be a comma seperated string of two, representing the image_path and the text. "),  # can be replaced by instruct-pix2pix + x-decoder
-            Tool(name="Answer Question About The Image", func=self.BLIPVQA.get_answer_from_question_and_image,
+            Tool(name="Answer Question About The Image", func=self.iqa.inference,
                  description="useful when you need an answer for a question based on an image. like: what is the background color of the last image, how many cats in this figure, what is in this figure. "
                              "The input to this tool should be a comma seperated string of two, representing the image_path and the question"), # can be replaced by x-decoder
             ]
@@ -469,7 +453,7 @@ if __name__ == '__main__':
     gr.close_all()    
     bot = ConversationBot()
     with gr.Blocks(css="#chatbot .overflow-y-auto{height:500px}") as demo:
-        chatbot = gr.Chatbot(elem_id="chatbot", label="X-Chat")
+        chatbot = gr.Chatbot(elem_id="chatbot", label="X-Chat").style(height=450)
         state = gr.State([])
         with gr.Row():
             with gr.Column(scale=0.7):

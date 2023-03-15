@@ -85,6 +85,8 @@ MODEL:
       ENABLED: True
       DIM_IMG: 768
       ENSEMBLE: True
+    VQA:
+      ENABLED: True      
     HIDDEN_DIM: 512
     NUM_OBJECT_QUERIES: 101
     NHEADS: 8

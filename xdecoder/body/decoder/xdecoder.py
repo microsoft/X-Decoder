@@ -145,6 +145,15 @@ class XDecoder(nn.Module):
             trunc_normal_(self.caping_embed, std=.02)
             self.pos_embed_caping = nn.Embedding(contxt_len, hidden_dim)
             self.captioning_step = captioning_step
+        
+        if task_switch['vqa']:
+            self.vqa_classifier = nn.Sequential( 
+                nn.Linear(hidden_dim * 1, hidden_dim * 2), 
+                nn.LayerNorm(hidden_dim * 2),  
+                nn.GELU(),    
+                nn.Linear(hidden_dim * 2, 3129), 
+            )
+            self.query_feat_caping = nn.Embedding(contxt_len, hidden_dim)
 
         # register self_attn_mask to avoid information leakage, it includes interaction between object query, class query and caping query
         self_attn_mask = torch.zeros((1, num_queries + contxt_len, num_queries + contxt_len)).bool()
@@ -243,6 +252,12 @@ class XDecoder(nn.Module):
             self_tgt_mask = pad_tgt_mask
             output = torch.cat((output, output[:-1]), dim=0)
             query_embed = torch.cat((query_embed, query_embed[:-1]), dim=0) # also pad language embdding to fix embedding
+        elif task == 'vqa':
+            output = torch.cat((output, self.query_feat_caping.weight.unsqueeze(1).repeat(1, bs, 1)), dim=0) # concat object query, class token and caption token.
+            caping_lang_embed = torch.cat([caption['caption_tokens'] for caption in target_vlp], dim=0).transpose(0, 1) # language output
+            caping_token_ids = torch.cat([caption['caption_tokenids'] for caption in target_vlp], dim=0) #.transpose(0, 1) # language output
+            query_embed = torch.cat((query_embed, caping_lang_embed), dim=0) # may not add at the beginning.
+            self_tgt_mask = self.self_attn_mask.repeat(output.shape[1]*self.num_heads, 1, 1)
         else:
             self_tgt_mask = self.self_attn_mask[:,:self.num_queries,:self.num_queries].repeat(output.shape[1]*self.num_heads, 1, 1)
 
@@ -259,7 +274,7 @@ class XDecoder(nn.Module):
             level_index = i % self.num_feature_levels
             attn_mask[torch.where(attn_mask.sum(-1) == attn_mask.shape[-1])] = False
 
-            if self.training and task == 'vlp' and self.task_switch['captioning']:
+            if (self.training and task == 'vlp' and self.task_switch['captioning']) or task == 'vqa':
                 attn_mask = torch.cat((attn_mask, torch.zeros_like(attn_mask[:, :self.contxt_len, :])), dim=1)
             # attention: cross-attention first
             output, avg_attn = self.transformer_cross_attention_layers[i](
@@ -302,6 +317,14 @@ class XDecoder(nn.Module):
             out = {'pred_captionings': predictions_captioning[-1], 
                    'pred_captions': predictions_caption[-1], 
                    'aux_outputs': [{'pred_captionings': x, 'pred_captions': y } for x, y in zip(predictions_captioning[:-1], predictions_caption[:-1])]}
+            return out
+        elif task == 'vqa':
+            output_vqa = predictions_captioning[-1]
+            output_vqa = output_vqa[torch.arange(output_vqa.size(0)), caping_token_ids.argmax(dim=-1)] 
+            output_vqa = self.vqa_classifier(output_vqa)
+            out = {'pred_captionings': output_vqa, #predictions_captioning[-1], 
+                'pred_captions': predictions_caption[-1], 
+                'aux_outputs': [{'pred_captionings': x, 'pred_captions': y } for x, y in zip(predictions_captioning[:-1], predictions_caption[:-1])]}
             return out
         else:
             out = {
@@ -420,6 +443,8 @@ class XDecoder(nn.Module):
         # extract image captioning token from decoder output.
         if self.task_switch['captioning'] and (task == 'vlp' or task == 'captioning_infer'):
             outputs_captionting = decoder_output[:,self.num_queries:] @ self.caping_embed
+        elif task == 'vqa':
+            outputs_captionting = decoder_output[:,self.num_queries:]
         else:
             outputs_captionting = None
 
@@ -431,7 +456,7 @@ class XDecoder(nn.Module):
         sim = (cls_token @ obj_token.transpose(1,2)).softmax(-1)[:,0,:,None] # TODO include class token.
         cls_token = (sim * decoder_output[:,:self.num_queries-1]).sum(dim=1, keepdim=True)
 
-        if (((self.training and task == 'seg') or (task == 'grounding_eval')) and self.task_switch['grounding']):
+        if (((self.training and task == 'seg') or (task == 'grounding_eval')) and self.task_switch['grounding']) and task != 'vqa':
             decoder_output = torch.cat((decoder_output[:,:self.num_queries-1], cls_token, decoder_output[:,self.num_queries:2*self.num_queries-1]), dim=1)
         else:
             decoder_output = torch.cat((decoder_output[:,:self.num_queries-1], cls_token), dim=1)
@@ -441,7 +466,7 @@ class XDecoder(nn.Module):
         # HACK do not compute similarity if mask is not on
         outputs_class = self.lang_encoder.compute_similarity(class_embed, fake=(((not self.task_switch['mask']) and self.training)))
 
-        if self.task_switch['mask']:
+        if self.task_switch['mask'] and task != 'vqa':
             mask_embed = self.mask_embed(decoder_output)
             outputs_mask = torch.einsum("bqc,bchw->bqhw", mask_embed, mask_features)
 

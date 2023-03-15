@@ -5,6 +5,7 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 import numpy as np
+import random
 
 from timm.models.layers import trunc_normal_
 from nltk.stem.lancaster import LancasterStemmer
@@ -139,7 +140,8 @@ class GeneralizedXdecoder(nn.Module):
                        'caption': dec_cfg['CAPTION'].get('ENABLED', False),
                        'captioning': dec_cfg['CAPTIONING'].get('ENABLED', False),
                        'retrieval': dec_cfg['RETRIEVAL'].get('ENABLED', False),
-                       'grounding': dec_cfg['GROUNDING'].get('ENABLED', False)}
+                       'grounding': dec_cfg['GROUNDING'].get('ENABLED', False),
+                       'vqa': dec_cfg['VQA'].get('ENABLED', False),}
 
         # build model
         extra = {'task_switch': task_switch}
@@ -332,7 +334,7 @@ class GeneralizedXdecoder(nn.Module):
             processed_results[-1]["caption"] = caption_results            
         return processed_results
 
-    def evaluate_captioning(self, batched_inputs):
+    def evaluate_captioning(self, batched_inputs, extra={}):
         images = [x["image"].to(self.device) for x in batched_inputs]
         images = [(x - self.pixel_mean) / self.pixel_std for x in images]
         images = ImageList.from_tensors(images, self.size_divisibility)
@@ -348,7 +350,8 @@ class GeneralizedXdecoder(nn.Module):
         if 'captioning_mask' in batched_inputs[-1]:
             captioning_mask = torch.cat([x['captioning_mask'] for x in batched_inputs])
 
-        outputs = self.sem_seg_head(features, target_queries=queries_grounding, task='captioning_infer', extra={'start_token': self.start_token, 'captioning_mask': captioning_mask})
+        extra.update({'start_token': self.start_token, 'captioning_mask': captioning_mask})
+        outputs = self.sem_seg_head(features, target_queries=queries_grounding, task='captioning_infer', extra=extra)
 
         processed_results = []
         for idx, batch_data in enumerate(batched_inputs):
@@ -519,6 +522,52 @@ class GeneralizedXdecoder(nn.Module):
             # processed_results[-1]['grounding_box'] = bbox
 
         return processed_results
+
+    def evaluate_vqa(self, batched_inputs, mode):
+        images = [x["image"].to(self.device) for x in batched_inputs]
+        images = [(x - self.pixel_mean) / self.pixel_std for x in images]
+        images = ImageList.from_tensors(images, self.size_divisibility)
+        img_bs = images.tensor.shape[0]
+
+        targets_vlp = self.prepare_vqa_targets(batched_inputs, images.tensor.device)
+        
+        targets = targets_grounding = queries_grounding = None
+        features = self.backbone(images.tensor)
+        outputs = self.sem_seg_head(features, target_vlp=targets_vlp, task='vqa') #, extra={'start_token': self.start_token})
+
+        processed_results = []
+        for idx, batch_data in enumerate(batched_inputs):
+            processed_results.append({})
+            pred = outputs['pred_captionings'][idx].argmax(dim=-1)
+            id2answer = MetadataCatalog.get("vqa_metadata").id2answer
+            vqa_preds = [id2answer[pred.item()]] 
+            processed_results[-1]["preds"] = vqa_preds
+
+        return processed_results
+
+    def prepare_vqa_targets(self, batched_inputs, device):
+        input_ids = []
+        attention_mask = []
+        for cnt, x in enumerate(batched_inputs):
+            captions = x['questions']
+            randid = random.randint(0, len(captions)-1)
+            input_ids += x['tokens']['input_ids'][randid:randid+1]
+            attention_mask += x['tokens']['attention_mask'][randid:randid+1]
+
+        input_ids = torch.stack(input_ids).cuda()
+        attention_mask = torch.stack(attention_mask).cuda()
+        tokens = {"input_ids": input_ids, "attention_mask": attention_mask}
+        lang_results = self.sem_seg_head.predictor.lang_encoder.get_text_token_embeddings(tokens, token=True)
+
+        target_vlp = []
+        for cnt, x in enumerate(batched_inputs):
+            target_dict = {}
+            target_dict["caption_tokens"] = lang_results['token_emb'][cnt:cnt+1]
+            target_dict["caption_proj"] = lang_results['class_emb'][cnt:cnt+1]
+            target_dict["caption_tokenids"] = lang_results['tokens']['input_ids'][cnt:cnt+1]
+            target_dict["caption_mask"] = lang_results['tokens']['attention_mask'][cnt:cnt+1]            
+            target_vlp.append(target_dict)
+        return target_vlp
 
     def semantic_inference(self, mask_cls, mask_pred, keep_sem_bgd=False):
         if keep_sem_bgd:
