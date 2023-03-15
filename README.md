@@ -20,8 +20,6 @@ Our **X-GPT** has several unique and new features:
 
 In the next, we will:
 
-* **Have visual question answering added to our pretrained X-Decoder model. Our model shows good VQA performance, but was not added to pretraining, though no barrier at all.**
-
 * **You may notice we developed a more grounded instructPix2Pix with the support of our X-Decoder. Next we integrate it to our X-GPT!**
 
 ## Getting Started
