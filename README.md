@@ -41,6 +41,7 @@ sh install_cococapeval.sh
 
 # download x-decoder tiny model
 wget https://projects4jw.blob.core.windows.net/x-decoder/release/xdecoder_focalt_last_novg.pt
+wget https://projects4jw.blob.core.windows.net/x-decoder/release/xdecoder_focalt_vqa.pt
 
 # create a folder for image uploading and image retrieval
 mkdir image & mkdir image_pool
