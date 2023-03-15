@@ -1,8 +1,8 @@
-# X-Chat: Connecting generalist vision model with GPT
+# X-GPT: Connecting generalist X-Decoder with GPT-3
 
 ## :fire: News
 
-* **[2023.03.14]** We build X-Chat, a demo of multi-modal conversational X-Decoder using GPT-3 and langchain!
+* **[2023.03.14]** We build X-GPT, a multi-modal conversational demo that is built on X-Decoder using GPT-3 and langchain!
 
 ## :notes: Introduction
 
@@ -10,7 +10,7 @@
 
 This specific project was started with our previous two demos, [all-in-one](https://huggingface.co/spaces/xdecoder/Demo) and [instruct x-decoder](https://huggingface.co/spaces/xdecoder/Instruct-X-Decoder). Then we were inspired by [visual-chatgpt](https://github.com/microsoft/visual-chatgpt) developed by our MSRA collegues to use the [langchain](https://github.com/hwchase17/langchain) to empower a conversational X-Decoder and encompassing all the capacities of our single X-Decoder model.
 
-Our **X-Chat** has several unique and new features:
+Our **X-GPT** has several unique and new features:
 
 * **It uses a SINGLE X-Decoder model to support a wide range of vision and vision-language tasks. As such, you do not need separate models for individual tasks!**
 
@@ -22,7 +22,7 @@ In the next, we will:
 
 * **Have visual question answering added to our pretrained X-Decoder model. Our model shows good VQA performance, but was not added to pretraining, though no barrier at all.**
 
-* **You may notice we developed a more grounded instructPix2Pix with the support of our X-Decoder. Next we integrate it to our X-Chat!**
+* **You may notice we developed a more grounded instructPix2Pix with the support of our X-Decoder. Next we integrate it to our X-GPT!**
 
 ## Getting Started
 
@@ -57,7 +57,7 @@ export OPENAI_API_KEY=<your Azure OpenAI API key>
 ## Run Demo
 ```sh
 # Simply run this single line and enjoy it!!!
-python xchat.py
+python xgpt.py
 ```
 
 ## Acknowledgement
@@ -76,4 +76,4 @@ We are highly inspired by [visual-chatgpt](https://github.com/microsoft/visual-c
 
 ## Contact Information
 
-For issues to use our X-Chat, please submit a GitHub issue or contact Jianwei Yang (jianwyan@microsoft.com).
+For issues to use our X-GPT, please submit a GitHub issue or contact Jianwei Yang (jianwyan@microsoft.com).
