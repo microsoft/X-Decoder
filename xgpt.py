@@ -453,6 +453,12 @@ if __name__ == '__main__':
     gr.close_all()    
     bot = ConversationBot()
     with gr.Blocks(css="#chatbot .overflow-y-auto{height:500px}") as demo:
+        with gr.Row():
+            gr.Markdown("<h1><center>X-GPT: Connecting generalist X-Decoder with GPT-3</center></h1>")
+
+        with gr.Row():
+            gr.Markdown("")
+
         chatbot = gr.Chatbot(elem_id="chatbot", label="X-GPT").style(height=450)
         state = gr.State([])
         with gr.Row():
