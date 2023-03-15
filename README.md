@@ -9,7 +9,7 @@ by [Xueyan Zou*](https://maureenzou.github.io/), [Zi-Yi Dou*](https://zdou0830.g
 
 ## :fire: News
 
-* **[2023.03.14]** We release [X-Chat](https://github.com/microsoft/X-Decoder/tree/xchat) which is an conversational version of our X-Decoder through langchain!
+* **[2023.03.14]** We release [X-GPT](https://github.com/microsoft/X-Decoder/tree/xgpt) which is an conversational version of our X-Decoder through GPT-3 langchain!
 * **[2023.03.01]** The [Segmentation in the Wild Challenge](https://eval.ai/web/challenges/challenge-page/1931/overview) had been launched and ready for submitting results!
 * **[2023.02.28]** We released the [SGinW benchmark](https://github.com/microsoft/X-Decoder/tree/seginw) for our challenge. Welcome to build your own models on the benchmark!
 * **[2023.02.27]** Our X-Decoder has been accepted by CVPR 2023!
