@@ -31,8 +31,8 @@ In the next, we will:
 ### Installation
 ```sh
 # set up environment
-conda create -n xchat python=3.8
-conda activate xchat
+conda create -n xgpt python=3.8
+conda activate xgpt
 
 # install dependencies
 pip3 install torch==1.13.1 torchvision==0.14.1 --extra-index-url https://download.pytorch.org/whl/cu113
