@@ -5,6 +5,7 @@
 ## :fire: News
 
 * **[2023.03.14]** We build X-GPT, a multi-modal conversational demo that is built on X-Decoder using GPT-3 and langchain!
+* **[2023.03.14]** Feel free to explore the full resolution demo  at https://youtu.be/GopwIdLb6GU!
 
 ## :notes: Introduction
 
