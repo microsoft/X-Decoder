@@ -8,7 +8,7 @@
 
 ## :notes: Introduction
 
-![intro](https://user-images.githubusercontent.com/11957155/225456972-5a859a87-d03d-44e9-80c8-1aa9a67afa79.png)
+![intro](https://user-images.githubusercontent.com/11957155/225476626-80ba3c57-f831-41dd-8a66-6516b93e7bc9.png)
 
 ### What are the uniques?
 
