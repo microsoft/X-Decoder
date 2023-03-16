@@ -42,6 +42,7 @@ X-Decoder is a generalized decoding model that can generate **pixel-level segmen
 - [ ] Release Base and Large model
 
 ## :paintbrush: DEMO
+:small_red_triangle:[[X-GPT](https://huggingface.co/spaces/xdecoder/Instruct-X-Decoder)] :small_red_triangle:[[Instruct X-Decoder](https://huggingface.co/spaces/xdecoder/Instruct-X-Decoder)]
 
 ![demo](https://user-images.githubusercontent.com/11957155/225728214-0523bd30-31f7-472d-be7e-12a049c25cbd.gif)
 
