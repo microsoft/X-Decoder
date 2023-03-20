@@ -15,6 +15,11 @@ by [Xueyan Zou*](https://maureenzou.github.io/), [Zi-Yi Dou*](https://zdou0830.g
 * **[2022.12.21]** We release Focal-T pretrained checkpoint.
 * **[2022.12.21]** We release open-vocabulary segmentation benchmark.
 
+## :paintbrush: DEMO
+:small_red_triangle:[[X-GPT](https://github.com/microsoft/X-Decoder/tree/xgpt)] :small_red_triangle:[[Instruct X-Decoder](https://huggingface.co/spaces/xdecoder/Instruct-X-Decoder)]
+
+![demo](https://user-images.githubusercontent.com/11957155/225728214-0523bd30-31f7-472d-be7e-12a049c25cbd.gif)
+
 ## :notes: Introduction
 
 ![github_figure](https://user-images.githubusercontent.com/11957155/210801832-c9143c42-ef65-4501-95a5-0d54749dcc52.gif)
@@ -37,11 +42,6 @@ X-Decoder is a generalized decoding model that can generate **pixel-level segmen
 - [ ] Release Training and Prompt Tuning code
 - [ ] Release Finetuned model
 - [ ] Release Base and Large model
-
-## :paintbrush: DEMO
-:small_red_triangle:[[X-GPT](https://github.com/microsoft/X-Decoder/tree/xgpt)] :small_red_triangle:[[Instruct X-Decoder](https://huggingface.co/spaces/xdecoder/Instruct-X-Decoder)]
-
-![demo](https://user-images.githubusercontent.com/11957155/225728214-0523bd30-31f7-472d-be7e-12a049c25cbd.gif)
 
 ## Getting Started
 
