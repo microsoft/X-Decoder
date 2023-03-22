@@ -39,11 +39,6 @@ X-Decoder is a generalized decoding model that can generate **pixel-level segmen
 * **One model architecture** finetuned for Semantic/Instance/Panoptic Segmentation, Referring Segmentation, Image Captioning, Image-Text Retrieval and Visual Question Answering (with an extra cls head);
 * **Zero-shot task composition** for Region Retrieval, Referring Captioning, Image Editing.
 
-## :snowflake: TODO
-- [ ] Release Training and Prompt Tuning code
-- [ ] Release Finetuned model
-- [ ] Release Base and Large model
-
 ## Getting Started
 
 ### Installation
