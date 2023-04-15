@@ -7,7 +7,9 @@ by [Xueyan Zou*](https://maureenzou.github.io/), [Zi-Yi Dou*](https://zdou0830.g
 ## :fire: News
 
 * **[2023.04.14]** We are releasing [SEEM](https://github.com/UX-Decoder/Segment-Everything-Everywhere-All-At-Once), a new universal interactive interface for image segmentation! You can use it for any segmentation tasks, way beyond what X-Decoder can do!
-![SEEM design](assets/teaser_new.png?raw=true)
+
+![SEEM design](images/teaser_new.png?raw=true)
+
 * **[2023.03.20]** As an aspiration of our X-Decoder, we developed OpenSeeD ([[Paper](https://arxiv.org/pdf/2303.08131.pdf)][[Code](https://github.com/IDEA-Research/OpenSeeD)]) to enable open-vocabulary segmentation and detection with a single model, Check it out! 
 * **[2023.03.14]** We release [X-GPT](https://github.com/microsoft/X-Decoder/tree/xgpt) which is an conversational version of our X-Decoder through GPT-3 langchain!
 * **[2023.03.01]** The [Segmentation in the Wild Challenge](https://eval.ai/web/challenges/challenge-page/1931/overview) had been launched and ready for submitting results!
