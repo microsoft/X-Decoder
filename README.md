@@ -104,7 +104,7 @@ python demo/demo_captioning.py evaluate --conf_files configs/xdecoder/svlp_focal
 ## Citation
 ```
 @article{zou2022xdecoder,
-  author      = {Zou*, Xueyan and Dou*, Zi-Yi and Yang*, Jianwei and Gan, Zhe and Li, Linjie and Li, Chunyuan and Dai, Xiyang and Wang, Jianfeng and Yuan, Lu and Peng, Nanyun and Wang, Lijuan and Lee^, Yong Jae and Gao^, Jianfeng},
+  author      = {Zou*, Xueyan and Dou*, Zi-Yi and Yang*, Jianwei and Gan, Zhe and Li, Linjie and Li, Chunyuan and Dai, Xiyang and Wang, Jianfeng and Yuan, Lu and Peng, Nanyun and Wang, Lijuan and Lee*, Yong Jae and Gao*, Jianfeng},
   title       = {Generalized Decoding for Pixel, Image and Language},
   publisher   = {arXiv},
   year        = {2022},
