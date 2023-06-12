@@ -10,7 +10,7 @@ timm==0.4.12
 numpy==1.23.5
 einops
 fvcore
-transformers==4.19.2
+transformers==4.30.0
 sentencepiece
 ftfy
 regex
