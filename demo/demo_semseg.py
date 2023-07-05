@@ -45,7 +45,8 @@ def main(args=None):
     # META DATA
     pretrained_pth = os.path.join(opt['WEIGHT'])
     output_root = './output'
-    image_pth = 'images/animals.png'
+    image_pth = './../datasets/VOCdevkit/VOC2012/JPEGImages/2007_007154.jpg'
+
 
     model = BaseModel(opt, build_model(opt)).from_pretrained(pretrained_pth).eval().cuda()
 
@@ -53,8 +54,8 @@ def main(args=None):
     t.append(transforms.Resize(512, interpolation=Image.BICUBIC))
     transform = transforms.Compose(t)
 
-    stuff_classes = ['zebra','antelope','giraffe','ostrich','sky','water','grass','sand','tree']
-    stuff_colors = [random_color(rgb=True, maximum=255).astype(np.int).tolist() for _ in range(len(stuff_classes))]
+    stuff_classes = ['background', 'person']
+    stuff_colors = [random_color(rgb=True, maximum=255).astype(np.int32).tolist() for _ in range(len(stuff_classes))]
     stuff_dataset_id_to_contiguous_id = {x:x for x in range(len(stuff_classes))}
 
     MetadataCatalog.get("demo").set(
@@ -62,7 +63,9 @@ def main(args=None):
         stuff_classes=stuff_classes,
         stuff_dataset_id_to_contiguous_id=stuff_dataset_id_to_contiguous_id,
     )
-    model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(stuff_classes + ["background"], is_eval=True)
+    model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(stuff_classes, is_eval=True)
+    #model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(stuff_classes + ["background"], is_eval=True)
+
     metadata = MetadataCatalog.get('demo')
     model.model.metadata = metadata
     model.model.sem_seg_head.num_classes = len(stuff_classes)

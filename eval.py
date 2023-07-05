@@ -25,6 +25,7 @@ from datasets import build_evaluator, build_eval_dataloader
 from xdecoder import build_model
 from xdecoder.BaseModel import BaseModel
 from xdecoder.utils import get_class_names
+from MaskBLIP.maskblip import MaskBLIP
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level = logging.INFO)
@@ -41,6 +42,7 @@ def main(args=None):
     opt = init_distributed(opt)
 
     # build model
+    label_generator = MaskBLIP(device='cuda')
     model = BaseModel(opt, build_model(opt)).from_pretrained(opt['WEIGHT']).eval().cuda()
 
     # build dataloade
@@ -57,13 +59,14 @@ def main(args=None):
         evaluator.reset()
         with torch.no_grad():
             # setup model
-            names = get_class_names(dataset_name)
-            model.model.metadata = MetadataCatalog.get(dataset_name)
-            eval_type = model.model.metadata.evaluator_type
-            model.model.sem_seg_head.num_classes = len(names) - 1
-            model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(names, is_eval=True)
-            hook_switcher(model, dataset_name)
-            hook_opt(model, dataset_name)
+
+            # names = get_class_names(dataset_name)
+            # model.model.metadata = MetadataCatalog.get(dataset_name)
+            # eval_type = model.model.metadata.evaluator_type
+            # model.model.sem_seg_head.num_classes = len(names) - 1
+            # model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(names, is_eval=True)
+            # hook_switcher(model, dataset_name)
+            # hook_opt(model, dataset_name)
 
             # setup timer
             total = len(dataloader)
@@ -82,7 +85,13 @@ def main(args=None):
                     total_compute_time = 0
                     total_eval_time = 0
                 start_compute_time = time.perf_counter()
-
+                names = MaskBLIP(batch[0]['image'])
+                model.model.metadata = MetadataCatalog.get(dataset_name)
+                eval_type = model.model.metadata.evaluator_type
+                model.model.sem_seg_head.num_classes = len(names) - 1
+                model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(names, is_eval=True)
+                hook_switcher(model, dataset_name)
+                hook_opt(model, dataset_name)
                 # forward
                 with torch.autocast(device_type='cuda', dtype=torch.float16):
                     outputs = model(batch, mode=eval_type)

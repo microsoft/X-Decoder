@@ -172,7 +172,9 @@ INPUT:
 
 DATASETS:
   # open vocabulary segmentation evaluation.
-  TEST: ["ade20k_panoptic_val", "ade20k_full_sem_seg_val", "sunrgbd_37_val_seg", "scannet_21_val_seg", "scannet_21_panoptic_val", "scannet_41_val_seg", "cityscapes_fine_panoptic_val", "cityscapes_fine_instance_seg_val", "cityscapes_fine_sem_seg_val", "bdd10k_val_sem_seg", "bdd10k_40_panoptic_val"]
+  #TEST: ["ade20k_panoptic_val", "ade20k_full_sem_seg_val", "sunrgbd_37_val_seg", "scannet_21_val_seg", "scannet_21_panoptic_val", "scannet_41_val_seg", "cityscapes_fine_panoptic_val", "cityscapes_fine_instance_seg_val", "cityscapes_fine_sem_seg_val", "bdd10k_val_sem_seg", "bdd10k_40_panoptic_val"]
+  TEST: ["cityscapes_fine_sem_seg_val"]
+
   # Supervised metrics evaluation.
   # TEST: ["vlp_captioning_val", "refcocog_val_umd", "vlp_val"]
   CLASS_CONCAT: false
@@ -291,7 +293,7 @@ CITY:
     MASK_FORMAT: "polygon"
   TEST:
     EVAL_PERIOD: 5000
-    BATCH_SIZE_TOTAL: 8
+    BATCH_SIZE_TOTAL: 1
     AUG:
       ENABLED: False
       MIN_SIZES: [512, 768, 1024, 1280, 1536, 1792]
