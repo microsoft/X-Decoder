@@ -30,6 +30,7 @@ from MaskBLIP.nlp import get_nouns, map_labels
 from utils.constants import CITYSCAPES
 from sentence_transformers import SentenceTransformer
 from torchvision.transforms import Compose, Resize, ToTensor, Normalize, InterpolationMode
+from cityscapesscripts.helpers.labels import name2label
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level = logging.INFO)
@@ -58,9 +59,6 @@ def main(args=None):
     # init metadata
     scores = {}
     summary = {}
-
-    class_embeds = model.encode(CITYSCAPES, convert_to_tensor=True)
-
     for dataloader, dataset_name in zip(dataloaders, dataset_names):
         # build evaluator
         evaluator = build_evaluator(opt, dataset_name, opt['SAVE_DIR'])
@@ -84,7 +82,11 @@ def main(args=None):
             total_compute_time = 0
             total_eval_time = 0
             start_data_time = time.perf_counter()
-
+            class_names = get_class_names(dataset_name)
+            class_names.remove('background')
+            #print("class names", class_names)
+            class_embeds = nlp_model.encode(class_names, convert_to_tensor=True)
+            
             for idx, batch in enumerate(dataloader):
                 total_data_time += time.perf_counter() - start_data_time
                 if idx == num_warmup:
@@ -95,24 +97,46 @@ def main(args=None):
                 start_compute_time = time.perf_counter()
                 image = batch[0]['image'].float() / 255
 
-                captions = label_generator(image.unsqueeze(0))[1]
-                names = get_nouns(captions)
-                mapped_names = map_labels(names, CITYSCAPES, class_embeds, nlp_model)
+                captions = label_generator(image.unsqueeze(0))[1][0]
+                #print(captions)
+                names = get_nouns(captions, label_generator.spacy_model)
+                names_dict = {}
+                for name_idx, name in enumerate(names):
+                    names_dict[name_idx] = name
 
+                #print("mapped names", mapped_names)
                 model.model.metadata = MetadataCatalog.get(dataset_name)
                 eval_type = model.model.metadata.evaluator_type
                 model.model.sem_seg_head.num_classes = len(names) - 1
-                model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(mapped_names, is_eval=True)
+                model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(names, is_eval=True)
                 hook_switcher(model, dataset_name)
                 hook_opt(model, dataset_name)
                 # forward
                 with torch.autocast(device_type='cuda', dtype=torch.float16):
                     outputs = model(batch, mode=eval_type)
-
+                #print(outputs[0]['sem_seg'].shape, len(class_names))
                 total_compute_time += time.perf_counter() - start_compute_time
                 start_eval_time = time.perf_counter()
-
-                evaluator.process(batch, outputs)
+                
+                # TODO
+                # map predicted MaskBLIP classes to the dataset classes in the predicted X-Decoder output
+                output = outputs[0]["sem_seg"].argmax(dim=0)#.to().numpy()
+                all_predicted_idx = torch.unique(output)
+                
+                evaluated_names = [names_dict[pred_idx.item()] for pred_idx in all_predicted_idx]
+                mapped_names = map_labels(names, class_names, class_embeds, nlp_model)# + ['background']
+                #print("mapped_names", names, mapped_names, class_names) 
+                #print("OUTPUT BEFORE", output, "\n")
+                map_dict = {}
+                for cc, n in enumerate(evaluated_names):
+                    map_dict[all_predicted_idx[cc].item()] = name2label[mapped_names[cc]].id
+                
+                #print("UNIQUE:", all_predicted_idx, map_dict)
+                for i, val in enumerate(all_predicted_idx):
+                    val = val.item()
+                    output[output==val] = map_dict[val]
+                
+                evaluator.process(batch, output.cpu())
                 total_eval_time += time.perf_counter() - start_eval_time
 
                 iters_after_start = idx + 1 - num_warmup * int(idx >= num_warmup)
@@ -136,8 +160,6 @@ def main(args=None):
                         n=5,
                     )                
                 start_data_time = time.perf_counter()
-
-
         # evaluate
         results = evaluator.evaluate()
 
