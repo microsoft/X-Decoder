@@ -26,6 +26,10 @@ from xdecoder import build_model
 from xdecoder.BaseModel import BaseModel
 from xdecoder.utils import get_class_names
 from MaskBLIP.maskblip import MaskBLIP
+from MaskBLIP.nlp import get_nouns, map_labels
+from utils.constants import CITYSCAPES
+from sentence_transformers import SentenceTransformer
+from torchvision.transforms import Compose, Resize, ToTensor, Normalize, InterpolationMode
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level = logging.INFO)
@@ -44,6 +48,7 @@ def main(args=None):
     # build model
     label_generator = MaskBLIP(device='cuda')
     model = BaseModel(opt, build_model(opt)).from_pretrained(opt['WEIGHT']).eval().cuda()
+    nlp_model = SentenceTransformer('all-MiniLM-L6-v2')
 
     # build dataloade
     dataloaders = build_eval_dataloader(opt)
@@ -53,6 +58,9 @@ def main(args=None):
     # init metadata
     scores = {}
     summary = {}
+
+    class_embeds = model.encode(CITYSCAPES, convert_to_tensor=True)
+
     for dataloader, dataset_name in zip(dataloaders, dataset_names):
         # build evaluator
         evaluator = build_evaluator(opt, dataset_name, opt['SAVE_DIR'])
@@ -85,11 +93,16 @@ def main(args=None):
                     total_compute_time = 0
                     total_eval_time = 0
                 start_compute_time = time.perf_counter()
-                names = MaskBLIP(batch[0]['image'])
+                image = batch[0]['image'].float() / 255
+
+                captions = label_generator(image.unsqueeze(0))[1]
+                names = get_nouns(captions)
+                mapped_names = map_labels(names, CITYSCAPES, class_embeds, nlp_model)
+
                 model.model.metadata = MetadataCatalog.get(dataset_name)
                 eval_type = model.model.metadata.evaluator_type
                 model.model.sem_seg_head.num_classes = len(names) - 1
-                model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(names, is_eval=True)
+                model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(mapped_names, is_eval=True)
                 hook_switcher(model, dataset_name)
                 hook_opt(model, dataset_name)
                 # forward

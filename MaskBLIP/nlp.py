@@ -1,5 +1,7 @@
 import spacy
-#from sentence_transformers import SentenceTransformer, util
+import torch
+
+from sentence_transformers import SentenceTransformer, util
 #import torch
 #import en_core_web_sm
 def filter_substrings(noun_chunks):
@@ -87,30 +89,33 @@ def get_nouns(captions, spacy_model, add_background=False):
         output.remove('background')
     return output
 
-# def find_matching_labels(chunks, labels, model=None, background=False):
-    # if background:
-    #     labels += ['background', 'unknown']
-    # if model is None:
-    #     model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
-    # matching_labels = []
-    # label_vectors = torch.stack([model.encode(label, convert_to_tensor=True) for label in labels]).squeeze()
-    # chunk_vectors = [model.encode(chunk, convert_to_tensor=True) for chunk in chunks]
-    # for chunk_v in chunk_vectors:
-    #     cos_sim = torch.nn.CosineSimilarity(dim=1, eps=1e-6)
-    #     similarities = cos_sim(chunk_v, label_vectors)
-    #     #distances = distance.cdist(chunk_v, label_vectors, "cosine")[0]
-    #     closest_idx = torch.argmax(similarities)
-    #     matching_labels.append(labels[closest_idx])
-    # return matching_labels
+def map_labels(labels, class_list, class_embeds, model):
+    mapped_labels = []
+    label_embeds = model.encode(labels, convert_to_tensor=True)
+    for i, label_emb in enumerate(label_embeds):
+        label = labels[i].lower()
+        if label in class_list:
+            mapped_labels.append(label)
+        else:
+            distances = torch.nn.CosineSimilarity(dim=1, eps=1e-6)(label_emb, class_embeds)
+            closest_idx = torch.argmax(distances)
+            mapped_labels.append(class_list[closest_idx])
+    return mapped_labels
+
 
 
 
 if __name__ == "__main__":
-    spacy_model = spacy.load('en_core_web_sm')
 
-    #find_matching_labels(['a giraffe', 'zebras', 'ostriches', 'a person standing in front of a white wall', 'water water water'], [['zebra'], ['giraffe'], ['ostrich'], ['person'], ['water']], spacy_model)
+    model = SentenceTransformer('all-MiniLM-L6-v2')
 
-    captions = ['a giraffe', 'zebras', 'ostriches', 'a person standing in front of a white wall', 'water water water']
-    #chunks = get_noun_chunks(captions, spacy_model)
-    chunks = get_nouns(captions, spacy_model)
-    print(chunks)
+    # Tokenize input
+    CITYSCAPES = ['road', 'sidewalk', 'building', 'wall', 'fence', 'pole', 'traffic light', 'trafffic sign',
+                  'vegetation', 'terrain', 'sky', 'person', 'rider', 'car', 'truck', 'bus', 'train', 'motorcycle',
+                  'bicycle']
+    class_embeds = model.encode(CITYSCAPES, convert_to_tensor=True)
+
+    labels = ['street', 'bike', 'pedestrian', 'skyscraper', 'scooter', 'palm tree', 'woman', 'clouds', 'grass', 'stop sign', 'mountain', 'fence']
+    mapped_labels = map_labels(labels, CITYSCAPES, class_embeds, model)
+
+    print(mapped_labels)
