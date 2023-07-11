@@ -13,6 +13,8 @@ import datetime
 
 from mpi4py import MPI
 import numpy as np
+from PIL import Image
+from torchvision import transforms
 
 import torch
 from detectron2.data import MetadataCatalog
@@ -31,6 +33,7 @@ from utils.constants import CITYSCAPES
 from sentence_transformers import SentenceTransformer
 from torchvision.transforms import Compose, Resize, ToTensor, Normalize, InterpolationMode
 from cityscapesscripts.helpers.labels import name2label
+from utils.visualizer import Visualizer
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level = logging.INFO)
@@ -55,6 +58,7 @@ def main(args=None):
     dataloaders = build_eval_dataloader(opt)
     # evaluation dataset
     dataset_names = opt['DATASETS']['TEST']
+    output_root = './output'
 
     # init metadata
     scores = {}
@@ -64,15 +68,6 @@ def main(args=None):
         evaluator = build_evaluator(opt, dataset_name, opt['SAVE_DIR'])
         evaluator.reset()
         with torch.no_grad():
-            # setup model
-
-            # names = get_class_names(dataset_name)
-            # model.model.metadata = MetadataCatalog.get(dataset_name)
-            # eval_type = model.model.metadata.evaluator_type
-            # model.model.sem_seg_head.num_classes = len(names) - 1
-            # model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(names, is_eval=True)
-            # hook_switcher(model, dataset_name)
-            # hook_opt(model, dataset_name)
 
             # setup timer
             total = len(dataloader)
@@ -83,10 +78,12 @@ def main(args=None):
             total_eval_time = 0
             start_data_time = time.perf_counter()
             class_names = get_class_names(dataset_name)
-            #class_names.remove('background')
-            #print("class names", class_names)
             class_embeds = nlp_model.encode(class_names, convert_to_tensor=True)
             
+            t = []
+            t.append(transforms.Resize(512, interpolation=Image.BICUBIC))
+            transform = transforms.Compose(t)
+
             for idx, batch in enumerate(dataloader):
                 total_data_time += time.perf_counter() - start_data_time
                 if idx == num_warmup:
@@ -102,16 +99,56 @@ def main(args=None):
                 names_dict = {}
                 for name_idx, name in enumerate(names):
                     names_dict[name_idx] = name
+                
+                # stuff_classes = ['zebra','antelope','giraffe','ostrich','sky','water','grass','sand','tree']
+                # stuff_colors = [random_color(rgb=True, maximum=255).astype(np.int).tolist() for _ in range(len(stuff_classes))]
+                # stuff_dataset_id_to_contiguous_id = {x:x for x in range(len(stuff_classes))}
+                #
+                #
+                # MetadataCatalog.get(dataset_name).set(
+                #         stuff_colors=stuff_colors,
+                #         stuff_classes=stuff_classes,
+                #         stuff_dataset_id_to_contiguous_id=stuff_dataset_id_to_contiguous_id,)
+                metadata = MetadataCatalog.get(dataset_name)
+                model.model.metadata = metadata
 
-                model.model.metadata = MetadataCatalog.get(dataset_name)
                 eval_type = model.model.metadata.evaluator_type
                 model.model.sem_seg_head.num_classes = len(names) - 1
                 model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(names, is_eval=True)
                 hook_switcher(model, dataset_name)
                 hook_opt(model, dataset_name)
+                
+                
+                
                 # forward
+                save_output = True
                 with torch.autocast(device_type='cuda', dtype=torch.float16):
                     outputs = model(batch, mode=eval_type)
+                    image_pth = batch[0]['file_name']
+                    if save_output:
+                        image_ori = Image.open(image_pth).convert("RGB")
+                        width = image_ori.size[0]
+                        height = image_ori.size[1]
+                        image = transform(image_ori)
+                        image = np.asarray(image)
+                        image_ori = np.asarray(image_ori)
+                        images = torch.from_numpy(image.copy()).permute(2,0,1).cuda()
+
+                        batch_inputs = [{'image': images, 'height': height, 'width': width}]
+                        outputs = model.forward(batch_inputs)
+                        visual = Visualizer(image_ori, metadata=metadata)
+                        sem_seg = outputs[-1]['sem_seg'].max(0)[1]
+                        demo = visual.draw_sem_seg(sem_seg.cpu(), alpha=0.5) # rgb Image
+
+                        if not os.path.exists(output_root):
+                            os.makedirs(output_root)
+                        
+                        demo.save(os.path.join(output_root, str(idx) + '_sem.png'))
+                
+                
+                
+                
+                
                 total_compute_time += time.perf_counter() - start_compute_time
                 start_eval_time = time.perf_counter()
                 
