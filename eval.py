@@ -83,7 +83,7 @@ def main(args=None):
             total_eval_time = 0
             start_data_time = time.perf_counter()
             class_names = get_class_names(dataset_name)
-            class_names.remove('background')
+            #class_names.remove('background')
             #print("class names", class_names)
             class_embeds = nlp_model.encode(class_names, convert_to_tensor=True)
             
@@ -98,13 +98,11 @@ def main(args=None):
                 image = batch[0]['image'].float() / 255
 
                 captions = label_generator(image.unsqueeze(0))[1][0]
-                #print(captions)
-                names = get_nouns(captions, label_generator.spacy_model)
+                names = get_nouns(captions, label_generator.spacy_model) + ['background']
                 names_dict = {}
                 for name_idx, name in enumerate(names):
                     names_dict[name_idx] = name
 
-                #print("mapped names", mapped_names)
                 model.model.metadata = MetadataCatalog.get(dataset_name)
                 eval_type = model.model.metadata.evaluator_type
                 model.model.sem_seg_head.num_classes = len(names) - 1
@@ -114,7 +112,6 @@ def main(args=None):
                 # forward
                 with torch.autocast(device_type='cuda', dtype=torch.float16):
                     outputs = model(batch, mode=eval_type)
-                #print(outputs[0]['sem_seg'].shape, len(class_names))
                 total_compute_time += time.perf_counter() - start_compute_time
                 start_eval_time = time.perf_counter()
                 
@@ -124,19 +121,29 @@ def main(args=None):
                 all_predicted_idx = torch.unique(output)
                 
                 evaluated_names = [names_dict[pred_idx.item()] for pred_idx in all_predicted_idx]
-                mapped_names = map_labels(names, class_names, class_embeds, nlp_model)# + ['background']
-                #print("mapped_names", names, mapped_names, class_names) 
-                #print("OUTPUT BEFORE", output, "\n")
+                mapped_names = map_labels(evaluated_names, class_names, class_embeds, nlp_model)# + ['background']
                 map_dict = {}
+                #print("evaluated names", evaluated_names, len(evaluated_names))
+                #print("mapped names", mapped_names, len(mapped_names))
+                background_ignore_idx = []
                 for cc, n in enumerate(evaluated_names):
-                    map_dict[all_predicted_idx[cc].item()] = name2label[mapped_names[cc]].id
-                
-                #print("UNIQUE:", all_predicted_idx, map_dict)
+                    mapped_name = mapped_names[cc]
+                    if mapped_name == 'background':
+                        background_ignore_idx.append(all_predicted_idx[cc])
+                        continue
+                    elif name2label[mapped_name].ignoreInEval:
+                        continue
+                    map_dict[all_predicted_idx[cc].item()] = name2label[mapped_name].id
+                #print("all predicted idx", all_predicted_idx)
+                #print("map dict", map_dict)
+
                 for i, val in enumerate(all_predicted_idx):
+                    if val in background_ignore_idx:
+                        continue
                     val = val.item()
                     output[output==val] = map_dict[val]
                 
-                evaluator.process(batch, output.cpu())
+                evaluator.process(batch, [output.cpu()])
                 total_eval_time += time.perf_counter() - start_eval_time
 
                 iters_after_start = idx + 1 - num_warmup * int(idx >= num_warmup)

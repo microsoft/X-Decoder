@@ -90,6 +90,8 @@ def get_nouns(captions, spacy_model, add_background=False):
     return output
 
 def map_labels(labels, class_list, class_embeds, model):
+    #print("LABELS", labels)
+    #print("CLASSLIST", class_list, "\n\n\n")
     mapped_labels = []
     label_embeds = model.encode(labels, convert_to_tensor=True)
     for i, label_emb in enumerate(label_embeds):
