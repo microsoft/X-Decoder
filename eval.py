@@ -85,6 +85,10 @@ def main(args=None):
             transform = transforms.Compose(t)
 
             for idx, batch in enumerate(dataloader):
+                torch.save(batch[0]['image'], 'image.pt')
+                torch.save(batch[0]['sem_seg'], 'sem_seg.pt')
+                print(batch) 
+                
                 total_data_time += time.perf_counter() - start_data_time
                 if idx == num_warmup:
                     start_time = time.perf_counter()
@@ -95,8 +99,10 @@ def main(args=None):
                 image = batch[0]['image'].float() / 255
 
                 captions = label_generator(image.unsqueeze(0))[1][0]
-                names = get_nouns(captions, label_generator.spacy_model) + ['background']
+                names = #get_nouns(captions, label_generator.spacy_model) + ['background']
                 names_dict = {}
+                print(names)
+                exit()
                 for name_idx, name in enumerate(names):
                     names_dict[name_idx] = name
                 

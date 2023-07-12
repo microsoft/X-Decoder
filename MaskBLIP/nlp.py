@@ -92,24 +92,28 @@ def get_nouns(captions, spacy_model, add_background=False):
 def map_labels(labels, class_list, class_embeds, model):
     #print("LABELS", labels)
     #print("CLASSLIST", class_list, "\n\n\n")
-    mapped_labels = []
+    mapped_labels, closest_values = [], []
     label_embeds = model.encode(labels, convert_to_tensor=True)
     for i, label_emb in enumerate(label_embeds):
-        label = labels[i].lower()
-        if label in class_list:
-            mapped_labels.append(label)
-        else:
-            distances = torch.nn.CosineSimilarity(dim=1, eps=1e-6)(label_emb, class_embeds)
-            closest_idx = torch.argmax(distances)
-            mapped_labels.append(class_list[closest_idx])
-    return mapped_labels
+        # label = labels[i].lower()
+        # if label in class_list:
+        #     mapped_labels.append(label)
+        # else:
+        distances = torch.nn.CosineSimilarity(dim=1, eps=1e-6)(label_emb, class_embeds)
+        closest_value = torch.amax(distances)
+        if closest_value < 0.5:
+            continue
+        closest_idx = torch.argmax(distances)
+        mapped_labels.append(class_list[closest_idx])
+        closest_values.append(closest_value.item())
+    return mapped_labels, closest_values
 
 
 
 
 if __name__ == "__main__":
 
-    model = SentenceTransformer('all-MiniLM-L6-v2')
+    model = SentenceTransformer('all-MiniLM-L6-v2').cuda()
 
     # Tokenize input
     CITYSCAPES = ['road', 'sidewalk', 'building', 'wall', 'fence', 'pole', 'traffic light', 'trafffic sign',
@@ -117,7 +121,7 @@ if __name__ == "__main__":
                   'bicycle']
     class_embeds = model.encode(CITYSCAPES, convert_to_tensor=True)
 
-    labels = ['street', 'bike', 'pedestrian', 'skyscraper', 'scooter', 'palm tree', 'woman', 'clouds', 'grass', 'stop sign', 'mountain', 'fence']
+    labels = ['tree', 'trees', 'bushes', 'plants', 'street', 'bike', 'pedestrian', 'skyscraper', 'scooter', 'palm tree', 'woman', 'clouds', 'grass', 'stop sign', 'mountain', 'fence']
     mapped_labels = map_labels(labels, CITYSCAPES, class_embeds, model)
 
     print(mapped_labels)

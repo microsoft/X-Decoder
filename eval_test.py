@@ -58,7 +58,7 @@ def main(args=None):
     dataloaders = build_eval_dataloader(opt)
     # evaluation dataset
     dataset_names = opt['DATASETS']['TEST']
-    output_root = './output'
+    output_root = './output_mapped_names_2'
 
     # init metadata
     scores = {}
@@ -85,8 +85,8 @@ def main(args=None):
             transform = transforms.Compose(t)
 
             for idx, batch in enumerate(dataloader):
-                batch[0]['image'] = torch.load('sample_data/image.pt')
-                batch[0]['semseg'] = torch.load('sample_data/sem_seg.pt')
+                #batch[0]['image'] = torch.load('sample_data/image.pt')
+                #batch[0]['semseg'] = torch.load('sample_data/sem_seg.pt')
 
                 total_data_time += time.perf_counter() - start_data_time
                 if idx == num_warmup:
@@ -99,18 +99,26 @@ def main(args=None):
 
                 captions = label_generator(image.unsqueeze(0))[1][0]
                 names = get_nouns(captions, label_generator.spacy_model) + ['background']
-                #names = ["road", "picture", "motorcycle", "photo", "stop", "street", "bus", "background"]
-
-
+                names.remove('picture')
+                names2 = names
+                # print("NAMES", names)
+                mapped_names_model, closest_values = map_labels(names, class_names, class_embeds, nlp_model)
+                names = mapped_names_model
+                tupled_names = [(names2[i], mapped_names_model[i], closest_values[i]) for i in range(len(names))]
+                # print("MAPPED NAMES", names)
+                # print("MAPPED VALUES", closest_values, "\n")
+                print("---", tupled_names)
                 names_dict = {}
                 for name_idx, name in enumerate(names):
                     names_dict[name_idx] = name
-                print("names dict: ", names_dict)
+                #print("names dict: ", names_dict)
                 metadata = MetadataCatalog.get(dataset_name)
                 model.model.metadata = metadata
 
                 eval_type = model.model.metadata.evaluator_type
                 model.model.sem_seg_head.num_classes = len(names) - 1
+
+                # Give the BLIP labels to X-Decoder
                 model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(names, is_eval=True)
                 hook_switcher(model, dataset_name)
                 hook_opt(model, dataset_name)
@@ -132,10 +140,12 @@ def main(args=None):
                 all_predicted_idx = torch.unique(output)
                 
                 evaluated_names = [names_dict[pred_idx.item()] for pred_idx in all_predicted_idx]
-                mapped_names = map_labels(evaluated_names, class_names, class_embeds, nlp_model)# + ['background']
+                mapped_names, _ = map_labels(evaluated_names, class_names, class_embeds, nlp_model)
+                # print(idx, "--- NAMES", evaluated_names, "\n---", "MAPPED NAMES", mapped_names, "\n\n")
+
                 map_dict = {}
-                print("evaluated names", evaluated_names, len(evaluated_names))
-                print("mapped names", mapped_names, len(mapped_names))
+                #print("evaluated names", evaluated_names, len(evaluated_names))
+                #print("mapped names", mapped_names, len(mapped_names))
                 background_ignore_idx = []
                 for cc, n in enumerate(evaluated_names):
                     mapped_name = mapped_names[cc]
@@ -152,9 +162,11 @@ def main(args=None):
                     val = val.item()
                     output[output==val] = map_dict[val]
                                
-                
-                save_output = True
-                
+                if idx < 15:
+                    save_output = True
+                else:
+                    save_output = False
+
                 if save_output:
                     image_pth = batch[0]['file_name']
                     #image_pth ='datasets/cityscapes/leftImg8bit/val/frankfurt/frankfurt_000000_003920_leftImg8bit.png'# batch[0]['file_name']
@@ -168,7 +180,7 @@ def main(args=None):
                     
                     demo.save(os.path.join(output_root, str(idx) + '_sem.png'))
                 
-                
+                #exit() 
                 evaluator.process(batch, [output.cpu()])
                 total_eval_time += time.perf_counter() - start_eval_time
 

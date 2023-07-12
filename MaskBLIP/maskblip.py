@@ -26,7 +26,7 @@ def print_cuda_memory():
 
 class MaskBLIP(torch.nn.Module):
     def __init__(self, device, scales=[384, 512], cluster_range=(2, 8), smoothness_weight=6, smoothness_theta=0.8, pos_emb_dim=256,
-                 use_nucleus=True, num_beams=3, top_p=0.9, repetition_penalty=3.0, attention_mode="global", use_background=True, use_xdecoder=False,
+                 use_nucleus=True, num_beams=3, top_p=1, repetition_penalty=10.0, attention_mode="global", use_background=True, use_xdecoder=False,
                  background=False, kmeans_range=False, local_global=False, nr_of_scales=False, scale_step=False):
         #TODO clean up those kwargs
         super().__init__()
@@ -179,21 +179,23 @@ class MaskBLIP(torch.nn.Module):
                 for i in range(len(cluster_indices)):
                     cluster_embs.append(image_emb[idx].squeeze()[cluster_indices[i]])
 
-            for emb in cluster_embs:
-                # emb = emb.mean(axis=0)
-                decoder_out = self.BLIPcap.text_decoder.generate_from_encoder(
-                    tokenized_prompt=self.prompt,
-                    visual_embeds=emb.clone().detach().unsqueeze(0),
-                    sep_token_id=self.BLIPcap.tokenizer.sep_token_id,
-                    pad_token_id=self.BLIPcap.tokenizer.pad_token_id,
-                    use_nucleus_sampling=self.use_nucleus,
-                    num_beams=self.num_beams,
-                    max_length=15,
-                    min_length=3,
-                    top_p=self.top_p,
-                    repetition_penalty=self.repetition_penalty,
-                )
-                token_list.append(list(decoder_out[0]))
+            for i in range(10):
+                for emb in cluster_embs:
+                    # emb = emb.mean(axis=0)
+                    decoder_out = self.BLIPcap.text_decoder.generate_from_encoder(
+                        tokenized_prompt=self.prompt,
+                        visual_embeds=emb.clone().detach().unsqueeze(0),
+                        sep_token_id=self.BLIPcap.tokenizer.sep_token_id,
+                        pad_token_id=self.BLIPcap.tokenizer.pad_token_id,
+                        use_nucleus_sampling=self.use_nucleus,
+                        num_beams=self.num_beams,
+                        max_length=15,
+                        min_length=3,
+                        top_p=self.top_p,
+                        repetition_penalty=self.repetition_penalty,
+                    )
+                    token_list.append(list(decoder_out[0]))
+                # print(i, "---", self.BLIPcap.tokenizer.batch_decode(token_list, skip_special_tokens=True))
             nr_captions_per_img.append(len(cluster_embs))
 
 
