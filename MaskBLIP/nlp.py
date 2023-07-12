@@ -90,26 +90,25 @@ def get_nouns(captions, spacy_model, add_background=False):
     return output
 
 def map_labels(labels, class_list, class_embeds, model):
-    #print("LABELS", labels)
-    #print("CLASSLIST", class_list, "\n\n\n")
-    mapped_labels, closest_values = [], []
     label_embeds = model.encode(labels, convert_to_tensor=True)
-    for i, label_emb in enumerate(label_embeds):
-        # label = labels[i].lower()
-        # if label in class_list:
-        #     mapped_labels.append(label)
-        # else:
-        distances = torch.nn.CosineSimilarity(dim=1, eps=1e-6)(label_emb, class_embeds)
-        closest_value = torch.amax(distances)
-        if closest_value < 0.5:
-            continue
-        closest_idx = torch.argmax(distances)
-        mapped_labels.append(class_list[closest_idx])
-        closest_values.append(closest_value.item())
-    return mapped_labels, closest_values
 
+    label_embeds = label_embeds.unsqueeze(1)  # shape will be [n, 1, 384]
+    class_embeds = class_embeds.unsqueeze(0)  # shape will be [1, m, 384]
 
+    similarity = torch.nn.functional.cosine_similarity(label_embeds, class_embeds, dim=2)  # shape will be [n, m]
 
+    max_sim_values, max_sim_indices = torch.max(similarity, dim=1)
+
+    # Apply the threshold
+    mask = max_sim_values > 0.5
+    filtered_sim_values = max_sim_values[mask]
+    filtered_sim_indices = max_sim_indices[mask]
+
+    # Convert to list
+    filtered_sim_values_list = filtered_sim_values.tolist()
+    filtered_sim_labels_list = [class_list[i] for i in filtered_sim_indices]
+
+    return filtered_sim_labels_list, filtered_sim_values_list
 
 if __name__ == "__main__":
 
