@@ -147,6 +147,7 @@ def main(args=None):
                     outputs = model(batch, mode=eval_type)
 
                 output = outputs[0]["sem_seg"].argmax(dim=0)
+                output_ori = output.clone()
                 all_predicted_idx = torch.unique(output)
 
                 evaluated_names = [names_dict[pred_idx.item()] for pred_idx in all_predicted_idx]
@@ -180,7 +181,9 @@ def main(args=None):
 
                     image_ori = Image.open(image_pth).convert("RGB")
                     visual = Visualizer(image_ori, metadata=metadata)
-                    demo = visual.draw_sem_seg(output.cpu(), alpha=0.5)  # rgb Image
+                    #demo = visual.draw_sem_seg(output.cpu(), alpha=0.5)  # rgb Image
+                    demo = visual.draw_open_seg(output_ori.cpu, evaluated_names, mapped_names,  alpha=0.5) # rgb Image
+
 
                     if not os.path.exists(output_root):
                         os.makedirs(output_root)
@@ -262,6 +265,7 @@ def main(args=None):
 
 
 if __name__ == "__main__":
-    main()
+    args = ["evaluate", "--conf_files", "configs/xdecoder/svlp_focalt_lang.yaml", "--overrides", "WEIGHT", "../maskblip/XDecoder/weights/xdecoder_focalt_best_openseg.pt"]
+    main(args)
     sys.exit(0)
 

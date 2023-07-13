@@ -444,6 +444,32 @@ class Visualizer:
         )
         return self.output
 
+
+    def draw_open_seg(self, sem_seg, pred_labels, mapped_labels, area_threshold=None, alpha=0.7):
+        if isinstance(sem_seg, torch.Tensor):
+            sem_seg = sem_seg.numpy()
+        labels, areas = np.unique(sem_seg, return_counts=True)
+        sorted_idxs = np.argsort(-areas).tolist()
+        labels = labels[sorted_idxs]
+        for label in labels:
+            text = pred_labels[label] + '/' + mapped_labels[label]
+            try:
+                mask_color = [x / 255 for x in self.metadata.stuff_colors[label]]
+            except (AttributeError, IndexError):
+                mask_color = None
+
+            binary_mask = (sem_seg == label).astype(np.uint8)
+            #text = self.metadata.stuff_classes[label]
+            self.draw_binary_mask(
+                binary_mask,
+                color=mask_color,
+                edge_color=_OFF_WHITE,
+                text=text,
+                alpha=alpha,
+                area_threshold=area_threshold,
+            )
+        return self.output
+
     def draw_sem_seg(self, sem_seg, area_threshold=None, alpha=0.7):
         """
         Draw semantic segmentation predictions/labels.
