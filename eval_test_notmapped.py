@@ -58,11 +58,11 @@ def main(args=None):
     dataloaders = build_eval_dataloader(opt)
     # evaluation dataset
     dataset_names = opt['DATASETS']['TEST']
-    threshold = 0.4
-    n_passes = 5
-    min_length = 3
+    threshold = 0.45
+    n_passes = 15
+    min_length = 5
     max_length = 15
-    output_root = './output_mapped_' + str(threshold*100) + '_' + str(n_passes) + '_' + str(max_length) + '_' + str(min_length)
+    output_root = './output_notmapped_' + str(threshold*100) + '_' + str(n_passes) + '_' + str(max_length) + '_' + str(min_length)
 
     # init metadata
     scores = {}
@@ -102,7 +102,6 @@ def main(args=None):
                 image = batch[0]['image'].float() / 255
 
                 captions = label_generator(image.unsqueeze(0), n_passes, min_length, max_length)[1][0]
-                # print("CAPS", captions)
                 names = get_nouns(captions, label_generator.spacy_model) + ['background']
                 # names = class_names
                 names.remove('picture')
@@ -181,8 +180,8 @@ def main(args=None):
 
                     image_ori = Image.open(image_pth).convert("RGB")
                     visual = Visualizer(image_ori, metadata=metadata)
-                    #demo = visual.draw_sem_seg(output.cpu(), alpha=0.5)  # rgb Image
-                    demo = visual.draw_open_seg(output_ori.cpu(), evaluated_names, mapped_names,  alpha=0.5) # rgb Image
+                    demo = visual.draw_sem_seg(output.cpu(), alpha=0.5)  # rgb Image
+                    # demo = visual.draw_open_seg(output_ori.cpu(), evaluated_names, mapped_names,  alpha=0.5) # rgb Image
 
 
                     if not os.path.exists(output_root):
