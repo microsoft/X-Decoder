@@ -66,7 +66,7 @@ class MaskBLIP(torch.nn.Module):
         prompt.input_ids = prompt.input_ids[:, :-1]
         return prompt
 
-    def forward(self, raw_images, gt_mask=None, clean=True):
+    def forward(self, raw_images, n_passes, min_length, max_length, gt_mask=None, clean=True):
         batch_size = raw_images.shape[0]
         clusterings = []
         max_emb_size = max(self.scales) // 16
@@ -121,15 +121,14 @@ class MaskBLIP(torch.nn.Module):
 
 
         if self.captioning:
-            captions_list = self.generate_captions(raw_images, final_clusters)
-            # print("777")
+            captions_list = self.generate_captions(raw_images, final_clusters, n_passes, min_length, max_length)
 
             return final_clusters, captions_list
         else:
             return final_clusters
 
     # Get captions from already generated clusters, useful to generate multiple captions from the same cluster
-    def generate_captions(self, image, clusters):
+    def generate_captions(self, image, clusters, n_passes, min_length, max_length):
         image = Resize(size=(self.img_size, self.img_size), antialias=True)(image).to(self.device)
 
         image_emb = self.BLIPcap.forward_encoder({"image": image})[:, :-1, :]
@@ -179,7 +178,7 @@ class MaskBLIP(torch.nn.Module):
                 for i in range(len(cluster_indices)):
                     cluster_embs.append(image_emb[idx].squeeze()[cluster_indices[i]])
 
-            for i in range(5):
+            for i in range(n_passes):
                 for emb in cluster_embs:
                     # emb = emb.mean(axis=0)
                     decoder_out = self.BLIPcap.text_decoder.generate_from_encoder(
@@ -189,8 +188,8 @@ class MaskBLIP(torch.nn.Module):
                         pad_token_id=self.BLIPcap.tokenizer.pad_token_id,
                         use_nucleus_sampling=self.use_nucleus,
                         num_beams=self.num_beams,
-                        max_length=15,
-                        min_length=3,
+                        max_length=max_length,
+                        min_length=min_length,
                         top_p=self.top_p,
                         repetition_penalty=self.repetition_penalty,
                     )

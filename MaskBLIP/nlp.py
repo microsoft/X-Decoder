@@ -89,13 +89,13 @@ def get_nouns(captions, spacy_model, add_background=False):
         output.remove('background')
     return output
 
-def map_labels(labels, class_list, class_embeds, model):
+def map_labels(labels, class_list, class_embeds, model, threshold):
     mapped_labels, selected_idx, closest_values = [], [], []
     label_embeds = model.encode(labels, convert_to_tensor=True)
     for i, label_emb in enumerate(label_embeds):
         distances = torch.nn.CosineSimilarity(dim=1, eps=1e-6)(label_emb, class_embeds)
         closest_value = torch.amax(distances)
-        if closest_value < 0.45:
+        if closest_value < threshold:
             continue
         selected_idx.append(i)
         closest_idx = torch.argmax(distances)

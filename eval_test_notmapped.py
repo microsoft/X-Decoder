@@ -58,7 +58,11 @@ def main(args=None):
     dataloaders = build_eval_dataloader(opt)
     # evaluation dataset
     dataset_names = opt['DATASETS']['TEST']
-    output_root = './output_notmapped_45_10_15_3'
+    threshold = 0.4
+    n_passes = 5
+    min_length = 3
+    max_length = 15
+    output_root = './output_mapped_' + str(threshold*100) + '_' + str(n_passes) + '_' + str(max_length) + '_' + str(min_length)
 
     # init metadata
     scores = {}
@@ -97,7 +101,7 @@ def main(args=None):
                 start_compute_time = time.perf_counter()
                 image = batch[0]['image'].float() / 255
 
-                captions = label_generator(image.unsqueeze(0))[1][0]
+                captions = label_generator(image.unsqueeze(0), n_passes, min_length, max_length)[1][0]
                 # print("CAPS", captions)
                 names = get_nouns(captions, label_generator.spacy_model) + ['background']
                 # names = class_names
@@ -107,9 +111,13 @@ def main(args=None):
                 if 'photo' in names:
                     names.remove('photo')
 
-                map, selected_idx, values = map_labels(names, class_names, class_embeds, nlp_model)
-                names = [names[j] for j in selected_idx]
+                # print("--BEF-->", names)
 
+                # Filter out the nouns that have very low similarity to any of the GT labels
+                names, selected_idx, values = map_labels(names, class_names, class_embeds, nlp_model, threshold)
+                # names = [names[j] for j in selected_idx]
+
+                # print("--AFT-->", names)
                 # Cornercase if all detected classes are filtered out
                 if len(names) == 1 and names[0] == 'background':
                     names = class_names
@@ -142,7 +150,7 @@ def main(args=None):
                 all_predicted_idx = torch.unique(output)
 
                 evaluated_names = [names_dict[pred_idx.item()] for pred_idx in all_predicted_idx]
-                mapped_names, selected_idx, _ = map_labels(evaluated_names, class_names, class_embeds, nlp_model)
+                mapped_names, selected_idx, _ = map_labels(evaluated_names, class_names, class_embeds, nlp_model, threshold)
 
                 map_dict = {}
                 background_ignore_idx = []
