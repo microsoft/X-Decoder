@@ -445,7 +445,7 @@ class Visualizer:
         return self.output
 
 
-    def draw_open_seg(self, sem_seg, pred_labels, mapped_labels, area_threshold=None, alpha=0.7):
+    def draw_open_seg(self, sem_seg, predicted_idx, pred_labels, mapped_labels, area_threshold=None, alpha=0.7):
         if isinstance(sem_seg, torch.Tensor):
             sem_seg = sem_seg.numpy()
         labels, areas = np.unique(sem_seg, return_counts=True)
@@ -454,7 +454,8 @@ class Visualizer:
         for label in labels:
             print(pred_labels)
             print(mapped_labels, label, "\n")
-            text = pred_labels[label] + '/' + mapped_labels[label]
+            idx = torch.where(predicted_idx == label)[0].item()
+            text = pred_labels[idx] + '/' + mapped_labels[idx]
             try:
                 mask_color = [x / 255 for x in self.metadata.stuff_colors[label]]
             except (AttributeError, IndexError):
