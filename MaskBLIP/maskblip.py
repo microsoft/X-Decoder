@@ -26,7 +26,7 @@ def print_cuda_memory():
 
 class MaskBLIP(torch.nn.Module):
     def __init__(self, device, scales=[384, 512], cluster_range=(2, 8), smoothness_weight=6, smoothness_theta=0.8, pos_emb_dim=256,
-                 use_nucleus=True, num_beams=3, top_p=1, repetition_penalty=10.0, attention_mode="global", use_background=True, use_xdecoder=False,
+                 use_nucleus=True, num_beams=3, top_p=1, repetition_penalty=100.0, attention_mode="global", use_background=True, use_xdecoder=False,
                  background=False, kmeans_range=False, local_global=False, nr_of_scales=False, scale_step=False):
         #TODO clean up those kwargs
         super().__init__()
@@ -179,7 +179,7 @@ class MaskBLIP(torch.nn.Module):
                 for i in range(len(cluster_indices)):
                     cluster_embs.append(image_emb[idx].squeeze()[cluster_indices[i]])
 
-            for i in range(10):
+            for i in range(5):
                 for emb in cluster_embs:
                     # emb = emb.mean(axis=0)
                     decoder_out = self.BLIPcap.text_decoder.generate_from_encoder(
@@ -200,10 +200,9 @@ class MaskBLIP(torch.nn.Module):
 
 
         outputs = self.BLIPcap.tokenizer.batch_decode(token_list, skip_special_tokens=True)
+        # captions_list = [outputs[i:i + nr_captions_per_img[idx]] for idx, i in enumerate(np.cumsum(nr_captions_per_img) - nr_captions_per_img)]
 
-        captions_list = [outputs[i:i + nr_captions_per_img[idx]] for idx, i in enumerate(np.cumsum(nr_captions_per_img) - nr_captions_per_img)]
-
-        return captions_list
+        return [outputs]
 
 def majority_filter(tensor, footprint_size):
     padding_size = footprint_size // 2
@@ -355,13 +354,14 @@ def plot_result(image, clusters, captions):
 
     # Show the plot
     plt.tight_layout()
+    plt.savefig("./test.png")
     plt.show()
 
 
 if __name__ == "__main__":
     wandb_track = False
 
-    img_path = "../images/fruit.jpg"
+    img_path = "/home/ulger/home2/X-Decoder/datasets/cityscapes/leftImg8bit/val/frankfurt/frankfurt_000001_058057_leftImg8bit.png"
     #img_path2 = "images/bear.jpg"
     raw_image = Image.open(img_path)
     transform = Compose([
@@ -381,19 +381,19 @@ if __name__ == "__main__":
     smoothness_weight = 6.26
     pos_emb_dim = 256
     cleanup = True
-    device = 'cpu'#torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-    if wandb_track:
-        run = wandb.init(
-            # Set the project where this run will be logged
-            project="maskblip",
-            group="multiscale",
-            # Track hyperparameters and run metadata
-            config={
-                "scales": scales
-            })
-    else:
-        run = wandb.init(mode = "disabled")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    #
+    # if wandb_track:
+    #     run = wandb.init(
+    #         # Set the project where this run will be logged
+    #         project="maskblip",
+    #         group="multiscale",
+    #         # Track hyperparameters and run metadata
+    #         config={
+    #             "scales": scales
+    #         })
+    # else:
+    #     run = wandb.init(mode = "disabled")
 
 
     model = MaskBLIP(device, scales=scales, cluster_range=cluster_range, smoothness_theta=smoothness_theta, smoothness_weight=smoothness_weight, pos_emb_dim=pos_emb_dim)
