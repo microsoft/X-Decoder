@@ -99,7 +99,7 @@ def main(args=None):
                 image = batch[0]['image'].float() / 255
 
                 captions = label_generator(image.unsqueeze(0))[1][0]
-                names = #get_nouns(captions, label_generator.spacy_model) + ['background']
+                names = get_nouns(captions, label_generator.lemmatizer) + ['background']
                 names_dict = {}
                 print(names)
                 exit()
@@ -259,5 +259,7 @@ def main(args=None):
 
 
 if __name__ == "__main__":
+    # args = ["evaluate", "--conf_files", "configs/xdecoder/svlp_focalt_lang.yaml", "--overrides", "WEIGHT", "../maskblip/XDecoder/weights/xdecoder_focalt_best_openseg.pt"]
+    # main(args)
     main()
     sys.exit(0)

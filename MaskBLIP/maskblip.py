@@ -17,7 +17,7 @@ import torch_kmeans
 import wandb
 from MaskBLIP.nlp import get_noun_chunks, get_nouns
 #from xdecoder_semseg import load_xdecoder_model, segment_image, segment_with_sanity_check
-import spacy
+from nltk.stem import WordNetLemmatizer
 
 
 def print_cuda_memory():
@@ -50,7 +50,8 @@ class MaskBLIP(torch.nn.Module):
             interpolate_pos_encoding(self.BLIPcap.visual_encoder.pos_embed, self.output_size[0]))
 
         #captioning
-        self.spacy_model = spacy.load("en_core_web_sm")
+        self.lemmatizer = WordNetLemmatizer()
+
         self.use_nucleus = use_nucleus
         self.num_beams = num_beams
         self.top_p = top_p
@@ -66,7 +67,7 @@ class MaskBLIP(torch.nn.Module):
         prompt.input_ids = prompt.input_ids[:, :-1]
         return prompt
 
-    def forward(self, raw_images, n_passes, min_length, max_length, gt_mask=None, clean=True):
+    def forward(self, raw_images, n_passes=3, min_length=5, max_length=15, gt_mask=None, clean=True):
         batch_size = raw_images.shape[0]
         clusterings = []
         max_emb_size = max(self.scales) // 16
@@ -201,7 +202,7 @@ class MaskBLIP(torch.nn.Module):
         outputs = self.BLIPcap.tokenizer.batch_decode(token_list, skip_special_tokens=True)
         # captions_list = [outputs[i:i + nr_captions_per_img[idx]] for idx, i in enumerate(np.cumsum(nr_captions_per_img) - nr_captions_per_img)]
 
-        return [outputs]
+        return outputs
 
 def majority_filter(tensor, footprint_size):
     padding_size = footprint_size // 2
@@ -360,7 +361,7 @@ def plot_result(image, clusters, captions):
 if __name__ == "__main__":
     wandb_track = False
 
-    img_path = "/home/ulger/home2/X-Decoder/datasets/cityscapes/leftImg8bit/val/frankfurt/frankfurt_000001_058057_leftImg8bit.png"
+    img_path = "../images/owls.jpeg"
     #img_path2 = "images/bear.jpg"
     raw_image = Image.open(img_path)
     transform = Compose([
@@ -401,9 +402,11 @@ if __name__ == "__main__":
     clusters, captions = model(batch, clean=cleanup)
 
     print(captions)
+
+    chunks = get_nouns(captions, model.lemmatizer)
+    print(chunks)
     plot_result(image, clusters[0], captions[0])
 
-    chunks = [get_nouns(captions[i], model.spacy_model) for i in range(len(captions))]
     del model, clusters, captions
     torch.cuda.empty_cache()
 
