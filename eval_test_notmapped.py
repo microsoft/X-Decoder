@@ -114,8 +114,8 @@ def main(args=None):
                 # print("--BEF-->", names)
 
                 # Filter out the nouns that have very low similarity to any of the GT labels
-                names, selected_idx, values = map_labels(names, class_names, class_embeds, nlp_model, threshold)
-                # names = [names[j] for j in selected_idx]
+                _, selected_idx, values = map_labels(names, class_names, class_embeds, nlp_model, threshold)
+                names = [names[j] for j in selected_idx]
 
                 # print("--AFT-->", names)
                 # Cornercase if all detected classes are filtered out
@@ -182,7 +182,7 @@ def main(args=None):
                     image_ori = Image.open(image_pth).convert("RGB")
                     visual = Visualizer(image_ori, metadata=metadata)
                     #demo = visual.draw_sem_seg(output.cpu(), alpha=0.5)  # rgb Image
-                    demo = visual.draw_open_seg(output_ori.cpu, evaluated_names, mapped_names,  alpha=0.5) # rgb Image
+                    demo = visual.draw_open_seg(output_ori.cpu(), evaluated_names, mapped_names,  alpha=0.5) # rgb Image
 
 
                     if not os.path.exists(output_root):

@@ -452,6 +452,8 @@ class Visualizer:
         sorted_idxs = np.argsort(-areas).tolist()
         labels = labels[sorted_idxs]
         for label in labels:
+            print(pred_labels)
+            print(mapped_labels, label, "\n")
             text = pred_labels[label] + '/' + mapped_labels[label]
             try:
                 mask_color = [x / 255 for x in self.metadata.stuff_colors[label]]
