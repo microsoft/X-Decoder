@@ -50,7 +50,7 @@ def main(args=None):
     opt = init_distributed(opt)
 
     # build model
-    label_generator = MaskBLIP(device='cuda')
+    label_generator = MaskBLIP(device='cuda', attention_mode='concat')
     model = BaseModel(opt, build_model(opt)).from_pretrained(opt['WEIGHT']).eval().cuda()
     nlp_model = SentenceTransformer('all-MiniLM-L6-v2')
 
@@ -60,9 +60,9 @@ def main(args=None):
     dataset_names = opt['DATASETS']['TEST']
     threshold = 0.45
     n_passes = 15
-    min_length = 5
+    min_length = 3
     max_length = 15
-    output_root = './output_notmapped_' + str(threshold*100) + '_' + str(n_passes) + '_' + str(max_length) + '_' + str(min_length)
+    output_root = './results/output_notmapped_concat_1024_' + str(threshold*100) + '_' + str(n_passes) + '_' + str(max_length) + '_' + str(min_length)
 
     # init metadata
     scores = {}
@@ -169,7 +169,7 @@ def main(args=None):
                     val = val.item()
                     output[output == val] = map_dict[val]
 
-                if idx < 15:
+                if idx < 25:
                     save_output = True
                 else:
                     save_output = False
@@ -180,8 +180,10 @@ def main(args=None):
 
                     image_ori = Image.open(image_pth).convert("RGB")
                     visual = Visualizer(image_ori, metadata=metadata)
-                    demo = visual.draw_sem_seg(output.cpu(), alpha=0.5)  # rgb Image
+                    # demo = visual.draw_sem_seg(output.cpu(), alpha=0.5)  # rgb Image
                     # demo = visual.draw_open_seg(output_ori.cpu(), evaluated_names, mapped_names,  alpha=0.5) # rgb Image
+                    # demo = visual.draw_sem_seg(output.cpu(), alpha=0.5)  # rgb Image
+                    demo = visual.draw_open_seg(output_ori.cpu(), all_predicted_idx, evaluated_names, mapped_names,  alpha=0.5) # rgb Image
 
 
                     if not os.path.exists(output_root):

@@ -25,7 +25,7 @@ def print_cuda_memory():
 
 
 class MaskBLIP(torch.nn.Module):
-    def __init__(self, device, scales=[384, 512], cluster_range=(2, 8), smoothness_weight=6, smoothness_theta=0.8, pos_emb_dim=256,
+    def __init__(self, device, scales=[384, 512, 1024], cluster_range=(2, 8), smoothness_weight=6, smoothness_theta=0.8, pos_emb_dim=256,
                  use_nucleus=True, num_beams=3, top_p=1, repetition_penalty=100.0, attention_mode="global", use_background=True, use_xdecoder=False,
                  background=False, kmeans_range=False, local_global=False, nr_of_scales=False, scale_step=False):
         #TODO clean up those kwargs
@@ -173,10 +173,12 @@ class MaskBLIP(torch.nn.Module):
                         cluster_embs.append(x)
                     elif self.attention_mode == "cls":
                         cluster_embs.append(x[0])
-
+            # self.attention = 'global'
+            # Every cluster becomes its own tensor with embeddings
             else:
                 for i in range(len(cluster_indices)):
                     cluster_embs.append(image_emb[idx].squeeze()[cluster_indices[i]])
+            # print(cluster_embs)
 
             for i in range(n_passes):
                 for emb in cluster_embs:

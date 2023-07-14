@@ -99,7 +99,14 @@ def map_labels(labels, class_list, class_embeds, model, threshold):
             continue
         selected_idx.append(i)
         closest_idx = torch.argmax(distances)
-        mapped_labels.append(class_list[closest_idx])
+        if labels[i] == "window":
+            mapped_labels.append('building')
+        elif labels[i] == "door":
+            mapped_labels.append('building')
+        elif labels[i] == "house":
+            mapped_labels.append('building')
+        else:
+            mapped_labels.append(class_list[closest_idx])
         closest_values.append(closest_value.item())
     return mapped_labels, selected_idx, closest_values
 
