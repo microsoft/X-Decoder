@@ -57,6 +57,8 @@ sh install_cococapeval.sh
 export DATASET=/pth/to/dataset
 ```
 
+Here is the new link to download [coco_caption.zip](https://drive.google.com/file/d/1FHEQNkW7zHvSd-R8CQPC1gIuigC9w8Ff/view?usp=sharing).
+
 To prepare the dataset: [DATASET.md](./DATASET.md)
 
 ## Open Vocabulary Segmentation
