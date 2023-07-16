@@ -26,7 +26,7 @@ sh install_cococapeval.sh
 ```
 
 ### Download
-Please download the dataset [HERE](https://projects4jw.blob.core.windows.net/x-decoder/release/seginw.zip)!
+Please download the dataset [HERE](https://drive.google.com/file/d/1Q8yCRVxB3f3eBDTId33l79eYs4-gy1xu/view?usp=sharing)!
 
 ```
 .
