@@ -1,9 +1,8 @@
-# Copyright (c) Facebook, Inc. and its affiliates.
 # --------------------------------------------------------
 # X-Decoder -- Generalized Decoding for Pixel, Image, and Language
 # Copyright (c) 2022 Microsoft
 # Licensed under The MIT License [see LICENSE for details]
-# Modified by Xueyan Zou (xueyan@cs.wisc.edu)
+# Modified by Xueyan Zou (xueyan@cs.wisc.edu), Ziyi Dou (zdou@cs.ucla.edu)
 # --------------------------------------------------------
 import copy
 import itertools

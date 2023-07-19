@@ -1,5 +1,4 @@
-torch
-torchvision
+pillow==9.4.0
 opencv-python
 pyyaml
 json_tricks
@@ -16,7 +15,7 @@ ftfy
 regex
 nltk
 vision-datasets==0.2.2
-pycocotools==2.0.4
+pycocotools
 diffdist
 pyarrow
 cityscapesscripts
@@ -25,6 +24,8 @@ scikit-image
 mup
 gradio==3.13.0
 scann
-kornia==0.6.4
+kornia
 torchmetrics==0.6.0
 mpi4py
+deepspeed
+infinibatch@git+https://github.com/microsoft/infinibatch.git#egg=infinibatch

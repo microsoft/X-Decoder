@@ -38,7 +38,7 @@ def main(args=None):
     opt, cmdline_args = load_opt_command(args)
     if cmdline_args.user_dir:
         absolute_user_dir = os.path.abspath(cmdline_args.user_dir)
-        opt['user_dir'] = absolute_user_dir
+        opt['base_path'] = absolute_user_dir
 
     opt = init_distributed(opt)
 

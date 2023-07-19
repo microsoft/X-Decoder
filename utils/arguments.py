@@ -88,13 +88,3 @@ def load_opt_command(args):
             opt[key] = val
 
     return opt, cmdline_args
-
-
-def save_opt_to_json(opt, conf_file):
-    with open(conf_file, 'w', encoding='utf-8') as f:
-        json.dump(opt, f, indent=4)
-
-
-def save_opt_to_yaml(opt, conf_file):
-    with open(conf_file, 'w', encoding='utf-8') as f:
-        yaml.dump(opt, f)

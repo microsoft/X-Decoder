@@ -14,8 +14,7 @@ sys.path.insert(0, pth)
 
 from PIL import Image
 import numpy as np
-np.random.seed(0)
-import cv2
+np.random.seed(1)
 
 import torch
 from torchvision import transforms
@@ -23,10 +22,9 @@ from torchvision import transforms
 from utils.arguments import load_opt_command
 
 from detectron2.data import MetadataCatalog
-from detectron2.structures import BitMasks
+from detectron2.utils.colormap import random_color
 from xdecoder.BaseModel import BaseModel
 from xdecoder import build_model
-from detectron2.utils.colormap import random_color
 from utils.visualizer import Visualizer
 from utils.distributed import init_distributed
 
@@ -41,22 +39,33 @@ def main(args=None):
     opt, cmdline_args = load_opt_command(args)
     if cmdline_args.user_dir:
         absolute_user_dir = os.path.abspath(cmdline_args.user_dir)
-        opt['user_dir'] = absolute_user_dir
+        opt['base_path'] = absolute_user_dir
     opt = init_distributed(opt)
 
     # META DATA
     pretrained_pth = os.path.join(opt['WEIGHT'])
-    if 'novg' not in pretrained_pth:
-        assert False, "Using the ckpt without visual genome training data will be much better."
     output_root = './output'
-    image_pth = 'images/mountain.jpeg'
+    image_pth = 'images/animals.png'
 
     model = BaseModel(opt, build_model(opt)).from_pretrained(pretrained_pth).eval().cuda()
-    model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(["background"], is_eval=False)
 
     t = []
-    t.append(transforms.Resize(224, interpolation=Image.BICUBIC))
+    t.append(transforms.Resize(512, interpolation=Image.BICUBIC))
     transform = transforms.Compose(t)
+
+    stuff_classes = ['zebra','antelope','giraffe','ostrich','sky','water','grass','sand','tree']
+    stuff_colors = [random_color(rgb=True, maximum=255).astype(np.int).tolist() for _ in range(len(stuff_classes))]
+    stuff_dataset_id_to_contiguous_id = {x:x for x in range(len(stuff_classes))}
+
+    MetadataCatalog.get("demo").set(
+        stuff_colors=stuff_colors,
+        stuff_classes=stuff_classes,
+        stuff_dataset_id_to_contiguous_id=stuff_dataset_id_to_contiguous_id,
+    )
+    model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(stuff_classes + ["background"], is_eval=True)
+    metadata = MetadataCatalog.get('demo')
+    model.model.metadata = metadata
+    model.model.sem_seg_head.num_classes = len(stuff_classes)
 
     with torch.no_grad():
         image_ori = Image.open(image_pth).convert("RGB")
@@ -67,29 +76,16 @@ def main(args=None):
         image_ori = np.asarray(image_ori)
         images = torch.from_numpy(image.copy()).permute(2,0,1).cuda()
 
-        batch_inputs = [{'image': images, 'height': height, 'width': width, 'image_id': 0}]
-        outputs = model.model.evaluate_captioning(batch_inputs)
-        text = outputs[-1]['captioning_text']
+        batch_inputs = [{'image': images, 'height': height, 'width': width}]
+        outputs = model.forward(batch_inputs)
+        visual = Visualizer(image_ori, metadata=metadata)
 
-        image_ori = image_ori[:,:,::-1].copy()
-        cv2.rectangle(image_ori, (0, 0), (width, 60), (0,0,0), -1)
-        font                   = cv2.FONT_HERSHEY_DUPLEX
-        fontScale              = 1.2
-        thickness              = 2
-        lineType               = 2
-        bottomLeftCornerOfText = (10, 40)
-        fontColor              = [255,255,255]
-        cv2.putText(image_ori, text,
-            bottomLeftCornerOfText,
-            font, 
-            fontScale,
-            fontColor,
-            thickness,
-            lineType)
+        sem_seg = outputs[-1]['sem_seg'].max(0)[1]
+        demo = visual.draw_sem_seg(sem_seg.cpu(), alpha=0.5) # rgb Image
 
         if not os.path.exists(output_root):
             os.makedirs(output_root)
-        cv2.imwrite(os.path.join(output_root, 'captioning.png'), image_ori)
+        demo.save(os.path.join(output_root, 'sem.png'))
 
 
 if __name__ == "__main__":

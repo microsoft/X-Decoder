@@ -1,4 +1,3 @@
-# Copyright (c) Facebook, Inc. and its affiliates.
 # --------------------------------------------------------
 # X-Decoder -- Generalized Decoding for Pixel, Image, and Language
 # Copyright (c) 2022 Microsoft

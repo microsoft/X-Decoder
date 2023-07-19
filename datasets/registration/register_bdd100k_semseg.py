@@ -4,7 +4,7 @@
 # Licensed under The MIT License [see LICENSE for details]
 # Modified by Xueyan Zou (xueyan@cs.wisc.edu)
 # --------------------------------------------------------
-# Copyright (c) Facebook, Inc. and its affiliates.
+
 import numpy as np
 import os
 import glob

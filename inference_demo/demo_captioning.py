@@ -15,10 +15,9 @@ sys.path.insert(0, pth)
 from PIL import Image
 import numpy as np
 np.random.seed(0)
-# import cv2
+import cv2
 
 import torch
-import torch.nn.functional as F
 from torchvision import transforms
 
 from utils.arguments import load_opt_command
@@ -31,6 +30,7 @@ from detectron2.utils.colormap import random_color
 from utils.visualizer import Visualizer
 from utils.distributed import init_distributed
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -41,58 +41,56 @@ def main(args=None):
     opt, cmdline_args = load_opt_command(args)
     if cmdline_args.user_dir:
         absolute_user_dir = os.path.abspath(cmdline_args.user_dir)
-        opt['user_dir'] = absolute_user_dir
+        opt['base_path'] = absolute_user_dir
     opt = init_distributed(opt)
 
     # META DATA
-    pretrained_pth = os.path.join(opt['WEIGHT']) # suggest using no VG version.
+    pretrained_pth = os.path.join(opt['WEIGHT'])
     if 'novg' not in pretrained_pth:
         assert False, "Using the ckpt without visual genome training data will be much better."
     output_root = './output'
-    image_pth = 'images/landscape.jpg'
-    text = 'water'
+    image_pth = 'images/mountain.jpeg'
 
     model = BaseModel(opt, build_model(opt)).from_pretrained(pretrained_pth).eval().cuda()
     model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(["background"], is_eval=False)
 
     t = []
     t.append(transforms.Resize(224, interpolation=Image.BICUBIC))
-    transform_ret = transforms.Compose(t)
-    t = []
-    t.append(transforms.Resize(512, interpolation=Image.BICUBIC))
-    transform_grd = transforms.Compose(t)
- 
-    metedata = MetadataCatalog.get('coco_2017_train_panoptic')
-    
+    transform = transforms.Compose(t)
+
     with torch.no_grad():
         image_ori = Image.open(image_pth).convert("RGB")
         width = image_ori.size[0]
         height = image_ori.size[1]
-        image = transform_grd(image_ori)
+        image = transform(image_ori)
         image = np.asarray(image)
-        images = torch.from_numpy(image.copy()).permute(2,0,1).cuda()
-
-        batch_inputs = [{'image': images, 'groundings': {'texts':[[text]]}, 'height': height, 'width': width}]
-        outputs = model.model.evaluate_grounding(batch_inputs, None)
-
-        grd_mask = (outputs[-1]['grounding_mask'] > 0).float()
-        grd_mask_ = (1 - F.interpolate(grd_mask[None,], (224, 224), mode='nearest')[0]).bool()
-        grd_mask_ = grd_mask_ * 0
-
-        image_ori = Image.open(image_pth).convert("RGB")
-        image = transform_ret(image_ori)
         image_ori = np.asarray(image_ori)
-        image = np.asarray(image)
         images = torch.from_numpy(image.copy()).permute(2,0,1).cuda()
-        batch_inputs = [{'image': images, 'image_id': 0, 'captioning_mask': grd_mask_}]
-        outputs = model.model.evaluate_captioning(batch_inputs)
 
-        visual = Visualizer(image_ori, metadata=metedata)
-        color = [252/255, 91/255, 129/255]
+        batch_inputs = [{'image': images, 'height': height, 'width': width, 'image_id': 0}]
+        outputs = model.model.evaluate_captioning(batch_inputs)
         text = outputs[-1]['captioning_text']
-        
-        demo = visual.draw_binary_mask(grd_mask.cpu().numpy()[0], color=color, text=text)
-        demo.save(os.path.join(output_root, 'ref_cap.png'))
+
+        image_ori = image_ori[:,:,::-1].copy()
+        cv2.rectangle(image_ori, (0, 0), (width, 60), (0,0,0), -1)
+        font                   = cv2.FONT_HERSHEY_DUPLEX
+        fontScale              = 1.2
+        thickness              = 2
+        lineType               = 2
+        bottomLeftCornerOfText = (10, 40)
+        fontColor              = [255,255,255]
+        cv2.putText(image_ori, text,
+            bottomLeftCornerOfText,
+            font, 
+            fontScale,
+            fontColor,
+            thickness,
+            lineType)
+
+        if not os.path.exists(output_root):
+            os.makedirs(output_root)
+        cv2.imwrite(os.path.join(output_root, 'captioning.png'), image_ori)
+
 
 if __name__ == "__main__":
     main()

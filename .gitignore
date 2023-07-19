@@ -99,8 +99,9 @@ kill.sh
 draws/
 plot/
 
-
-
+*run.sh
+exps/*
+amlt/*
 
 *venv/*
 *.pt
