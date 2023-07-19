@@ -4,6 +4,26 @@
 
 by [Xueyan Zou*](https://maureenzou.github.io/), [Zi-Yi Dou*](https://zdou0830.github.io/), [Jianwei Yang*](https://jwyang.github.io/),  [Zhe Gan](https://zhegan27.github.io/), [Linjie Li](https://scholar.google.com/citations?user=WR875gYAAAAJ&hl=en), [Chunyuan Li](https://chunyuan.li/), [Xiyang Dai](https://sites.google.com/site/xiyangdai/), [Harkirat Behl](https://harkiratbehl.github.io/), [Jianfeng Wang](https://scholar.google.com/citations?user=vJWEw_8AAAAJ&hl=en), [Lu Yuan](https://scholar.google.com/citations?user=k9TsUVsAAAAJ&hl=en), [Nanyun Peng](https://vnpeng.net/), [Lijuan Wang](https://scholar.google.com/citations?user=cDcWXuIAAAAJ&hl=zh-CN), [Yong Jae Lee^](https://pages.cs.wisc.edu/~yongjaelee/), [Jianfeng Gao^](https://www.microsoft.com/en-us/research/people/jfgao/?from=http%3A%2F%2Fresearch.microsoft.com%2Fen-us%2Fum%2Fpeople%2Fjfgao%2F).
 
+
+## Getting Started
+
+**One-Line Getting Started with Linux:**
+```sh
+```
+
+:point_right: *[New]* **Latest Checkpoints and Numbers:**
+|                 |                                                                                             |          | COCO |      |      | Ref-COCOg |      |      | VOC   |       | SBD   |       |
+|-----------------|---------------------------------------------------------------------------------------------|----------|------|------|------|-----------|------|------|-------|-------|-------|-------|
+| Method          | Checkpoint                                                                                  | backbone | PQ   | mAP  | mIoU | cIoU      | mIoU | AP50 | NoC85 | NoC90 | NoC85 | NoC90 |
+| X-Decoder       | [ckpt](https://huggingface.co/xdecoder/X-Decoder/resolve/main/xdecoder_focalt_last.pt) | Focal-T  | 50.8 | 39.5 | 62.4 | 57.6      | 63.2 | 71.6 | -     | -     | -     | -     |
+| X-Decoder-oq201 | [ckpt](https://huggingface.co/xdecoder/X-Decoder/resolve/main/xdecoder_focall_last.pt) | Focal-L  | 56.5 | 46.7 | 67.2 | 62.8      | 67.5 | 76.3 | -     | -     | -     | -     |
+
+:fire: **README:**
+* [INSTALL.md](asset/INSTALL.md)
+* [TRAIN.md](asset/TRAIN.md)
+* [EVALUATION.md](asset/EVALUATION.md)
+* [DEMO.md](asset/DEMO.md)
+
 ## :fire: News
 
 * **[2023.07.19]** We finally release the x-decoder training code (still dev the readme now)!
@@ -25,7 +45,7 @@ by [Xueyan Zou*](https://maureenzou.github.io/), [Zi-Yi Dou*](https://zdou0830.g
 * **[2022.12.21]** We release open-vocabulary segmentation benchmark.
 
 ## :paintbrush: DEMO
-:small_red_triangle:[[X-GPT](https://github.com/microsoft/X-Decoder/tree/xgpt)] :small_red_triangle:[[Instruct X-Decoder](https://huggingface.co/spaces/xdecoder/Instruct-X-Decoder)]
+:blueberries: [[X-GPT](https://github.com/microsoft/X-Decoder/tree/xgpt) :strawberry:[[Instruct X-Decoder](https://huggingface.co/spaces/xdecoder/Instruct-X-Decoder)]
 
 ![demo](https://user-images.githubusercontent.com/11957155/225728214-0523bd30-31f7-472d-be7e-12a049c25cbd.gif)
 
