@@ -108,16 +108,15 @@ python demo/demo_captioning.py evaluate --conf_files configs/xdecoder/svlp_focal
 | X-Decoder | [NoVG Tiny](https://projects4jw.blob.core.windows.net/x-decoder/release/xdecoder_focalt_last_novg.pt) |  |  |  |       |  |  |  |    |       |  |  |  | |
 -->
 
-* X-Decoder [NoVG Tiny](https://huggingface.co/xdecoder/X-Decoder/resolve/main/xdecoder_focalt_last_novg.pt)
-* X-Decoder [Last Tiny](https://huggingface.co/xdecoder/X-Decoder/resolve/main/xdecoder_focalt_last.pt)
+<!-- * X-Decoder [NoVG Tiny](https://huggingface.co/xdecoder/X-Decoder/resolve/main/xdecoder_focalt_last_novg.pt)
+* X-Decoder [Last Tiny](https://huggingface.co/xdecoder/X-Decoder/resolve/main/xdecoder_focalt_last.pt) -->
 
-## Additional Results
-
+<!-- ## Additional Results
 * Finetuned ADE 150 (32 epochs)
 
 | Model                           | Task    | Log | PQ   | mAP  | mIoU |
 |---------------------------------|---------|-----|------|------|------|
-| X-Decoder (davit-d5,Deformable) | PanoSeg |  [log](https://projects4jw.blob.core.windows.net/x-decoder/release/ade20k_finetune_davitd5_deform_32epoch_log.txt)   | 52.4 | 38.7 | 59.1 | -->
+| X-Decoder (davit-d5,Deformable) | PanoSeg |  [log](https://projects4jw.blob.core.windows.net/x-decoder/release/ade20k_finetune_davitd5_deform_32epoch_log.txt)   | 52.4 | 38.7 | 59.1 | --> -->
 
 ## Acknowledgement
 * We appreciate the contructive dicussion with [Haotian Zhang](https://haotian-zhang.github.io/) 
