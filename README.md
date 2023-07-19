@@ -18,7 +18,7 @@ by [Xueyan Zou*](https://maureenzou.github.io/), [Zi-Yi Dou*](https://zdou0830.g
 | X-Decoder       | [ckpt](https://huggingface.co/xdecoder/X-Decoder/resolve/main/xdecoder_focalt_last.pt) | Focal-T  | 50.8 | 39.5 | 62.4 | 57.6      | 63.2 | 71.6 | -     | -     | -     | -     |
 | X-Decoder-oq201 | [ckpt](https://huggingface.co/xdecoder/X-Decoder/resolve/main/xdecoder_focall_last.pt) | Focal-L  | 56.5 | 46.7 | 67.2 | 62.8      | 67.5 | 76.3 | -     | -     | -     | -     |
 
-:point_right: *[New]* **README:**
+:point_right: *[New]* **Installation, Training, Evaluation, and Demo Guide**
 * [INSTALL.md](asset/INSTALL.md)
 * [TRAIN.md](asset/TRAIN.md)
 * [EVALUATION.md](asset/EVALUATION.md)
