@@ -7,7 +7,7 @@ by [Xueyan Zou*](https://maureenzou.github.io/), [Zi-Yi Dou*](https://zdou0830.g
 
 ## Getting Started
 
-**One-Line Getting Started with Linux:**
+**One-Line Getting Started:**
 ```sh
 ```
 
@@ -67,7 +67,7 @@ X-Decoder is a generalized decoding model that can generate **pixel-level segmen
 * **One model architecture** finetuned for Semantic/Instance/Panoptic Segmentation, Referring Segmentation, Image Captioning, Image-Text Retrieval and Visual Question Answering (with an extra cls head);
 * **Zero-shot task composition** for Region Retrieval, Referring Captioning, Image Editing.
 
-## Getting Started
+<!-- ## Getting Started
 
 ### Installation
 ```sh
@@ -117,7 +117,7 @@ python demo/demo_captioning.py evaluate --conf_files configs/xdecoder/svlp_focal
 
 | Model                           | Task    | Log | PQ   | mAP  | mIoU |
 |---------------------------------|---------|-----|------|------|------|
-| X-Decoder (davit-d5,Deformable) | PanoSeg |  [log](https://projects4jw.blob.core.windows.net/x-decoder/release/ade20k_finetune_davitd5_deform_32epoch_log.txt)   | 52.4 | 38.7 | 59.1 |
+| X-Decoder (davit-d5,Deformable) | PanoSeg |  [log](https://projects4jw.blob.core.windows.net/x-decoder/release/ade20k_finetune_davitd5_deform_32epoch_log.txt)   | 52.4 | 38.7 | 59.1 | -->
 
 ## Acknowledgement
 * We appreciate the contructive dicussion with [Haotian Zhang](https://haotian-zhang.github.io/) 
