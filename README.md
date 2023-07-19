@@ -10,7 +10,7 @@ by [Xueyan Zou*](https://maureenzou.github.io/), [Zi-Yi Dou*](https://zdou0830.g
 * **[2023.04.14]** We are releasing [SEEM](https://github.com/UX-Decoder/Segment-Everything-Everywhere-All-At-Once), a new universal interactive interface for image segmentation! You can use it for any segmentation tasks, way beyond what X-Decoder can do!
 
 <p align="center">
-  <img src="images/teaser_new.png" width="90%" height="90%">
+  <img src="inference_demo/images/teaser_new.png" width="90%" height="90%">
 </p>
 
 * **[2023.03.20]** As an aspiration of our X-Decoder, we developed OpenSeeD ([[Paper](https://arxiv.org/pdf/2303.08131.pdf)][[Code](https://github.com/IDEA-Research/OpenSeeD)]) to enable open-vocabulary segmentation and detection with a single model, Check it out! 
