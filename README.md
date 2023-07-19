@@ -18,7 +18,7 @@ by [Xueyan Zou*](https://maureenzou.github.io/), [Zi-Yi Dou*](https://zdou0830.g
 | X-Decoder       | [ckpt](https://huggingface.co/xdecoder/X-Decoder/resolve/main/xdecoder_focalt_last.pt) | Focal-T  | 50.8 | 39.5 | 62.4 | 57.6      | 63.2 | 71.6 | -     | -     | -     | -     |
 | X-Decoder-oq201 | [ckpt](https://huggingface.co/xdecoder/X-Decoder/resolve/main/xdecoder_focall_last.pt) | Focal-L  | 56.5 | 46.7 | 67.2 | 62.8      | 67.5 | 76.3 | -     | -     | -     | -     |
 
-:fire: **README:**
+:point_right: *[New]* **README:**
 * [INSTALL.md](asset/INSTALL.md)
 * [TRAIN.md](asset/TRAIN.md)
 * [EVALUATION.md](asset/EVALUATION.md)
@@ -45,7 +45,7 @@ by [Xueyan Zou*](https://maureenzou.github.io/), [Zi-Yi Dou*](https://zdou0830.g
 * **[2022.12.21]** We release open-vocabulary segmentation benchmark.
 
 ## :paintbrush: DEMO
-:blueberries: [[X-GPT](https://github.com/microsoft/X-Decoder/tree/xgpt) :strawberry:[[Instruct X-Decoder](https://huggingface.co/spaces/xdecoder/Instruct-X-Decoder)]
+:blueberries: [[X-GPT]](https://github.com/microsoft/X-Decoder/tree/xgpt) &ensp; :strawberry:[[Instruct X-Decoder](https://huggingface.co/spaces/xdecoder/Instruct-X-Decoder)]
 
 ![demo](https://user-images.githubusercontent.com/11957155/225728214-0523bd30-31f7-472d-be7e-12a049c25cbd.gif)
 
