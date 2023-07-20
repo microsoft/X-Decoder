@@ -17,7 +17,7 @@ sh aaset/eval.sh # evaluation
 |          |            |     | COCO |      |      | ADE |     |      | Ref-COCO | COCO-Karpathy |      |       |
 |----------|------------|-----|------|------|------|-----|-----|------|----------|---------------|------|-------|
 | Backbone | Checkpoint | Log | PQ   | mAP  | mIoU | PQ  | mAP | mIoU | mIoU     | ir@1          | tr@1 | CIDer |
-| Focal-T  |  [ckpt]()  |     | 50.8 | 39.5 | 62.4 |     |     |      | 63.2     |               |      |       |
+| Focal-T  |  [ckpt]()  |  Running   | 50.8 | 39.5 | 62.4 |     |     |      | 63.2     |               |      |       |
 |          |            |     |      |      |      |     |     |      |          |               |      |       |
 
 :point_right: *[New]* **Installation, Training, Evaluation, Dataset, and Demo Guide**
@@ -29,7 +29,7 @@ sh aaset/eval.sh # evaluation
 
 ## :fire: News
 
-* **[2023.07.19]** !!! We are excited to release the x-decoder training code (still dev the readme now)!
+* **[2023.07.19]** :roller_coaster: We are excited to release the x-decoder training code (still dev the readme now)!
 * **[2023.07.10]** We release [Semantic-SAM](https://github.com/UX-Decoder/Semantic-SAM), a universal image segmentation model to enable segment and recognize anything at any desired granularity. Code and checkpoint are available!
 * **[2023.04.14]** We are releasing [SEEM](https://github.com/UX-Decoder/Segment-Everything-Everywhere-All-At-Once), a new universal interactive interface for image segmentation! You can use it for any segmentation tasks, way beyond what X-Decoder can do!
 
