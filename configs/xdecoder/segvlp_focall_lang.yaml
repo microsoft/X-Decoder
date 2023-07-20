@@ -9,7 +9,7 @@
 PIPELINE: XDecoderPipeline
 TRAINER: xdecoder
 SAVE_DIR: '../../data/output/test'
-base_path: "./" # lower case due to it is used in mainz as such
+base_path: "./"
 
 # Resume Logistic
 RESUME: false

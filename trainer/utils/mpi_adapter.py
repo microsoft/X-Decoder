@@ -104,7 +104,6 @@ class MPIAdapter:
         """
         Logs information about distributed training environment.
         """
-        # use logger.warning because MainzTrain has a hidden convention
         # of not printing logger.info messages on processes with rank > 0
         logger.warning('----------------')
         logger.warning('MPI Adapter data')
@@ -123,7 +122,6 @@ class MPIAdapter:
         """
         Initializes the default PyTorch distributed process group.
         """
-        # use logger.warning because MainzTrain has a hidden convention
         # of not printing logger.info messages on processes with rank > 0
         logger.warning('trying to initialize process group ...')
         torch.distributed.init_process_group(backend=backend,
