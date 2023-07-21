@@ -1,5 +1,11 @@
 ### Installation
 
+First download coco caption_class_similarity and put it in folder coco/annotations:
+```
+wget https://github.com/microsoft/X-Decoder/releases/download/coco/caption_class_similarity.pth
+mv caption_class_similarity.pth /path/to/coco/annotations/
+```
+
 Single GPU
 ```sh
 CUDA_VISIBLE_DEVICES=0 python entry.py train \
