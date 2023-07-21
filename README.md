@@ -22,7 +22,7 @@ sh aaset/eval.sh # evaluation
 | Focal-L  |  [last](https://huggingface.co/xdecoder/X-Decoder/blob/main/xdecoder_focall_last.pt) |  Log   |  56.2  |  46.4    |   65.5   |     |  11.5  |  23.6  |  67.7  |  34.9     |   54.4   |       |
 | Focal-L  |  [best_seg](https://huggingface.co/xdecoder/X-Decoder/blob/main/xdecoder_focall_bestseg.pt) |  Log   | 51.5   |   41.3   |   64.1   |     |  11.7   |  29.4    |  61.5  |  30.7  |  50.1  |       |
 
-Note the number in Table 1 is after task specific finetuning in paper.
+Note the number in Table 1 in main paper is after task specific finetuning.
 
 :point_right: *[New]* **Installation, Training, Evaluation, Dataset, and Demo Guide**
 * [INSTALL.md](asset/INSTALL.md)
