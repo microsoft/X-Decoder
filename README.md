@@ -18,7 +18,7 @@ sh aaset/eval.sh # evaluation
 |----------|------------|-----|------|------|------|-----|-----|------|----------|---------------|------|-------|
 | Backbone | Checkpoint | Log | PQ   | mAP  | mIoU | PQ  | mAP | mIoU | mIoU     | ir@1          | tr@1 | CIDEr |
 | Focal-T  |  [last](https://huggingface.co/xdecoder/X-Decoder/resolve/main/xdecoder_focalt_last.pt)  |  Running   | 50.8 | 39.5 | 62.4 |     |  9.6   |  23.9    | 63.2   |   30.0  |   48.3   |   83.3    |
-| Focal-T  |  [best_seg](https://huggingface.co/xdecoder/X-Decoder/resolve/main/xdecoder_focalt_best_openseg.pt)  |  Log   |  48.8   |      |   60.2   |  37.0   |  10.1   |  29.1    |    61.6      |     30.2    |    48.36  |       |
+| Focal-T  |  [best_seg](https://huggingface.co/xdecoder/X-Decoder/resolve/main/xdecoder_focalt_best_openseg.pt)  |  Log   |  48.8   |   37.0   |   60.2   |     |  10.1   |  29.1    |    61.6      |     30.2    |    48.36  |       |
 | Focal-L  |  [last](https://huggingface.co/xdecoder/X-Decoder/blob/main/xdecoder_focall_last.pt) |  Log   |  56.2  |  46.4    |   65.5   |     |  11.5  |  23.6  |  67.7  |  34.9     |   54.4   |       |
 | Focal-L  |  [best_seg](https://huggingface.co/xdecoder/X-Decoder/blob/main/xdecoder_focall_bestseg.pt) |  Log   | 51.5   |   41.3   |   64.1   |     |  11.7   |  29.4    |  61.5  |  30.7  |  50.1  |       |
 
