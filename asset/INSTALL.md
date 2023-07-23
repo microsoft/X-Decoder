@@ -1,7 +1,5 @@
 ### Installation
 
-Install dependencies:
-
 ```sh
 pip3 install torch torchvision
 python -m pip install 'git+https://github.com/MaureenZOU/detectron2-xyz.git'
