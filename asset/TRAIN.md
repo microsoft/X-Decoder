@@ -1,16 +1,5 @@
 ### Installation
 
-First download some meta files needed for COCO and put them in folder coco/annotations:
-```
-wget https://github.com/microsoft/X-Decoder/releases/download/coco/caption_class_similarity.pth
-wget https://huggingface.co/xdecoder/X-Decoder/blob/main/captions_train2017_filtrefgumdval_filtvlp.json
-wget https://huggingface.co/xdecoder/X-Decoder/blob/main/grounding_train2017_filtrefgumdval_filtvlp.json
-
-mv caption_class_similarity.pth /path/to/coco/annotations/
-mv captions_train2017_filtrefgumdval_filtvlp.json /path/to/coco/annotations/
-mv grounding_train2017_filtrefgumdval_filtvlp.json /path/to/coco/annotations/
-```
-
 Single GPU
 ```sh
 CUDA_VISIBLE_DEVICES=0 python entry.py train \
