@@ -2,6 +2,8 @@
 Our dataloader follows [Detectron2](https://github.com/facebookresearch/detectron2) contains (1) A dataset registrator. (2) A dataset mapper. (3) A dataset loader. We modify the dataset registrator and mapper for different datasets.
 
 ## Training Dataset
+
+### COCO
 ```sh
 Prepare panoptic_train2017, panoptic_semseg_train2017 exactly the same as [Mask2Fomer](https://github.com/facebookresearch/Mask2Former/tree/main/datasets)
 
@@ -11,7 +13,6 @@ wget -P ../xdecoder_data https://huggingface.co/xdecoder/X-Decoder/blob/main/cap
 wget -P ../xdecoder_data https://huggingface.co/xdecoder/X-Decoder/blob/main/grounding_train2017_filtrefgumdval_filtvlp.json
 ```
 
-### COCO
 ```
 .xdecoder_data
 └── coco/
