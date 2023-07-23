@@ -18,15 +18,15 @@ _PREDEFINED_SPLITS_PRETRAIN = {
     # "vlp_val2017": ["coco_caption_karpathy_val2017.arrow"],
     # "vlp_captioning_val2017": ["coco_caption_karpathy_val2017.arrow"],
     # filt coco2017 and refcocog umd val
-    # "vlp_train": ["filtrefval2017_coco_caption_karpathy_restval.arrow", "filtrefval2017_coco_caption_karpathy_train.arrow", "filtrefval2017_coco_caption_karpathy_val.arrow"] + ["code224_vg.arrow"] + [f"code224_sbu_{i}.arrow" for i in range(9)] + [f"code224_conceptual_caption_train_{i}.arrow" for i in range(31)],
-    # "vlp_val": ["coco_caption_karpathy_test.arrow"],
-    # "vlp_captioning_val": ["coco_caption_karpathy_test.arrow"],
-    # "vlp_val2017": ["coco_caption_karpathy_val2017.arrow"],
-    # "vlp_captioning_val2017": ["coco_caption_karpathy_val2017.arrow"],
-    # the following is for local testing
-    "vlp_train": ["coco_caption_karpathy_test.arrow"],
+    "vlp_train": ["filtrefval2017_coco_caption_karpathy_restval.arrow", "filtrefval2017_coco_caption_karpathy_train.arrow", "filtrefval2017_coco_caption_karpathy_val.arrow"] + ["code224_vg.arrow"] + [f"code224_sbu_{i}.arrow" for i in range(9)] + [f"code224_conceptual_caption_train_{i}.arrow" for i in range(31)],
     "vlp_val": ["coco_caption_karpathy_test.arrow"],
     "vlp_captioning_val": ["coco_caption_karpathy_test.arrow"],
+    "vlp_val2017": ["coco_caption_karpathy_val2017.arrow"],
+    "vlp_captioning_val2017": ["coco_caption_karpathy_val2017.arrow"],
+    # the following is for local testing
+    # "vlp_train": ["coco_caption_karpathy_test.arrow"],
+    # "vlp_val": ["coco_caption_karpathy_test.arrow"],
+    # "vlp_captioning_val": ["coco_caption_karpathy_test.arrow"],
 }
 
 def get_metadata(name):
