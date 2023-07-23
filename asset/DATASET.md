@@ -1,17 +1,19 @@
 # Preparing Dataset
 Our dataloader follows [Detectron2](https://github.com/facebookresearch/detectron2) contains (1) A dataset registrator. (2) A dataset mapper. (3) A dataset loader. We modify the dataset registrator and mapper for different datasets.
 
-## Training Dataset Note
+## Training Dataset
 <img src="https://user-images.githubusercontent.com/11957155/226159078-7f817452-76f8-44f4-af7a-9f13f3e02554.png" width="500">
 There are overlap between COCO2017, COCO-Karpathy and REF-COCO dataset, and ref-coco is all overalp with the COCO2017 training data, we have exclude the refcocog-umd validation, coco-karpathy test split during training.
 
-## ADE20K, Cityscapes, COCO
+
+## Evaluation Dataset
+### ADE20K, Cityscapes, COCO
 Please Refer to [Mask2Former](https://github.com/facebookresearch/Mask2Former/tree/main/datasets).
 
-## BDD100K
+### BDD100K
 Please download the 10k split of BDD100k at https://doc.bdd100k.com/download.html#id1
 
-### Expected dataset structure for cityscapes:
+#### Expected dataset structure for cityscapes:
 ```
 .
 └── bdd100k/
@@ -26,10 +28,10 @@ Please download the 10k split of BDD100k at https://doc.bdd100k.com/download.htm
         └── sem_seg
 ```
 
-## RefCOCO
+### RefCOCO
 Please download the original refcoco datasets at https://github.com/lichengunc/refer.
 
-### Expected dataset structure for refcoco:
+#### Expected dataset structure for refcoco:
 ```
 .
 └── refcocoseg/
@@ -40,7 +42,7 @@ Please download the original refcoco datasets at https://github.com/lichengunc/r
 ```
 
 Also download the coco dataset at https://cocodataset.org/#home:
-### Expected dataset structure for coco:
+#### Expected dataset structure for coco:
 ```
 .
 └── coco/
@@ -56,9 +58,9 @@ After preparing the dataset, run the following command:
 python3 refcoco2json.py
 ```
 
-## SUN-RGBD
+### SUN-RGBD
 
 
-## SCAN-Net
+### SCAN-Net
 
 
