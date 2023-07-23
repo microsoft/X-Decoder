@@ -1,5 +1,7 @@
 ### Installation
 
+Install dependencies:
+
 ```sh
 pip3 install torch torchvision
 python -m pip install 'git+https://github.com/MaureenZOU/detectron2-xyz.git'
@@ -12,4 +14,5 @@ unzip ../xdecoder_data/coco_caption.zip -d ../xdecoder_data
 export PYTHONPATH=$PYTHONPATH:../xdecoder_data/coco_caption
 export DATASET=../xdecoder_data
 export PATH=$PATH:../xdecoder_data/coco_caption/jre1.8.0_321/bin
+python -c "import nltk; nltk.download('punkt'); nltk.download('averaged_perceptron_tagger')"
 ```
