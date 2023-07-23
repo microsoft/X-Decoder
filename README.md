@@ -33,7 +33,7 @@ Note the number in Table 1 in main paper is after task specific finetuning.
 
 ## :fire: News
 
-* **[2023.07.19]** :roller_coaster: We are excited to release the x-decoder training code (refer to [INSTALL.md](./INSTALL.md), DATASET.md, TRAIN.md, EVALUATION.md)!
+* **[2023.07.19]** :roller_coaster: We are excited to release the x-decoder training code (refer to [INSTALL.md](asset/INSTALL.md), [DATASET.md](asset/DATASET.md), [TRAIN.md](asset/TRAIN.md), [EVALUATION.md](asset/EVALUATION.md))!
 * **[2023.07.10]** We release [Semantic-SAM](https://github.com/UX-Decoder/Semantic-SAM), a universal image segmentation model to enable segment and recognize anything at any desired granularity. Code and checkpoint are available!
 * **[2023.04.14]** We are releasing [SEEM](https://github.com/UX-Decoder/Segment-Everything-Everywhere-All-At-Once), a new universal interactive interface for image segmentation! You can use it for any segmentation tasks, way beyond what X-Decoder can do!
 
