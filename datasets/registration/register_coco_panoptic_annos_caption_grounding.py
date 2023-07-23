@@ -162,6 +162,7 @@ def load_coco_panoptic_json(json_file, image_dir, gt_dir, semseg_dir, caption_fi
                 "segments_info": segments_info,
             }
         )
+    import pdb; pdb.set_trace()
     assert len(ret), f"No images found in {image_dir}!"
     assert PathManager.isfile(ret[0]["file_name"]), ret[0]["file_name"]
     assert PathManager.isfile(ret[0]["pan_seg_file_name"]), ret[0]["pan_seg_file_name"]
@@ -210,7 +211,7 @@ def register_all_coco_panoptic_annos_caption_grounding_sem_seg(root):
         prefix_instances = '_'.join(prefix.split('_')[0:3])
         instances_meta = MetadataCatalog.get(prefix_instances)
         image_root, instances_json = instances_meta.image_root, instances_meta.json_file
-        # image_root = image_root.replace('datasets', root)
+        image_root = image_root.replace('datasets', root)
 
         register_coco_panoptic_annos_caption_grounding_sem_seg(
             prefix,
