@@ -34,6 +34,17 @@ We follow the exact data preparation for the image text pair data using https://
 Please filter out coco2017 validation set from the karpathy training split or delete coco trainin data from ./datasets/register_vlp_datasets.py
 ```
 
+```
+.xdecoder_data
+└── pretrain_arrows_code224/
+    ├── filtcoco2017val_caption_karpathy_train.arrow
+    ├── ...
+    ├── code224_vg.arrow
+    ├── code224_sbu_0.arrow
+    ├── ...
+    └── code224_conceptual_caption_train_0.arrow
+```
+
 
 ### Note
 <img src="https://user-images.githubusercontent.com/11957155/226159078-7f817452-76f8-44f4-af7a-9f13f3e02554.png" width="500">
