@@ -25,10 +25,10 @@ sh aaset/eval.sh # evaluation
 Note the number in Table 1 in main paper is after task specific finetuning.
 
 :point_right: *[New]* **Installation, Training, Evaluation, Dataset, and Demo Guide**
+* [DATASET.md](asset/DATASET.md)
 * [INSTALL.md](asset/INSTALL.md)
 * [TRAIN.md](asset/TRAIN.md)
 * [EVALUATION.md](asset/EVALUATION.md)
-* [DATASET.md](asset/DATASET.md)
 * [DEMO.md](asset/DEMO.md)
 
 ## :fire: News
