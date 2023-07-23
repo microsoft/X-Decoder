@@ -162,7 +162,6 @@ def load_coco_panoptic_json(json_file, image_dir, gt_dir, semseg_dir, caption_fi
                 "segments_info": segments_info,
             }
         )
-    import pdb; pdb.set_trace()
     assert len(ret), f"No images found in {image_dir}!"
     assert PathManager.isfile(ret[0]["file_name"]), ret[0]["file_name"]
     assert PathManager.isfile(ret[0]["pan_seg_file_name"]), ret[0]["pan_seg_file_name"]
