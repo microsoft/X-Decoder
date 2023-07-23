@@ -1,5 +1,7 @@
 ### Installation
 
+Install dependencies:
+
 ```sh
 pip3 install torch torchvision
 python -m pip install 'git+https://github.com/MaureenZOU/detectron2-xyz.git'
@@ -11,4 +13,11 @@ export DATASET=/pth/to/dataset
 wget https://huggingface.co/xdecoder/X-Decoder/resolve/main/coco_caption.zip
 export PATH=$PATH:/pth/to/coco_caption/jre1.8.0_321/bin
 export PYTHONPATH=$PYTHONPATH:/pth/to/coco_caption
+```
+
+Download required nltk packages:
+```
+import nltk
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
 ```
