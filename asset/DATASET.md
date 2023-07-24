@@ -11,6 +11,7 @@ Prepare panoptic_train2017, panoptic_semseg_train2017 exactly the same as [Mask2
 wget -P ../xdecoder_data https://github.com/microsoft/X-Decoder/releases/download/coco/caption_class_similarity.pth
 wget -P ../xdecoder_data https://huggingface.co/xdecoder/X-Decoder/blob/main/captions_train2017_filtrefgumdval_filtvlp.json
 wget -P ../xdecoder_data https://huggingface.co/xdecoder/X-Decoder/blob/main/grounding_train2017_filtrefgumdval_filtvlp.json
+wget -P ../xdecoder_data https://huggingface.co/xdecoder/X-Decoder/blob/main/panoptic_train2017_filtrefgumdval_filtvlp.json
 ```
 
 ```
