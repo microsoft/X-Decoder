@@ -24,6 +24,8 @@ CUDA_VISIBLE_DEVICES=0 python entry.py train \
             MODEL.ENCODER.CONVS_DIM 512 \
             MODEL.ENCODER.MASK_DIM 512 \
             FP16 True \
+            WEIGHT True \
+            RESUME_FROM \pth\to\focalt_unicl_pretrain.pt
 ```
 
 Multi-GPU
@@ -50,4 +52,6 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 mpirun -n 8 python entry.py train \
             MODEL.ENCODER.CONVS_DIM 512 \
             MODEL.ENCODER.MASK_DIM 512 \
             FP16 True \
+            WEIGHT True \
+            RESUME_FROM \pth\to\focalt_unicl_pretrain.pt
 ```
