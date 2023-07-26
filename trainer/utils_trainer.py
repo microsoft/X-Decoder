@@ -77,10 +77,15 @@ class UtilsTrainer(DistributedTrainer):
         tag = str(tag).zfill(8)
         logger.warning('Saving checkpoint...')
 
-        self.train_params['current_batch_idx'] = self.train_params['current_batch_idx'] + 1
-        if self.train_params['current_batch_idx'] == self.train_params['updates_per_epoch']:
-            self.train_params['resume_batch_idx'] = 0
-            self.train_params['resume_epoch_idx'] += 1
+        resume_epoch_idx = self.train_params['current_epoch_idx']
+        resume_batch_idx = self.train_params['current_epoch_idx'] + 1
+
+        if resume_batch_idx == self.train_params['updates_per_epoch']:
+            self.train_params['start_batch_idx'] = 0
+            self.train_params['start_epoch_idx'] = resume_epoch_idx + 1
+        else:
+            self.train_params['start_batch_idx'] = resume_batch_idx
+            self.train_params['start_epoch_idx'] = resume_epoch_idx
         
         save_dir = os.path.join(self.save_folder, tag)
 

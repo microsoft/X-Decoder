@@ -227,7 +227,7 @@ class DefaultTrainer(UtilsTrainer, DistributedTrainer):
 
         train_prev_logged_time = datetime.now()
         for epoch in range(self.train_params['start_epoch_idx'], num_epochs):
-            self.train_params['start_epoch_idx'] = epoch
+            self.train_params['current_epoch_idx'] = epoch
             logger.info(f"Start epoch: {epoch} training.")
             
             epoch_start_time = datetime.now()
