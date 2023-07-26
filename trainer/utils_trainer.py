@@ -78,7 +78,7 @@ class UtilsTrainer(DistributedTrainer):
         logger.warning('Saving checkpoint...')
 
         resume_epoch_idx = self.train_params['current_epoch_idx']
-        resume_batch_idx = self.train_params['current_epoch_idx'] + 1
+        resume_batch_idx = self.train_params['current_batch_idx'] + 1
 
         if resume_batch_idx == self.train_params['updates_per_epoch']:
             self.train_params['start_batch_idx'] = 0
