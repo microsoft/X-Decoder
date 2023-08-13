@@ -1,3 +1,3 @@
-wget https://projects4jw.blob.core.windows.net/x-decoder/release/coco_caption.zip
+wget https://huggingface.co/xdecoder/X-Decoder/resolve/main/coco_caption.zip
 unzip coco_caption.zip -d utils
 export PYTHONPATH=$PYTHONPATH:$PWD/utils/coco_caption
