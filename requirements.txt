@@ -22,7 +22,7 @@ cityscapesscripts
 shapely
 scikit-image
 mup
-gradio==3.13.0
+gradio==3.34.0
 scann
 kornia
 torchmetrics==0.6.0
