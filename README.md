@@ -3,7 +3,7 @@
 ![demo](https://user-images.githubusercontent.com/11957155/225451614-62c6f129-5c4a-4706-971c-0c90024a2bfa.gif)
 
 ## :fire: News
-
+* **[2023.09.22]** The previous model links are deprecated, please download the checkpoints from [here](https://github.com/microsoft/X-Decoder/releases/tag/release).
 * **[2023.03.14]** We build X-GPT, a multi-modal conversational demo that is built on X-Decoder using GPT-3 and langchain!
 * **[2023.03.14]** Feel free to explore the [Full resolution demo video](https://youtu.be/GopwIdLb6GU)!
 
