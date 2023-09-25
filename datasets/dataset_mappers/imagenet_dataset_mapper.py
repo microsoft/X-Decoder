@@ -15,7 +15,7 @@ import numpy as np
 import torch
 from torchvision import transforms
 
-from xdecoder.utils import configurable
+from modeling.utils import configurable
 
 __all__ = ["ImageNetDatasetMapper"]
 

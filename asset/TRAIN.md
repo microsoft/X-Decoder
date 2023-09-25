@@ -3,7 +3,7 @@
 Single GPU
 ```sh
 CUDA_VISIBLE_DEVICES=0 python entry.py train \
-            --conf_files configs/xdecoder/segvlp_focalt_lang.yaml \
+            --conf_files configs/xdecoder/xdecoder_focalt_lang.yaml \
             --overrides \
             COCO.INPUT.IMAGE_SIZE 1024 \
             MODEL.DECODER.CAPTIONING.ENABLED True \
@@ -31,7 +31,7 @@ CUDA_VISIBLE_DEVICES=0 python entry.py train \
 Multi-GPU
 ```sh
 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 mpirun -n 8 python entry.py train \
-            --conf_files configs/xdecoder/segvlp_focalt_lang.yaml \
+            --conf_files configs/xdecoder/xdecoder_focalt_lang.yaml \
             --overrides \
             COCO.INPUT.IMAGE_SIZE 1024 \
             MODEL.DECODER.CAPTIONING.ENABLED True \

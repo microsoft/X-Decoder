@@ -23,9 +23,9 @@ from torchvision import transforms
 from utils.arguments import load_opt_command
 
 from detectron2.data import MetadataCatalog
-from xdecoder.language.misc import vl_similarity
-from xdecoder.BaseModel import BaseModel
-from xdecoder import build_model
+from modeling.language.misc import vl_similarity
+from modeling.BaseModel import BaseModel
+from modeling import build_model
 from utils.visualizer import Visualizer
 from utils.distributed import init_distributed
 
@@ -43,10 +43,10 @@ def main(args=None):
     opt = init_distributed(opt)
 
     # META DATA
-    pretrained_pth = os.path.join(opt['WEIGHT'])
+    pretrained_pth = os.path.join(opt['RESUME_FROM'])
     output_root = './output'
 
-    image_list = ['images/coco/000.jpg', 'images/coco/001.jpg', 'images/coco/002.jpg', 'images/coco/003.jpg']
+    image_list = ['inference/images/coco/000.jpg', 'inference/images/coco/001.jpg', 'inference/images/coco/002.jpg', 'inference/images/coco/003.jpg']
     text = ['pizza on the plate']
 
     model = BaseModel(opt, build_model(opt)).from_pretrained(pretrained_pth).eval().cuda()
@@ -58,7 +58,7 @@ def main(args=None):
     t = []
     t.append(transforms.Resize(512, interpolation=Image.BICUBIC))
     transform_grd = transforms.Compose(t)
-    
+
     metadata = MetadataCatalog.get('ade20k_panoptic_train')
     color = [0/255, 255/255, 0/255]
 

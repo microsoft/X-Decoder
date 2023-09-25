@@ -12,6 +12,7 @@ import sys
 import importlib
 import json
 import random
+import wandb
 import logging
 import numpy as np
 import copy
@@ -73,17 +74,22 @@ class DefaultTrainer(UtilsTrainer, DistributedTrainer):
 
         if not eval_without_loading:
             if os.path.isfile(self.opt['PYLEARN_MODEL']):
-                model_path = self.opt['PYLEARN_MODEL']  # this is a directory, not a file
+                model_path = self.opt['PYLEARN_MODEL'] 
                 self.load_model(model_path)
             else:
-                raise ValueError(f"Model directory not found: {model_path}")
+                raise ValueError(f"Model not found: {model_path}")
 
         results = self._eval_on_set(self.save_folder)
         return results
 
     def _eval_on_set(self, save_folder):
         logger.info(f"Evaluation start ...")
-        results = self.pipeline.evaluate_model(self, save_folder)
+        if self.opt['FP16']:
+            from torch.cuda.amp import autocast
+            with autocast():
+                results = self.pipeline.evaluate_model(self, save_folder)
+        else:        
+            results = self.pipeline.evaluate_model(self, save_folder)
         if self.opt['rank'] == 0:
             logger.info(results)
         return results
@@ -187,6 +193,7 @@ class DefaultTrainer(UtilsTrainer, DistributedTrainer):
                              "start_batch_idx": 0,
                              "current_epoch_idx": 0,
                              "current_batch_idx": 0,
+                             "resume_epoch_idx": 0, 
                              }
 
         self.train_loss = LossMeter()
@@ -225,6 +232,11 @@ class DefaultTrainer(UtilsTrainer, DistributedTrainer):
         current_optim_steps = self._get_and_validate_current_optim_steps()
         num_epochs = self.opt['SOLVER']['MAX_NUM_EPOCHS']
 
+        if self.opt.get('EVAL_AT_START', False):
+            results = self._eval_on_set(self.save_folder)
+            if self.opt['rank'] == 0 and self.opt['WANDB']:
+                wandb.log(results)
+
         train_prev_logged_time = datetime.now()
         for epoch in range(self.train_params['start_epoch_idx'], num_epochs):
             self.train_params['current_epoch_idx'] = epoch
@@ -241,6 +253,7 @@ class DefaultTrainer(UtilsTrainer, DistributedTrainer):
                 prev_total_batch_size = self.train_params['total_batch_size']
 
                 # update
+                self.prev_optim_steps = prev_optim_steps
                 self.train_step(batch)
 
                 current_optim_steps = self._get_and_validate_current_optim_steps()
@@ -261,6 +274,12 @@ class DefaultTrainer(UtilsTrainer, DistributedTrainer):
                         memory = torch.cuda.max_memory_allocated() / MB
 
                         if self.opt['rank'] == 0:
+                            if self.opt['WANDB']:
+                                # log for wandb
+                                wb_loss_info = {key: obj.val for key, obj in self.train_loss.losses.items()}
+                                wandb.log(wb_loss_info, step=self.prev_optim_steps)
+
+                            # log for terminal
                             logger.info(f"epochs[{epoch:6}] optim steps[{current_optim_steps:.0f}] "
                                         f"learning rate[{', '.join([f'{key}: {val:.5e}' for key, val in last_lr.items()])}] "
                                         f"train loss[{', '.join([f'{key}: {obj.val:.5f}/{obj.avg:.5f}' for key, obj in self.train_loss.losses.items()])}] "
@@ -274,9 +293,10 @@ class DefaultTrainer(UtilsTrainer, DistributedTrainer):
 
                 # evaluate and save ckpt every epoch
                 if batch_idx + 1 == self.train_params['updates_per_epoch']:
-                # if batch_idx == 3:
-                    results = self._eval_on_set(self.save_folder)
                     self.save_checkpoint(self.train_params['num_updates'])
+                    results = self._eval_on_set(self.save_folder)
+                    if self.opt['rank'] == 0 and self.opt['WANDB']:
+                        wandb.log(results)
                     break
 
             logger.info(f"This epoch takes {datetime.now() - epoch_start_time}")

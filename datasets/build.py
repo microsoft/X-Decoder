@@ -59,7 +59,7 @@ from .evaluation import (InstanceSegEvaluator,
                          COCOPanopticEvaluator,
                          GroundingEvaluator,
 )
-from xdecoder.utils import configurable
+from modeling.utils import configurable
 from utils.distributed import get_world_size
 
 class JointLoader(torchdata.IterableDataset):

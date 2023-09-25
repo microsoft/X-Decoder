@@ -13,7 +13,7 @@ import torch
 from PIL import Image
 
 from torchvision import transforms
-from xdecoder.utils import configurable
+from modeling.utils import configurable
 
 __all__ = ["SunRGBDSegDatasetMapper"]
 

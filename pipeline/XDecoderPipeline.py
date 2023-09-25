@@ -21,9 +21,9 @@ from detectron2.evaluation import inference_on_dataset
 from detectron2.utils.logger import log_every_n_seconds
 from detectron2.data import MetadataCatalog
 
-from xdecoder import build_model
-from xdecoder.utils import get_class_names
-from xdecoder.BaseModel import BaseModel
+from modeling import build_model
+from modeling.utils import get_class_names
+from modeling.BaseModel import BaseModel
 from datasets import build_evaluator, build_eval_dataloader, build_train_dataloader
 from utils.distributed import is_main_process
 from utils.constants import COCO_PANOPTIC_CLASSES
@@ -172,6 +172,7 @@ class XDecoderPipeline:
                         log_every_n_seconds(
                             logging.INFO,
                             (
+                                f"Task {dataset_label}. "
                                 f"Inference done {idx + 1}/{total}. "
                                 f"Dataloading: {data_seconds_per_iter:.4f} s/iter. "
                                 f"Inference: {compute_seconds_per_iter:.4f} s/iter. "

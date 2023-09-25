@@ -18,8 +18,10 @@ RESET_DATA_LOADER: false
 RESUME_FROM: ''
 PYLEARN_MODEL: '' # model resume when evaluation
 DONT_LOAD_MODEL: true
+EVAL_AT_START: False
 
 # Logging and Debug
+WANDB: False
 LOG_EVERY: 500
 FIND_UNUSED_PARAMETERS: false
 
@@ -43,7 +45,7 @@ MODEL:
   KEYPOINT_ON: false
   LOAD_PROPOSALS: false
   DIM_PROJ: 512
-  BACKBONE_DIM: 768
+  BACKBONE_DIM: 1536
   TEXT:
     ARCH: vlpencoder
     NAME: transformer
@@ -54,15 +56,15 @@ MODEL:
     LAYERS: 12 # 6
     AUTOGRESSIVE: True
   BACKBONE:
-    NAME: focal_dw
+    NAME: focal
     PRETRAINED: ''
     LOAD_PRETRAINED: false
     FOCAL:
       PRETRAIN_IMG_SIZE: 224
       PATCH_SIZE: 4
-      EMBED_DIM: 96
-      DEPTHS: [2, 2, 6, 2]
-      FOCAL_LEVELS: [3, 3, 3, 3]
+      EMBED_DIM: 192
+      DEPTHS: [2, 2, 18, 2]
+      FOCAL_LEVELS: [4, 4, 4, 4]
       FOCAL_WINDOWS: [3, 3, 3, 3]
       DROP_PATH_RATE: 0.3
       MLP_RATIO: 4.0
@@ -107,7 +109,7 @@ MODEL:
       STEP: 50
     RETRIEVAL:
       ENABLED: True
-      DIM_IMG: 768
+      DIM_IMG: 1024
       ENSEMBLE: True
     DEEP_SUPERVISION: True
     NO_OBJECT_WEIGHT: 0.1
@@ -127,7 +129,7 @@ MODEL:
     BBOX_WEIGHT: 5.0
     GIOU_WEIGHT: 2.0
     HIDDEN_DIM: 512
-    NUM_OBJECT_QUERIES: 101
+    NUM_OBJECT_QUERIES: 201
     NHEADS: 8
     DROPOUT: 0.0
     DIM_FEEDFORWARD: 2048

@@ -19,7 +19,7 @@ from pycocotools import mask
 from detectron2.data import detection_utils as utils
 from detectron2.data import transforms as T
 
-from xdecoder.utils import configurable
+from modeling.utils import configurable
 
 __all__ = ["RefCOCODatasetMapper"]
 

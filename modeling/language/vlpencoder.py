@@ -116,7 +116,8 @@ class LanguageEncoder(nn.Module):
                         txts = [template.format(clss.replace('-other','').replace('-merged','').replace('-stuff','')) for template in templates]
                         clss_embeddings.append(extract_mean_emb(txts))
                 else:
-                    clss_embeddings.append(extract_mean_emb(class_names))
+                    for clss in class_names:
+                        clss_embeddings.append(extract_mean_emb([clss]))
 
                 if add_bgd:
                     txts = ["A background in coco."]

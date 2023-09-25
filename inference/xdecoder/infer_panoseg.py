@@ -14,7 +14,7 @@ sys.path.insert(0, pth)
 
 from PIL import Image
 import numpy as np
-np.random.seed(2)
+np.random.seed(1)
 
 import torch
 from torchvision import transforms
@@ -22,13 +22,11 @@ from torchvision import transforms
 from utils.arguments import load_opt_command
 
 from detectron2.data import MetadataCatalog
-from detectron2.structures import BitMasks
-from xdecoder.BaseModel import BaseModel
-from xdecoder import build_model
 from detectron2.utils.colormap import random_color
+from modeling.BaseModel import BaseModel
+from modeling import build_model
 from utils.visualizer import Visualizer
 from utils.distributed import init_distributed
-
 
 logger = logging.getLogger(__name__)
 
@@ -45,32 +43,38 @@ def main(args=None):
     opt = init_distributed(opt)
 
     # META DATA
-    pretrained_pth = os.path.join(opt['WEIGHT'])
+    pretrained_pth = os.path.join(opt['RESUME_FROM'])
     output_root = './output'
-    image_pth = 'images/owls.jpeg'
+    image_pth = 'inference/images/street.jpg'
 
     model = BaseModel(opt, build_model(opt)).from_pretrained(pretrained_pth).eval().cuda()
 
     t = []
-    t.append(transforms.Resize(800, interpolation=Image.BICUBIC))
+    t.append(transforms.Resize(512, interpolation=Image.BICUBIC))
     transform = transforms.Compose(t)
 
-    thing_classes = ["owl"]
+    thing_classes = ['car','person','traffic light', 'truck', 'motorcycle']
+    stuff_classes = ['building','sky','street','tree','rock','sidewalk']
     thing_colors = [random_color(rgb=True, maximum=255).astype(np.int).tolist() for _ in range(len(thing_classes))]
+    stuff_colors = [random_color(rgb=True, maximum=255).astype(np.int).tolist() for _ in range(len(stuff_classes))]
     thing_dataset_id_to_contiguous_id = {x:x for x in range(len(thing_classes))}
+    stuff_dataset_id_to_contiguous_id = {x+len(thing_classes):x for x in range(len(stuff_classes))}
 
     MetadataCatalog.get("demo").set(
         thing_colors=thing_colors,
         thing_classes=thing_classes,
         thing_dataset_id_to_contiguous_id=thing_dataset_id_to_contiguous_id,
+        stuff_colors=stuff_colors,
+        stuff_classes=stuff_classes,
+        stuff_dataset_id_to_contiguous_id=stuff_dataset_id_to_contiguous_id,
     )
-    model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(thing_classes + ["background"], is_eval=False)
+    model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(thing_classes + stuff_classes + ["background"], is_eval=False)
     metadata = MetadataCatalog.get('demo')
     model.model.metadata = metadata
-    model.model.sem_seg_head.num_classes = len(thing_classes)
+    model.model.sem_seg_head.num_classes = len(thing_classes + stuff_classes)
 
     with torch.no_grad():
-        image_ori = Image.open(image_pth).convert('RGB')
+        image_ori = Image.open(image_pth).convert("RGB")
         width = image_ori.size[0]
         height = image_ori.size[1]
         image = transform(image_ori)
@@ -82,14 +86,21 @@ def main(args=None):
         outputs = model.forward(batch_inputs)
         visual = Visualizer(image_ori, metadata=metadata)
 
-        inst_seg = outputs[-1]['instances']
-        inst_seg.pred_masks = inst_seg.pred_masks.cpu()
-        inst_seg.pred_boxes = BitMasks(inst_seg.pred_masks > 0).get_bounding_boxes()
-        demo = visual.draw_instance_predictions(inst_seg) # rgb Image
+        pano_seg = outputs[-1]['panoptic_seg'][0]
+        pano_seg_info = outputs[-1]['panoptic_seg'][1]
+
+        for i in range(len(pano_seg_info)):
+            if pano_seg_info[i]['category_id'] in metadata.thing_dataset_id_to_contiguous_id.keys():
+                pano_seg_info[i]['category_id'] = metadata.thing_dataset_id_to_contiguous_id[pano_seg_info[i]['category_id']]
+            else:
+                pano_seg_info[i]['isthing'] = False
+                pano_seg_info[i]['category_id'] = metadata.stuff_dataset_id_to_contiguous_id[pano_seg_info[i]['category_id']]
+
+        demo = visual.draw_panoptic_seg(pano_seg.cpu(), pano_seg_info) # rgb Image
 
         if not os.path.exists(output_root):
             os.makedirs(output_root)
-        demo.save(os.path.join(output_root, 'inst.png'))
+        demo.save(os.path.join(output_root, 'pano.png'))
 
 
 if __name__ == "__main__":

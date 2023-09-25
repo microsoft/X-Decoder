@@ -12,7 +12,7 @@ from detectron2.data import transforms as T
 from detectron2.projects.point_rend import ColorAugSSDTransform
 from detectron2.structures import BitMasks, Instances, polygons_to_bitmask
 
-from xdecoder.utils import configurable
+from modeling.utils import configurable
 
 __all__ = ["MaskFormerInstanceDatasetMapper"]
 

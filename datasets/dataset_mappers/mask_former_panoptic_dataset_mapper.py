@@ -11,9 +11,7 @@ from detectron2.data import transforms as T
 from detectron2.structures import BitMasks, Instances
 
 from .mask_former_semantic_dataset_mapper import MaskFormerSemanticDatasetMapper
-from xdecoder.utils import configurable
-
-
+from modeling.utils import configurable
 
 __all__ = ["MaskFormerPanopticDatasetMapper"]
 

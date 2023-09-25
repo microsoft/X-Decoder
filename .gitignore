@@ -95,6 +95,7 @@ MODELS
 MODELS/*
 
 kill.sh
+train.sh
 
 draws/
 plot/

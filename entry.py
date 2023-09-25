@@ -9,11 +9,30 @@ import os
 import sys
 import torch
 import logging
+import wandb
 
 from utils.arguments import load_opt_command
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+def init_wandb(args, job_dir, entity='xueyanz', project='xdecoder', job_name='tmp'):
+    wandb_dir = os.path.join(job_dir, 'wandb')
+    os.makedirs(wandb_dir, exist_ok=True)
+    runid = None
+    if os.path.exists(f"{wandb_dir}/runid.txt"):
+        runid = open(f"{wandb_dir}/runid.txt").read()
+
+    wandb.init(project=project,
+            name=job_name,
+            dir=wandb_dir,
+            entity=entity,
+            resume="allow",
+            id=runid,
+            config={"hierarchical": True},)
+
+    open(f"{wandb_dir}/runid.txt", 'w').write(wandb.run.id)
+    wandb.config.update({k: args[k] for k in args if k not in wandb.config})
 
 def main(args=None):
     '''
@@ -43,6 +62,9 @@ def main(args=None):
     os.environ['TORCH_DISTRIBUTED_DEBUG']='DETAIL'
 
     if command == "train":
+        if opt['rank'] == 0 and opt['WANDB']:
+            wandb.login(key=os.environ['WANDB_KEY'])
+            init_wandb(opt, trainer.save_folder, job_name=trainer.save_folder)
         trainer.train()
     elif command == "evaluate":
         trainer.eval()

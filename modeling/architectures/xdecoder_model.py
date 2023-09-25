@@ -523,6 +523,8 @@ class GeneralizedXdecoder(nn.Module):
                     'image_ids': batch_data['image_id'],
                 }
             processed_results[-1]["caption"] = caption_results            
+
+        del features
         return processed_results
 
     def evaluate_captioning(self, batched_inputs):

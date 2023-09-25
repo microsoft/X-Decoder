@@ -16,8 +16,8 @@ from detectron2.data import MetadataCatalog
 from pycocotools import mask
 
 from utils.prompt_engineering import prompt_engineering
-from xdecoder.language.misc import text_noun_with_prompt_all
-from xdecoder.utils import configurable
+from modeling.language.misc import text_noun_with_prompt_all
+from modeling.utils import configurable
 
 __all__ = ["COCOPanopticNewBaselineDatasetMapper"]
 
