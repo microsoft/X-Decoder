@@ -33,12 +33,13 @@ Note the number in Table 1 in main paper is after task specific finetuning.
 
 ## :fire: News
 
+* **[2023.07.19]** :roller_coaster: We are providing new demo command/code for inference ([DEMO.md](asset/DEMO.md))!
 * **[2023.07.19]** :roller_coaster: We are excited to release the x-decoder training code ([INSTALL.md](asset/INSTALL.md), [DATASET.md](asset/DATASET.md), [TRAIN.md](asset/TRAIN.md), [EVALUATION.md](asset/EVALUATION.md))!
 * **[2023.07.10]** We release [Semantic-SAM](https://github.com/UX-Decoder/Semantic-SAM), a universal image segmentation model to enable segment and recognize anything at any desired granularity. Code and checkpoint are available!
 * **[2023.04.14]** We are releasing [SEEM](https://github.com/UX-Decoder/Segment-Everything-Everywhere-All-At-Once), a new universal interactive interface for image segmentation! You can use it for any segmentation tasks, way beyond what X-Decoder can do!
 
 <p align="center">
-  <img src="inference_demo/images/teaser_new.png" width="90%" height="90%">
+  <img src="inference/images/teaser_new.png" width="90%" height="90%">
 </p>
 
 * **[2023.03.20]** As an aspiration of our X-Decoder, we developed OpenSeeD ([[Paper](https://arxiv.org/pdf/2303.08131.pdf)][[Code](https://github.com/IDEA-Research/OpenSeeD)]) to enable open-vocabulary segmentation and detection with a single model, Check it out! 
