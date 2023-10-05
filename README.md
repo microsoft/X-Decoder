@@ -2,37 +2,49 @@
 
 \[[Project Page](https://x-decoder-vl.github.io/)\]   \[[Paper](https://arxiv.org/pdf/2212.11270.pdf)\]    \[[HuggingFace All-in-One Demo](https://huggingface.co/spaces/xdecoder/Demo)\] \[[HuggingFace Instruct Demo](https://huggingface.co/spaces/xdecoder/Instruct-X-Decoder)\]  \[[Video](https://youtu.be/nZZTkYM0kd0)\]
 
-by [Xueyan Zou*](https://maureenzou.github.io/), [Zi-Yi Dou*](https://zdou0830.github.io/), [Jianwei Yang*](https://jwyang.github.io/),  [Zhe Gan](https://zhegan27.github.io/), [Linjie Li](https://scholar.google.com/citations?user=WR875gYAAAAJ&hl=en), [Chunyuan Li](https://chunyuan.li/), [Xiyang Dai](https://sites.google.com/site/xiyangdai/), [Harkirat Behl](https://harkiratbehl.github.io/), [Jianfeng Wang](https://scholar.google.com/citations?user=vJWEw_8AAAAJ&hl=en), [Lu Yuan](https://scholar.google.com/citations?user=k9TsUVsAAAAJ&hl=en), [Nanyun Peng](https://vnpeng.net/), [Lijuan Wang](https://scholar.google.com/citations?user=cDcWXuIAAAAJ&hl=zh-CN), [Yong Jae Lee^](https://pages.cs.wisc.edu/~yongjaelee/), [Jianfeng Gao^](https://www.microsoft.com/en-us/research/people/jfgao/?from=http%3A%2F%2Fresearch.microsoft.com%2Fen-us%2Fum%2Fpeople%2Fjfgao%2F) in CVPR 2023.
+by [Xueyan Zou*](https://maureenzou.github.io/), [Zi-Yi Dou*](https://zdou0830.github.io/), [Jianwei Yang*](https://jwyang.github.io/),  [Zhe Gan](https://zhegan27.github.io/), [Linjie Li](https://scholar.google.com/citations?user=WR875gYAAAAJ&hl=en), [Chunyuan Li](https://chunyuan.li/), [Xiyang Dai](https://sites.google.com/site/xiyangdai/), [Harkirat Behl](https://harkiratbehl.github.io/), [Jianfeng Wang](https://scholar.google.com/citations?user=vJWEw_8AAAAJ&hl=en), [Lu Yuan](https://scholar.google.com/citations?user=k9TsUVsAAAAJ&hl=en), [Nanyun Peng](https://vnpeng.net/), [Lijuan Wang](https://scholar.google.com/citations?user=cDcWXuIAAAAJ&hl=zh-CN), [Yong Jae Lee^](https://pages.cs.wisc.edu/~yongjaelee/), [Jianfeng Gao^](https://www.microsoft.com/en-us/research/people/jfgao/?from=http%3A%2F%2Fresearch.microsoft.com%2Fen-us%2Fum%2Fpeople%2Fjfgao%2F) in **CVPR 2023**.
 
 
 ## :hot_pepper: Getting Started
+We release the following contents for **both SEEM and X-Decoder**:exclamation:
+- [x] Demo Code
+- [x] Model Checkpoint
+- [x] Comprehensive User Guide
+- [x] Training Code
+- [x] Evaluation Code
 
-<!-- :point_right: *[New]* **One-Line Getting Started:**
+:point_right: **One-Line SEEM Demo with Linux:**
 ```sh
-sh asset/train.sh # training
-sh aaset/eval.sh # evaluation
-``` -->
+git clone git@github.com:UX-Decoder/Segment-Everything-Everywhere-All-At-Once.git && sh aasets/scripts/run_demo.sh
+```
 
-:point_right: *[New]* **Latest Checkpoints and Numbers:**
-|          |            | COCO |      |      | ADE      |      | Ref-COCO | COCO-Karpathy |      | 
-|----------|------------|------|------|------|-----|------|----------|---------------|------|
-| Backbone | Checkpoint | PQ   | mAP  | mIoU | mAP | mIoU | mIoU     | ir@1          | tr@1 |
-| Focal-T  |  [last](https://huggingface.co/xdecoder/X-Decoder/resolve/main/xdecoder_focalt_last.pt)  | 50.8 | 39.5 | 62.4 |     9.6   |  23.9    | 63.2   |   30.0  |   48.3   |   
-| Focal-T  |  [best_open_seg](https://huggingface.co/xdecoder/X-Decoder/resolve/main/xdecoder_focalt_best_openseg.pt)  |  48.8   |   37.0   |   60.2   |     10.1   |  29.1    |    61.6      |     30.2    |    48.36  | 
-| Focal-L  |  [last](https://huggingface.co/xdecoder/X-Decoder/blob/main/xdecoder_focall_last.pt) |  56.2  |  46.4    |   65.5   |      11.5  |  23.6  |  67.7  |  34.9     |   54.4   |  
-| Focal-L  |  [best_open_seg](https://huggingface.co/xdecoder/X-Decoder/blob/main/xdecoder_focall_bestseg.pt) | 51.5   |   41.3   |   64.1   |     11.7   |  29.4    |  61.5  |  30.7  |  50.1  | 
+:round_pushpin: *[New]* **Getting Started:**
 
-Note the number in Table 1 in main paper is after task specific finetuning.
+* [INSTALL.md](assets/readmes/INSTALL.md) <br>
+* [DATASET.md](assets/readmes/DATASET.md) <br>
+* [TRAIN.md](assets/readmes/TRAIN.md) <br>
+* [EVAL.md](assets/readmes/EVAL.md) <br>
+* [INFERENCE.md](assets/readmes/INFERENCE.md) <br>
 
-:point_right: *[New]* **Installation, Training, Evaluation, Dataset, and Demo Guide**
-* [DATASET.md](asset/DATASET.md)
-* [INSTALL.md](asset/INSTALL.md)
-* [TRAIN.md](asset/TRAIN.md)
-* [EVALUATION.md](asset/EVALUATION.md)
-* [DEMO.md](asset/DEMO.md)
+:round_pushpin: *[New]* **Latest Checkpoints and Numbers:**
+|                 |                                                                                      |          | COCO |      |      | Ref-COCOg |      |      | VOC   |       | SBD   |       |
+|-----------------|---------------------------------------------------------------------------------------------|----------|------|------|------|-----------|------|------|-------|-------|-------|-------|
+| Method          |  Checkpoint                                                                                  | backbone | PQ &uarr;  | mAP &uarr; | mIoU &uarr; | cIoU  &uarr; | mIoU &uarr; | AP50 &uarr; | NoC85 &darr; | NoC90 &darr;| NoC85 &darr;| NoC90 &darr;|
+| X-Decoder       |  [ckpt](https://huggingface.co/xdecoder/X-Decoder/resolve/main/xdecoder_focalt_last.pt) | Focal-T  | 50.8 | 39.5 | 62.4 | 57.6      | 63.2 | 71.6 | -     | -     | -     | -     |
+| X-Decoder-oq201 |  [ckpt](https://huggingface.co/xdecoder/X-Decoder/resolve/main/xdecoder_focall_last.pt) | Focal-L  | 56.5 | 46.7 | 67.2 | 62.8      | 67.5 | 76.3 | -     | -     | -     | -     |
+| SEEM_v0            | [ckpt](https://huggingface.co/xdecoder/SEEM/resolve/main/seem_focalt_v0.pt)      | Focal-T  | 50.6 | 39.4 | 60.9 | 58.5      | 63.5 | 71.6 | 3.54  | 4.59  | *     | *     |
+| SEEM_v0            |  -                                                                                           | Davit-d3 | 56.2 | 46.8 | 65.3 | 63.2      | 68.3 | 76.6 | 2.99  | 3.89  | 5.93  | 9.23  |
+| SEEM_v0      | [ckpt](https://huggingface.co/xdecoder/SEEM/resolve/main/seem_focall_v0.pt)       | Focal-L  | 56.2 | 46.4 | 65.5 | 62.8      | 67.7 | 76.2 | 3.04  | 3.85  | *     | *     |
+| SEEM_v1      | [ckpt](https://huggingface.co/xdecoder/SEEM/resolve/main/seem_focalt_v1.pt)       | Focal-T  | 50.8 | 39.4 | 60.7 |   58.5    |  63.7 | 72.0 | 3.19  | 4.13  | *     | *     |
+| SEEM_v1      | [ckpt](https://huggingface.co/xdecoder/SEEM/resolve/main/seem_samvitb_v1.pt)       | SAM-ViT-B  | 52.0 | 43.5 | 60.2 | 54.1      | 62.2 | 69.3 | 2.53  | 3.23  | *     | *     |
+| SEEM_v1       | [ckpt](https://huggingface.co/xdecoder/SEEM/resolve/main/seem_samvitl_v1.pt)       | SAM-ViT-L  | 49.0 | 41.6 | 58.2 | 53.8      | 62.2 | 69.5 | 2.40  | 2.96  | *     | *     |
+
+**SEEM_v0:** Supporting Single Interactive object training and inference <br>
+**SEEM_v1:** Supporting Multiple Interactive objects training and inference
+
 
 ## :fire: News
-
+* **[2023.10.04]** We are excited to release :white_check_mark: [training/evaluation/demo code](https://github.com/microsoft/X-Decoder/edit/v2.0/README.md#hot_pepper-getting-started), :white_check_mark: [new checkpoints](https://github.com/microsoft/X-Decoder/edit/v2.0/README.md#hot_pepper-getting-started), and :white_check_mark: [comprehensive readmes](https://github.com/microsoft/X-Decoder/edit/v2.0/README.md#hot_pepper-getting-started) for ***both X-Decoder and SEEM***!
 * **[2023.09.24]** We are providing new demo command/code for inference ([DEMO.md](asset/DEMO.md))!
 * **[2023.07.19]** :roller_coaster: We are excited to release the x-decoder training code ([INSTALL.md](asset/INSTALL.md), [DATASET.md](asset/DATASET.md), [TRAIN.md](asset/TRAIN.md), [EVALUATION.md](asset/EVALUATION.md))!
 * **[2023.07.10]** We release [Semantic-SAM](https://github.com/UX-Decoder/Semantic-SAM), a universal image segmentation model to enable segment and recognize anything at any desired granularity. Code and checkpoint are available!
