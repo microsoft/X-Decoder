@@ -23,7 +23,7 @@ from torchvision import transforms
 from utils.arguments import load_opt_command
 
 from detectron2.data import MetadataCatalog
-from modeling.language.misc import vl_similarity
+from modeling.language.loss import vl_similarity
 from modeling.BaseModel import BaseModel
 from modeling import build_model
 from utils.visualizer import Visualizer

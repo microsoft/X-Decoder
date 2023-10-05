@@ -1,4 +1,3 @@
-# Copyright (c) Facebook, Inc. and its affiliates.
 from . import (
     register_refcoco_dataset,
     register_ade20k_full,
@@ -7,6 +6,7 @@ from . import (
     register_coco_panoptic_annos_semseg,
     register_coco_panoptic_annos_caption,
     register_coco_panoptic_annos_caption_grounding,
+    register_coco_lvis_panoptic_annos_caption_grounding,
     register_ade20k_instance,
     register_vlp_datasets,
     register_sunrgbd_semseg,
@@ -14,4 +14,5 @@ from . import (
     register_bdd100k_semseg,
     register_scannet_panoptic,
     register_bdd100k_panoseg,
+    register_pascalvoc_eval,
 )

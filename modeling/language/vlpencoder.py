@@ -11,7 +11,7 @@ from torch.nn import functional as F
 
 from timm.models.layers import trunc_normal_
 
-from .registry import register_model
+from .build import register_model
 from ..utils import configurable
 from .LangEncoder import build_tokenizer, build_lang_encoder
 from utils.prompt_engineering import prompt_engineering, get_prompt_templates
@@ -68,7 +68,7 @@ class LanguageEncoder(nn.Module):
             "queue_operator": queue_operator,
         }
 
-    def get_text_embeddings(self, class_names, name='default', is_eval=False, add_bgd=False, prompt=True, norm=True):
+    def get_text_embeddings(self, class_names, name='default', is_eval=False, add_bgd=False, prompt=True, norm=True, store_buffer=None):
         if not is_eval:
             if prompt:
                 # randomly sample one template
@@ -125,6 +125,9 @@ class LanguageEncoder(nn.Module):
 
                 text_emb = torch.stack(clss_embeddings, dim=0)
                 setattr(self, '{}_text_embeddings'.format(name), text_emb)
+
+    def reset_text_embeddings(self, name='default'):
+        pass
 
     def get_text_token_embeddings(self, txts, name='default', token=False, norm=False):
         if not token:

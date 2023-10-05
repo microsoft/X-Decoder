@@ -1,5 +1,6 @@
 from fvcore.common.config import CfgNode as _CfgNode
 
+
 class CfgNode(_CfgNode):
     """
     The same as `fvcore.common.config.CfgNode`, but different in:

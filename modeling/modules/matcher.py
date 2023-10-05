@@ -376,7 +376,6 @@ class HungarianMatcher(nn.Module):
             for i, j in indices
         ]
 
-
     @torch.no_grad()
     def spatial_forward_pn(self, outputs, targets, extra):
         """More memory-friendly matching"""

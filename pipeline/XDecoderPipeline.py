@@ -29,7 +29,7 @@ from utils.distributed import is_main_process
 from utils.constants import COCO_PANOPTIC_CLASSES
 from trainer.utils.misc import move_batch_to_device, cast_batch_to_half
 
-from .utils.misc import hook_metadata, hook_switcher
+from .utils.misc import hook_metadata, hook_switcher, hook_opt
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +81,6 @@ class XDecoderPipeline:
 
     @staticmethod
     def forward_func(trainer, batch):
-        # trainer.models['default'].train()
         loss = trainer.models['default'](batch)
         return loss
 
@@ -113,6 +112,7 @@ class XDecoderPipeline:
     ) -> Tuple[Dict, Dict[str, float], bool]:
 
         model = trainer.raw_models['default'].eval()
+        self._opt = hook_opt(self._opt)
         dataset_names = self._opt['DATASETS']['TEST']
         scores = {}
         summary = {}
@@ -126,7 +126,8 @@ class XDecoderPipeline:
                 model.model.metadata = MetadataCatalog.get(dataset_label)
                 model.model.metadata = hook_metadata(model.model.metadata, dataset_label)
                 eval_type = model.model.metadata.evaluator_type
-                model.model.sem_seg_head.num_classes = len(names) - 1
+                if 'background' in names:
+                    model.model.sem_seg_head.num_classes = len(names) - 1
                 model.model.sem_seg_head.predictor.lang_encoder.get_text_embeddings(names, is_eval=True)
                 hook_switcher(model, dataset_label)
                 total = len(eval_batch_gen)
@@ -185,6 +186,7 @@ class XDecoderPipeline:
                     start_data_time = time.perf_counter()
 
             results = self.evaluator.evaluate()
+            model.model.sem_seg_head.predictor.lang_encoder.reset_text_embeddings()
 
             if is_main_process():
                 scores["{}/{}".format(dataset_label, eval_type)] = results

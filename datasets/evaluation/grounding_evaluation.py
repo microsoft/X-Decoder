@@ -1,4 +1,3 @@
-# Copyright (c) Facebook, Inc. and its affiliates.
 # --------------------------------------------------------
 # X-Decoder -- Generalized Decoding for Pixel, Image, and Language
 # Copyright (c) 2022 Microsoft
@@ -58,7 +57,7 @@ class GroundingEvaluator(DatasetEvaluator):
             I, U = self.computeIoU(pred, gt)
             self.cum_I += I.sum().cpu()
             self.cum_U += U.sum().cpu()
-            IoU = I.reshape(bsi,-1).sum(-1)*1.0 / U.reshape(bsi,-1).sum(-1)
+            IoU = I.reshape(bsi,-1).sum(-1)*1.0 / (U.reshape(bsi,-1).sum(-1) + 1e-6)
             self.mIoU += IoU.sum().cpu()
 
             if self._compute_box:

@@ -132,14 +132,12 @@ class UtilsTrainer(DistributedTrainer):
                                 'torch_cuda_random': torch.cuda.get_rng_state(device=self.opt['device']) if self.opt['CUDA'] else None
                                 }
                 torch.save(random_state, random_state_path)
-                num_retries += 1
-            except OSError as err:
-                logger.warning(err)
-                logger.warning("Failed to save checkpoint, waiting for 2 minutes to retry.")
-                # time.sleep(120)
-                # num_retries += 1
                 num_retries = 3
-                break
+            except Exception as err:
+                num_retries += 1
+                logger.warning(err)
+                logger.warning("Failed to save checkpoint at retry {}, waiting for 30s to retry.".format(num_retries))
+                time.sleep(30)
 
         if self.opt['rank'] == 0:
             for module_name in self.model_names:

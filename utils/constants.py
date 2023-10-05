@@ -107,3 +107,9 @@ IMAGENET_DEFAULT_TEMPLATES = [
 IMAGENET_SIMPLE_TEMPLATES = [
     'a photo of {}.',
 ]
+
+PASCAL_CLASSES = [
+    "aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat",
+    "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person",
+    "pottedplant", "sheep", "sofa", "train", "tvmonitor"
+]

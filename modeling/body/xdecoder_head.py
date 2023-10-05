@@ -11,9 +11,9 @@ from torch import nn
 
 from detectron2.layers import ShapeSpec
 
-from .registry import register_body
-from .encoder import build_encoder
-from .decoder import build_decoder
+from .build import register_body
+from ..vision.encoder import build_encoder
+from ..interface import build_decoder
 from ..utils import configurable
 
 

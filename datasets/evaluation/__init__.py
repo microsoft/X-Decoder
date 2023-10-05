@@ -5,3 +5,4 @@ from .retrieval_evaluation import *
 from .captioning_evaluation import *
 from .panoptic_evaluation import *
 from .grounding_evaluation import *
+from .interactive_evaluation import *

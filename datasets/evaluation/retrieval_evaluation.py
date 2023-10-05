@@ -34,9 +34,10 @@ class RetrievalEvaluator(DatasetEvaluator):
 
     def __init__(
         self,
-        distributed=True,
+        dataset_name=None,
         output_dir=None,
         ensemble=False,
+        distributed=True,
     ):
         """
         Args:
@@ -74,11 +75,17 @@ class RetrievalEvaluator(DatasetEvaluator):
                 Defaults to True.
         """
         self._logger = logging.getLogger(__name__)
-        self._distributed = distributed
+        self._dataset_name = dataset_name
         self._output_dir = output_dir
         self._ensemble = ensemble
-        from transformers import CLIPTokenizer
-        self.tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-base-patch32")
+        self._distributed = distributed
+
+        if 'p2i' in dataset_name:
+            self.mode = 'patch2image'
+        elif 'interactive2i' in dataset_name:
+            self.mode = 'interactive2image'
+        else:
+            self.mode = 'default'
 
     def reset(self):
         self._text_embeds = []
@@ -105,6 +112,14 @@ class RetrievalEvaluator(DatasetEvaluator):
                 self._image_embeds2.append(output['caption']['image_embeds'][1])
 
     def evaluate(self, img_ids=None):
+        if self.mode == 'default':
+            return self.evaluate_default(img_ids)
+        elif self.mode in ['patch2image', 'interactive2image']:
+            return self.evaluate_p2i(img_ids)
+        else:
+            assert False, "Unknown mode for retrieval evaluation"
+
+    def evaluate_default(self, img_ids=None):
         """
         Args:
             img_ids: a list of image IDs to evaluate on. Default to None for the whole dataset
@@ -178,4 +193,68 @@ class RetrievalEvaluator(DatasetEvaluator):
         self._results['recall']['tr1'] = float("{:.3f}".format(tr_r1.item() * 100))
         self._results['recall']['tr5'] = float("{:.3f}".format(tr_r5.item() * 100))
         self._results['recall']['tr10'] = float("{:.3f}".format(tr_r10.item() * 100))
+        self._logger.info(self._results)
+        return copy.deepcopy(self._results)
+
+    def evaluate_p2i(self, img_ids=None):
+        """
+        Args:
+            img_ids: a list of image IDs to evaluate on. Default to None for the whole dataset
+        """
+
+        if self._distributed:
+            comm.synchronize()
+            def gather(x, move=False):
+                x = comm.gather(x)
+                x = list(itertools.chain(*x))
+                if move:
+                    x = [xx.to(self._text_embeds[0].device) for xx in x]
+                return x
+            text_embeds = gather(self._text_embeds, move=True)
+            image_embeds = gather(self._image_embeds, move=True)
+            image_embeds2 = gather(self._image_embeds2, move=True)
+            text_ids = gather(self._text_ids)
+            image_ids = gather(self._image_ids)
+            if not comm.is_main_process():
+                return {}
+        else:
+            text_embeds = self._text_embeds
+            image_embeds = self._image_embeds
+            image_embeds2 = self._image_embeds2
+            text_ids = self._text_ids
+            image_ids = self._image_ids
+
+        if len(text_embeds) == 0:
+            self._logger.warning("[COCOCaptionEvaluator] Did not receive valid predictions.")
+            return {}
+
+        iids = torch.tensor(image_ids).view(-1).cuda()
+        tiids = torch.tensor(text_ids).view(-1).cuda()
+        image_embeds = torch.cat(image_embeds)
+        text_embeds = torch.cat(text_embeds)
+        image_embeds = image_embeds / image_embeds.norm(dim=-1, keepdim=True) 
+        text_embeds = text_embeds / text_embeds.norm(dim=-1, keepdim=True) 
+
+        image_embeds2 = torch.cat(image_embeds2)
+        image_embeds2 = image_embeds2 / image_embeds2.norm(dim=-1, keepdim=True)
+
+        # compute image to image retrieval
+        self._results = OrderedDict()
+        self._results['recall'] = {}
+        ii_scores = image_embeds2 @ image_embeds.t()
+
+        topk10 = ii_scores.topk(10, dim=1)
+        topk5 = ii_scores.topk(5, dim=1)
+        topk1 = ii_scores.topk(1, dim=1)
+        topk10_iids = iids[topk10.indices]
+        topk5_iids = iids[topk5.indices]
+        topk1_iids = iids[topk1.indices]
+        iir_r10 = (iids.unsqueeze(1) == topk10_iids).float().max(dim=1)[0].mean()
+        iir_r5 = (iids.unsqueeze(1) == topk5_iids).float().max(dim=1)[0].mean()
+        iir_r1 = (iids.unsqueeze(1) == topk1_iids).float().max(dim=1)[0].mean()
+        # Copy so the caller can do whatever with results
+        self._results['recall']['p2ir1'] = float("{:.3f}".format(iir_r1.item() * 100))
+        self._results['recall']['p2ir5'] = float("{:.3f}".format(iir_r5.item() * 100))
+        self._results['recall']['p2ir10'] = float("{:.3f}".format(iir_r10.item() * 100))
+        self._logger.info(self._results)
         return copy.deepcopy(self._results)

@@ -8,12 +8,6 @@ import numpy as np
 from utils.constants import IMAGENET_DEFAULT_TEMPLATES
 
 
-def vl_similarity(image_feat, text_feat, temperature=1):
-    # Only support single GPU for now.
-    logits = torch.matmul(image_feat, text_feat.t())
-    logits = temperature.exp().clamp(max=100) * logits
-    return logits
-
 def get_tag(tokenized, tags):
     if not isinstance(tags, (list, tuple)):
         tags = [tags]

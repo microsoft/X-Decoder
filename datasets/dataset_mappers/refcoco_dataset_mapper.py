@@ -56,6 +56,17 @@ def build_transform_gen(cfg, is_train):
     
     return augmentation
 
+def build_transform_gen_se(cfg, is_train):
+    min_scale = cfg['INPUT']['MIN_SIZE_TEST']
+    max_scale = cfg['INPUT']['MAX_SIZE_TEST']
+
+    augmentation = []
+    augmentation.extend([
+        T.ResizeShortestEdge(
+            min_scale, max_size=max_scale
+        ),
+    ])    
+    return augmentation
 
 # This is specifically designed for the COCO dataset.
 class RefCOCODatasetMapper:
@@ -100,9 +111,9 @@ class RefCOCODatasetMapper:
         self.pixel_mean = torch.tensor(mean)[:,None,None]
         self.pixel_std = torch.tensor(std)[:,None,None]
 
-        t = []
-        t.append(transforms.Resize(self.min_size_test, interpolation=Image.BICUBIC))
-        self.transform = transforms.Compose(t)
+        # t = []
+        # t.append(T.ResizeShortestEdge(min_size_test, max_size=max_size_test))
+        # self.transform = transforms.Compose(t)
 
     @classmethod
     def from_config(cls, cfg, is_train=True):
@@ -110,7 +121,7 @@ class RefCOCODatasetMapper:
         if is_train:
             tfm_gens = build_transform_gen(cfg, is_train)
         else:
-            tfm_gens = None
+            tfm_gens = build_transform_gen_se(cfg, is_train)
 
         ret = {
             "is_train": is_train,
@@ -134,13 +145,10 @@ class RefCOCODatasetMapper:
         dataset_dict = copy.deepcopy(dataset_dict)  # it will be modified by code below
         file_name = dataset_dict['file_name']
         if self.is_train == False:
-            image = Image.open(file_name).convert('RGB')
-            dataset_dict['width'] = image.size[0]
-            dataset_dict['height'] = image.size[1]
-            image = self.transform(image)
-            image = torch.from_numpy(np.asarray(image).copy())
-            image = image.permute(2,0,1)
-            dataset_dict['image'] = image
+            image = utils.read_image(file_name, format=self.img_format)
+            utils.check_image_size(dataset_dict, image)
+            image, _ = T.apply_transform_gens(self.tfm_gens, image)
+            dataset_dict["image"] = torch.as_tensor(np.ascontiguousarray(image.transpose(2, 0, 1)))
 
             grounding_anno = dataset_dict['grounding_info']
             assert len(grounding_anno) > 0

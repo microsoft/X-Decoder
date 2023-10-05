@@ -69,15 +69,12 @@ class DefaultTrainer(UtilsTrainer, DistributedTrainer):
         for module_name in self.model_names:
             self.raw_models[module_name].to(self.opt['device'])
 
-        # This means the model will be evaluated without loading the pretrained weights, perhaps for profiling reasons.
-        eval_without_loading = self.opt.get('DONT_LOAD_MODEL', False)
-
-        if not eval_without_loading:
-            if os.path.isfile(self.opt['PYLEARN_MODEL']):
-                model_path = self.opt['PYLEARN_MODEL'] 
-                self.load_model(model_path)
-            else:
-                raise ValueError(f"Model not found: {model_path}")
+        # load model during evaluation
+        if self.opt['WEIGHT'] and os.path.isfile(self.opt['RESUME_FROM']):
+            model_path = self.opt['RESUME_FROM'] 
+            self.load_model(model_path)
+        else:
+            raise ValueError(f"Model not found: {model_path}")
 
         results = self._eval_on_set(self.save_folder)
         return results

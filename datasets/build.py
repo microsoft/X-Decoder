@@ -6,7 +6,6 @@
 # --------------------------------------------------------
 # Copyright (c) Facebook, Inc. and its affiliates.
 
-
 import os
 import itertools
 import logging
@@ -37,20 +36,7 @@ from detectron2.evaluation import (
 )
 from fvcore.common.config import CfgNode
 
-from .dataset_mappers import (
-    COCOInstanceNewBaselineDatasetMapper,
-    COCOPanopticNewBaselineDatasetMapper,
-    MaskFormerInstanceDatasetMapper,
-    MaskFormerPanopticDatasetMapper,
-    MaskFormerSemanticDatasetMapper,
-    ImageNetDatasetMapper,
-    VLPreDatasetMapper,
-    SunRGBDSegDatasetMapper,
-    ScanNetSegDatasetMapper,
-    BDDSemDatasetMapper,
-    ScanNetPanoDatasetMapper,
-    RefCOCODatasetMapper,
-)
+from .dataset_mappers import *
 from .evaluation import (InstanceSegEvaluator, 
                          ClassificationEvaluator, 
                          SemSegEvaluator, 
@@ -58,6 +44,7 @@ from .evaluation import (InstanceSegEvaluator,
                          CaptioningEvaluator, 
                          COCOPanopticEvaluator,
                          GroundingEvaluator,
+                         InteractiveEvaluator,
 )
 from modeling.utils import configurable
 from utils.distributed import get_world_size
@@ -332,9 +319,17 @@ def get_config_from_name(cfg, dataset_name):
     if 'refcoco' in dataset_name:
         cfg.update(cfg['REF'])
         return cfg
-    elif 'coco' in dataset_name:
-        if 'COCO' in cfg.keys():
-            cfg.update(cfg['COCO'])
+    elif 'cocomini' in dataset_name:
+        cfg.update(cfg['DAVIS'])
+        return cfg
+    elif 'ytvos' in dataset_name:
+        cfg.update(cfg['VOS'])
+        return cfg
+    elif 'ade600' in dataset_name:
+        cfg.update(cfg['DAVIS'])
+        return cfg
+    elif 'openimage600' in dataset_name:
+        cfg.update(cfg['DAVIS'])
         return cfg
     elif 'ade' in dataset_name:
         if 'ADE20K' in cfg.keys():
@@ -347,6 +342,16 @@ def get_config_from_name(cfg, dataset_name):
     elif 'vlp' in dataset_name:
         cfg.update(cfg['VLP'])
         return cfg
+    elif 'coco' in dataset_name:
+        if 'COCO' in cfg.keys():
+            cfg.update(cfg['COCO'])
+        return cfg
+    elif 'voc' in dataset_name:
+        cfg.update(cfg['VOC'])
+        return cfg
+    elif 'context' in dataset_name:
+        cfg.update(cfg['CONTEXT'])
+        return cfg
     elif 'sun' in dataset_name:
         cfg.update(cfg['SUN'])
         return cfg
@@ -358,6 +363,33 @@ def get_config_from_name(cfg, dataset_name):
         return cfg
     elif 'bdd' in dataset_name:
         cfg.update(cfg['BDD'])
+        return cfg
+    elif 'tsv' in dataset_name:
+        cfg.update(cfg['TSV'])
+        return cfg
+    elif 'phrasecut' in dataset_name:
+        cfg.update(cfg['PHRASE'])
+        return cfg
+    elif 'object365' in dataset_name:
+        cfg.update(cfg['OBJECT365'])
+        return cfg
+    elif 'openimage' in dataset_name:
+        cfg.update(cfg['OPENIMAGE'])
+        return cfg
+    elif 'lvis' in dataset_name:
+        cfg.update(cfg['LVIS'])
+        return cfg
+    elif 'seginw' in dataset_name:
+        cfg.update(cfg['SEGINW'])
+        return cfg
+    elif 'sbd' in dataset_name:
+        cfg.update(cfg['SBD'])
+        return cfg
+    elif 'davis' in dataset_name:
+        cfg.update(cfg['DAVIS'])
+        return cfg
+    elif 'sam' in dataset_name:
+        cfg.update(cfg['SAM'])
         return cfg
     else:
         assert False, "dataset not support."
@@ -378,6 +410,8 @@ def build_eval_dataloader(cfg, ):
             mapper = ScanNetSegDatasetMapper(cfg, False)
         elif dataset_name in ["scannet_21_panoptic_val", 'bdd10k_40_panoptic_val']:
             mapper = ScanNetPanoDatasetMapper(cfg, False)
+        elif "pascalvoc_val" in dataset_name:
+            mapper = PascalVOCSegDatasetMapperIX(cfg, False, dataset_name)
         elif 'sun' in dataset_name:
             mapper = SunRGBDSegDatasetMapper(cfg, False)
         elif 'refcoco' in dataset_name:
@@ -421,6 +455,9 @@ def build_train_dataloader(cfg, ):
         elif mapper_name == "refcoco":
             mapper = RefCOCODatasetMapper(cfg, True)
             loaders['ref'] = build_detection_train_loader(cfg, dataset_name=dataset_name, mapper=mapper)
+        elif mapper_name == "coco_interactive":
+            mapper = COCOPanopticInteractiveDatasetMapper(cfg, True)
+            loaders['coco'] = build_detection_train_loader(cfg, dataset_name=dataset_name, mapper=mapper)
         else:
             mapper = None
             loaders[dataset_name] = build_detection_train_loader(cfg, dataset_name=dataset_name, mapper=mapper)
@@ -514,12 +551,15 @@ def build_evaluator(cfg, dataset_name, output_folder=None):
     if evaluator_type == "classification":
         evaluator_list.append(ClassificationEvaluator(dataset_name, output_folder))
     # Retrieval
-    if evaluator_type == "retrieval":
+    if evaluator_type in ["retrieval"]:
         evaluator_list.append(RetrievalEvaluator(dataset_name, output_folder, cfg['MODEL']['DECODER']['RETRIEVAL']['ENSEMBLE']))
     if evaluator_type == "captioning":
         evaluator_list.append(CaptioningEvaluator(dataset_name, output_folder, MetadataCatalog.get(dataset_name).gt_json))
-    if evaluator_type in ["grounding_refcoco", "grounding_phrasecut"]:
+    if evaluator_type in ["grounding_refcoco", "grounding_phrasecut", "grounding_spatial", "grounding_entity"]:
         evaluator_list.append(GroundingEvaluator(dataset_name))
+    # Interactive
+    if evaluator_type in ["interactive", "interactive_grounding"]:
+        evaluator_list.append(InteractiveEvaluator(dataset_name, output_dir=output_folder, max_clicks=cfg['STROKE_SAMPLER']['EVAL']['MAX_ITER'], iou_iter=cfg['STROKE_SAMPLER']['EVAL']['IOU_ITER']))
 
     if len(evaluator_list) == 0:
         raise NotImplementedError(
